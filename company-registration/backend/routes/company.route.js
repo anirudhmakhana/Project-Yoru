@@ -98,4 +98,18 @@ router.route('/delete-company/:id').delete((req, res, next ) => {
     })
 })
 
+// Delete publicKey
+router.route('/delete-key/:id/:acckey').put((req, res, next ) => {
+    companySchema.findByIdAndUpdate(req.params.id, 
+        {$pull: {publicKeys:req.params.acckey}} , (error, data) => {
+        if (error) {
+            return next(error);
+        } else {
+            res.status(200).json ({
+                msg: data
+            })
+        }
+    })
+})
+
 module.exports = router;
