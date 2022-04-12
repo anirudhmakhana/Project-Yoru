@@ -14,6 +14,7 @@ import CreateCompany from "./components/create-company.component"
 import EditCompany from "./components/edit-company.component"
 import CompanyList from "./components/company-list.component"
 import AddAccount from "./components/add-account.component"
+import MapPage from "./components/map/map.component"
 
 const createError = require('http-errors')
 
@@ -32,6 +33,11 @@ function App() {
               </NavBar.Brand>
 
               <Nav className="justify-content-end">
+              <Nav>
+                  <Link to={"/map"} class="nav-link">
+                    Map
+                  </Link>
+                </Nav>
                 <Nav>
                   <Link to={"/create-company"} class="nav-link">
                     Create company
@@ -57,6 +63,7 @@ function App() {
                   <Route path="/edit-company/:id" element={<EditCompany/>}/>
                   <Route path="/company-list" element={<CompanyList/>}/>
                   <Route path="/add-account/:id" element={<AddAccount/>}/>
+                  <Route path="/map/" element={<MapPage/>}/>
                 </Routes>
               </div>
             </Col>
