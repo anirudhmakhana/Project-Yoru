@@ -1,4 +1,4 @@
-import React, { Component, useFocusEffect, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
 import CompanyTableRow from './CompanyTableRow'
@@ -7,8 +7,8 @@ export default function CompanyList() {
 
     const [companies, setCompanies] = useState([])
 
-    useFocusEffect(
-        // Update the document title using the browser API
+    
+    useEffect(() => {
         axios.get('http://localhost:4000/companies')
             .then( res => {
                 setCompanies(res.data)
@@ -16,7 +16,8 @@ export default function CompanyList() {
             .catch((error) => {
                 console.log(error)
             })
-    );
+        
+    }, )
 
 
     const dataTable = () => {
@@ -32,7 +33,7 @@ export default function CompanyList() {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Public Keys</th>
+                        <th>Staff</th>
                         <th>Action</th>
 
                     </tr>

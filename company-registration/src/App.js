@@ -14,9 +14,9 @@ import Login from "./components/loginScreen"
 import CreateCompany from "./components/create-company.component"
 import EditCompany from "./components/edit-company.component"
 import CompanyList from "./components/company-list.component"
-import AddAccount from "./components/add-account.component"
+import AddStaff from "./components/add-account.component"
 import MapPage from "./components/map/map.component"
-
+import AddDistCenter from "./components/add-dist-center.component"
 import { OverviewPage } from './pages/Overview';
 
 const createError = require('http-errors')
@@ -70,7 +70,8 @@ function App() {
                   <Route path="/create-company" element={<CreateCompany/>}/>
                   <Route path="/edit-company/:id" element={<EditCompany/>}/>
                   <Route path="/company-list" element={<CompanyList/>}/>
-                  <Route path="/add-account/:id" element={<AddAccount/>}/>
+                  <Route path="/add-staff/:id" element={<AddStaff/>}/>
+                  <Route path="/add-dist-center/:id" element={<AddDistCenter/>}/>
                   <Route path="/map/" element={<MapPage/>}/>
                   <Route path="/overview" element={<OverviewPage/>}/>
                 </Routes>

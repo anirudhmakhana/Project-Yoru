@@ -23,9 +23,6 @@ const staffSchema = new Schema ({
 })
 
 const distCenterSchema = new Schema ({
-    code : {
-        type:String
-    },
     name : {
         type:String
     },

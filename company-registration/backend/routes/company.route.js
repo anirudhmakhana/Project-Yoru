@@ -51,11 +51,11 @@ router.route("/get-company-by-account/:acckey").get((req, res) => {
     })
 })
 
-// Add account
-router.route("/add-account/:id").put((req, res, next) => {
+// Add staff
+router.route("/add-staff/:id").put((req, res, next) => {
     companySchema.findByIdAndUpdate(req.params.id, {
         $push: {
-            publicKeys: req.body.publicKey
+            staffs: req.body
         }
     }, (error, data) => {
         if (error ) {
@@ -63,12 +63,27 @@ router.route("/add-account/:id").put((req, res, next) => {
             return next(error);
         } else {
             res.json(data);
-            console.log("Account added successfully")
+            console.log("Staff added successfully")
         }
     })
 })
 
-//
+//// Add distribution center
+router.route("/add-dist-center/:id").put((req, res, next) => {
+    companySchema.findByIdAndUpdate(req.params.id, {
+        $push: {
+            distCenters: req.body
+        }
+    }, (error, data) => {
+        if (error ) {
+            console.log(error);
+            return next(error);
+        } else {
+            res.json(data);
+            console.log("Distribution center added successfully")
+        }
+    })
+})
 
 // Update company
 router.route('/update-company/:id').put((req, res, next) => {

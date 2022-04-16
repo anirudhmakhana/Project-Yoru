@@ -15,13 +15,17 @@ export default class CompanyTableRow extends Component {
 
     }
 
-    deleteKey = (key) => {
-        console.log(key)
-        axios.put('http://localhost:4000/companies/delete-key/' + this.props.obj._id + '/' + key)
-        .catch((error) => {
-            console.log(error)
-        })
-        window.location.reload(false)
+    deleteStaff = (staff) => {
+        console.log(staff)
+        // axios.put('http://localhost:4000/companies/delete-key/' + this.props.obj._id + '/' + key)
+        // .catch((error) => {
+        //     console.log(error)
+        // })
+        // window.location.reload(false)
+    }
+
+    viewStaff = (staff) => {
+
     }
 
     render() {
@@ -37,23 +41,31 @@ export default class CompanyTableRow extends Component {
                         <Button size="sm" variant="outline-primary">Edit</Button>
                     </Link>
                     &nbsp;&nbsp;
-                    <Link to={'/add-account/'+this.props.obj._id}>
+                    <Link to={'/add-staff/'+this.props.obj._id}>
                         <Button size="sm" variant="outline-success">Add Account</Button>
+                    </Link>
+                    <Link to={'/add-dist-center/'+this.props.obj._id}>
+                        <Button size="sm" variant="outline-success">Add Dist Center</Button>
                     </Link>
                     &nbsp;&nbsp;
                     <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> Delete</Button>
                 </td>
 
             </tr>
-            {this.props.obj.publicKeys.slice(0, this.props.obj.publicKeys.length).map((item, index) => {
+            {this.props.obj.staffs.slice(0, this.props.obj.staffs.length).map((item, index) => {
                 return (
                     <tr>
                         <td>{this.props.obj.companyName}</td>
-                        <td>{item}</td>
+                        <td>{item.firstName} {item.lastName}</td>
                         
                         <td>
                             <Button size="sm" onClick={() => {
-                                this.deleteKey(item)
+                                this.viewKey(item)
+                            }}variant="outline-danger"> View</Button>
+                        </td>
+                        <td>
+                            <Button size="sm" onClick={() => {
+                                this.deleteStaff(item)
                             }}variant="outline-danger"> Delete</Button>
                         </td>
                     </tr>

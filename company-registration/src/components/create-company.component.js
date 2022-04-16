@@ -29,8 +29,8 @@ export default function CreateCompany() {
         } else {
             const companyObject = {
                 companyName: companyName,
-                staffs: initStaffs,
-                distCenters: initDistCenters,
+                // staffs: initStaffs,
+                // distCenters: initDistCenters,
                 managerContact: managerContact
             }
     
