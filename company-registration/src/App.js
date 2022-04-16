@@ -17,6 +17,8 @@ import CompanyList from "./components/company-list.component"
 import AddAccount from "./components/add-account.component"
 import MapPage from "./components/map/map.component"
 
+import { OverviewPage } from './pages/Overview';
+
 const createError = require('http-errors')
 
 function App() {
@@ -34,7 +36,7 @@ function App() {
               </NavBar.Brand>
 
               <Nav className="justify-content-end">
-              <Nav>
+                <Nav>
                   <Link to={"/map"} class="nav-link">
                     Map
                   </Link>
@@ -47,6 +49,11 @@ function App() {
                 <Nav>
                   <Link to={"/company-list"} class="nav-link">
                     Company List
+                  </Link>
+                </Nav>
+                <Nav>
+                  <Link to={"/overview"} class="nav-link">
+                    Overview
                   </Link>
                 </Nav>
               </Nav>
@@ -65,6 +72,7 @@ function App() {
                   <Route path="/company-list" element={<CompanyList/>}/>
                   <Route path="/add-account/:id" element={<AddAccount/>}/>
                   <Route path="/map/" element={<MapPage/>}/>
+                  <Route path="/overview" element={<OverviewPage/>}/>
                 </Routes>
               </div>
             </Col>
