@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-require('dotenv').config()
 
-let coordinate = new Schema ({
+const coordinate = new Schema ({
     lat : {
         type:Number
     },
@@ -11,7 +10,7 @@ let coordinate = new Schema ({
     }
 })
 
-let staffSchema = new Schema ({
+const staffSchema = new Schema ({
     firstName : {
         type:String
     },
@@ -23,7 +22,7 @@ let staffSchema = new Schema ({
     }
 })
 
-let distCenterSchema = new Schema ({
+const distCenterSchema = new Schema ({
     code : {
         type:String
     },
@@ -44,21 +43,22 @@ let distCenterSchema = new Schema ({
     }
 })
 
-let companySchema = new Schema ( {
+const companySchema = new Schema ( {
     companyName : {
         type: String
     },
-    staffs: [{
-        type: staffSchema
-    }],
-    distCenters: [{
-        type: distCenterSchema
-    }], 
+    staffs: {
+        type: [staffSchema]
+    },
+    distCenters: {
+        type: [distCenterSchema]
+    }, 
     managerContact: {     //manager phone number (who has responsibility of)
         type: String
     },
-    collection: "companies"
     }
 )
 
-module.exports = mongoose.model('Company', companySchema);
+ const CompanyModel = mongoose.model('Company', companySchema);
+
+ module.exports = CompanyModel

@@ -11,6 +11,7 @@ const companyRoute = require('../backend/routes/company.route');
 
 // Connecting MongoDB 
 mongoose.Promise = global.Promise;
+console.log("check", process.env)
 mongoose.connect(dbConfig.db, {
     useNewUrlParser: true
 }).then( () => {

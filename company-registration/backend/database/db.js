@@ -1,5 +1,6 @@
-require('dotenv').config()
+require('dotenv').config({path:'../.env'})
+const { REACT_APP_DB_URI} = process.env
 
 module.exports = {
-    db: process.env.REACT_APP_DB_URI
+    db: REACT_APP_DB_URI
 }
