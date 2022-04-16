@@ -8,7 +8,6 @@ import {
 } from "react-google-maps";
 import mapStyles from "./map-styles";
 import { formatRelative } from "date-fns";
-require('dotenv').config()
 
 console.log((process.env))
 
@@ -84,7 +83,8 @@ function Map() {
   );
 }
 const MapWrapped = withScriptjs(withGoogleMap(Map));
-const API_KEY = process.env.MAP_API_KEY
+const API_KEY = process.env.REACT_APP_MAP_API_KEY
+console.log('test', process.env)
 export default function MapPage() {
   return (
     <div style={{width:'100vx', height:'100vh'}}>
