@@ -3,6 +3,7 @@ let mongoose = require('mongoose'),
     router = express.Router()
 const   createError = require('http-errors');
 
+var ObjectId = require('mongoose').Types.ObjectId; 
 let companySchema = require("../models/Company")
 
 router.route('/create-company').post((req, res, next) => {
@@ -41,12 +42,31 @@ router.route("/get-company/:id").get((req,res) => {
 
 // Find company by account
 router.route("/get-company-by-account/:acckey").get((req, res) => {
-    companySchema.findOne({publicKeys:{$elemMatch: {$eq:　req.params.acckey}}}, (error, data ) => {
+    companySchema.findOne({"staffs.walletAddress":new ObjectId(req.params.acckey)}, (error, data ) => {
         if (error) {
             return next(error);
         } else {
-            console.log(data);
-            res.json(data);
+            console.log(data)
+            res.json(temp);
+        }
+    })
+})
+
+// Find staff by id
+router.route("/get-staff/:staffid").get((req, res) => {
+    companySchema.findOne({"staffs._id":new ObjectId(req.params.staffid)}, (error, data ) => {
+        if (error) {
+            return next(error);
+        } else {
+            console.log(data)
+            var temp;
+            data["staffs"].forEach((s) => {
+                if (s._id.equals(req.params.staffid)) {
+                    temp = s
+                }
+            })
+            console.log('test',temp);
+            res.json(temp);
         }
     })
 })

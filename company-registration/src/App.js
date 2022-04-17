@@ -17,6 +17,7 @@ import CompanyList from "./components/company-list.component"
 import AddStaff from "./components/add-account.component"
 import MapPage from "./components/map/map.component"
 import AddDistCenter from "./components/add-dist-center.component"
+import ViewStaff from "./components/view-staff.component"
 import { OverviewPage } from './pages/Overview';
 
 const createError = require('http-errors')
@@ -71,9 +72,11 @@ function App() {
                   <Route path="/edit-company/:id" element={<EditCompany/>}/>
                   <Route path="/company-list" element={<CompanyList/>}/>
                   <Route path="/add-staff/:id" element={<AddStaff/>}/>
+                  <Route path="/view-staff/:id" element={<ViewStaff/>}/>
                   <Route path="/add-dist-center/:id" element={<AddDistCenter/>}/>
                   <Route path="/map/" element={<MapPage/>}/>
                   <Route path="/overview" element={<OverviewPage/>}/>
+
                 </Routes>
               </div>
             </Col>

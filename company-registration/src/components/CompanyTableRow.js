@@ -44,6 +44,8 @@ export default class CompanyTableRow extends Component {
                     <Link to={'/add-staff/'+this.props.obj._id}>
                         <Button size="sm" variant="outline-success">Add Account</Button>
                     </Link>
+                    &nbsp;&nbsp;
+
                     <Link to={'/add-dist-center/'+this.props.obj._id}>
                         <Button size="sm" variant="outline-success">Add Dist Center</Button>
                     </Link>
@@ -59,15 +61,16 @@ export default class CompanyTableRow extends Component {
                         <td>{item.firstName} {item.lastName}</td>
                         
                         <td>
-                            <Button size="sm" onClick={() => {
-                                this.viewKey(item)
-                            }}variant="outline-danger"> View</Button>
-                        </td>
-                        <td>
+                            
+                            <Link to={'/view-staff/'+item._id}>
+                            <Button size="sm" variant="outline-primary">View</Button>
+                             </Link>
+                            &nbsp;&nbsp;
                             <Button size="sm" onClick={() => {
                                 this.deleteStaff(item)
                             }}variant="outline-danger"> Delete</Button>
                         </td>
+                        
                     </tr>
                     
                 )
