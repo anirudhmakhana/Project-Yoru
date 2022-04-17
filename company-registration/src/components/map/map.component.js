@@ -36,7 +36,8 @@ function Map() {
       }, []);
 
     const onMapLoad = React.useCallback((map) => {
-    mapRef.current = map;
+      console.log(map)
+      mapRef.current = map;
     }, []);
 
   return (
@@ -84,7 +85,7 @@ function Map() {
 }
 const MapWrapped = withScriptjs(withGoogleMap(Map));
 const API_KEY = process.env.REACT_APP_MAP_API_KEY
-console.log('test', process.env)
+//console.log('test', process.env)
 export default function MapPage() {
   return (
     <div style={{width:'100vx', height:'100vh'}}>

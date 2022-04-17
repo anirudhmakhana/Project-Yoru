@@ -1,118 +1,64 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useRef } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom'
 import {
-  withGoogleMap,
-  withScriptjs,
+  useJsApiLoader,
   GoogleMap,
   Marker,
-  InfoWindow
-} from "react-google-maps";
-import mapStyles from "./map/map-styles";
+  
+} from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import axios from 'axios'
 
-
 export default function AddDistCenter() {
-    const [lat, setLat] = useState()
-    const [lng, setLng] = useState()
-    const mapRef = React.useRef();
-    const [selected, setSelected] = React.useState(null);
-    const [markers, setMarkers] = React.useState([]);
-    const [currentMark, setCurrentMark] = useState(null)
-    const options = {
-        styles: mapStyles,
-        disableDefaultUI: true,
-        zoomControl: true,
-      };
-    
-    function DistMap() {
-        
-        
-        const onMapClick = React.useCallback((e) => {
-            // setMarkers((current) => [
-            //   ...current,
-            //   {
-            //     lat: e.latLng.lat(),
-            //     lng: e.latLng.lng(),
-            //     time: new Date(),
-            //   },
-            // ]);
-            setCurrentMark({lat:e.latLng.lat(), lng:e.latLng.lng(), time: new Date()})
-            setLat(e.latLng.lat().toFixed(3))
-            setLng(e.latLng.lng().toFixed(3))
-            console.log(lat, lng)
-          }, []);
-    
-        const onMapLoad = React.useCallback((map) => {
-        mapRef.current = map;
-        }, []);
-    
-      return (
-        <GoogleMap
-          defaultZoom={10}
-          defaultCenter={{ lat: 13.756331, lng: 100.501762 }}
-          defaultOptions={{ styles: mapStyles }}
-          onClick={onMapClick}
-          onLoad={onMapLoad}
-          options={options}
-        >
-    
-        {/* {markers.map((marker) => (
-              <Marker
-                key={`${marker.lat}-${marker.lng}`}
-                position={{ lat: marker.lat, lng: marker.lng }}
-                onClick={() => {
-                  setSelected(marker);
-                }}
-              />
-        ))} */}
 
-        {currentMark ? (
-              <Marker
-                key={`${currentMark.lat}-${currentMark.lng}`}
-                position={{ lat: currentMark.lat, lng: currentMark.lng }}
-                onClick={() => {
-                  setSelected(currentMark);
-                }}
-              />
-        ) : null}
-    
-        {/* {selected ? (
-              <InfoWindow
-                position={{ lat: selected.lat, lng: selected.lng }}
-                onCloseClick={() => {
-                  setSelected(null);
-                }}
-              >
-                <div>
-                  <h2>
-                    <span role="img" aria-label="bear">
-                        ⛩
-                    </span>
-                  </h2>
-                  <p>Spotted {formatRelative(selected.time, new Date())}</p>
-                  <p>{currentMark["lat"]} : {currentMark["lng"]}</p>
-                </div>
-              </InfoWindow>
-            ) : null} */}
-    
-        </GoogleMap>
-      );
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
+      libraries: ['places'],
+    })
+
+    const options={
+      zoomControl: false,
+      streetViewControl: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
     }
-
-    const MapWrapped = withScriptjs(withGoogleMap(DistMap));
-    const API_KEY = process.env.REACT_APP_MAP_API_KEY
-
+    const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
+    const [currentMark, setCurrentMark] = useState(null)
+    const [selected, setSelected] = React.useState(null);
     const {id} = useParams()
     const [companyName, setCompanyName] = useState()
     const [centerName, setCenterName] = useState('')
     const [address, setAddress] = useState('')
     const [zipCode, setZipCode] = useState('')
     const [contactNumber, setContactNumber ] = useState('')
-    
-    // console.log(id)
+    const [lat, setLat] = useState()
+    const [lng, setLng] = useState()
+
+    const onMapClick = (e) => {
+      let marker = <Marker
+              key={`${e.latLng.lat()}-${e.latLng.lng()}`}
+              position={{
+                lat: e.latLng.lat(),
+                lng: e.latLng.lng(),
+              }}
+              onClick={() => {
+                setSelected({
+                  lat: e.latLng.lat(),
+                  lng: e.latLng.lng(),
+                  time: new Date()
+                });
+              }}
+              map={mapRef}
+          />
+      console.log(marker)
+  
+      setCurrentMark(marker)
+      setLat(e.latLng.lat().toFixed(3))
+      setLng(e.latLng.lng().toFixed(3))
+    }
+
     useEffect(() => {
       axios.get('http://localhost:4000/companies/get-company/' + id)
       .then( res => {
@@ -121,7 +67,7 @@ export default function AddDistCenter() {
       })
       .catch((error) => {
           console.log(error)
-      })}
+      })}, [companyName]
     );
     
     function onSubmit (e) {
@@ -150,17 +96,20 @@ export default function AddDistCenter() {
     
     }
       return (
-        <div style={{width:'100vx', height:'70vh'}}>
-                <MapWrapped
-                  googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${
-                    API_KEY
-                  }`}
-                  loadingElement={<div style={{ height: `80%` , width: '80%'}} />}
-                  containerElement={<div style={{ height: `80%` , width: '80%'}} />}
-                  mapElement={<div style={{ height: `80%` , width: '80%'}} />}
-                />
+        <div style={{width:'100vx', height:'50vh'}}>
+                  <GoogleMap
+                    center={{ lat: 13.756331, lng: 100.501762 }}
+                    zoom={15}
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    options={options}
+                    onLoad={map => setMapRef(map)}
+                    onClick={onMapClick}
+                  >
+                  {currentMark}
+                  </GoogleMap>
+                
                 <div className="form-wrapper mt-5">
-              <h1>Add Account to the Company</h1>
+              <h1>Add Distribution Center</h1>
               
               <h2>{lat} : {lng}</h2>
               <Form onSubmit={onSubmit}>
@@ -194,7 +143,7 @@ export default function AddDistCenter() {
                   </Form.Group>
 
                   <Button variant="success" size="lg" block="block" type="submit">
-                      Add Staff
+                      Confirm
                   </Button>
               </Form>
           </div>
