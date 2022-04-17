@@ -6,7 +6,8 @@ import {
   useJsApiLoader,
   GoogleMap,
   Marker,
-  
+  Autocomplete,
+  DirectionsRenderer
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import axios from 'axios'
@@ -24,9 +25,17 @@ export default function AddDistCenter() {
       mapTypeControl: false,
       fullscreenControl: false,
     }
+    const [directionsResponse, setDirectionsResponse] = useState(null)
+    const [distance, setDistance] = useState('')
+    const [duration, setDuration] = useState('')
+
+     /** @type React.MutableRefObject<HTMLInputElement> */
+    const originRef = useRef()
+    /** @type React.MutableRefObject<HTMLInputElement> */
+    const destiantionRef = useRef()
+
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     const [currentMark, setCurrentMark] = useState(null)
-    const [selected, setSelected] = React.useState(null);
     const {id} = useParams()
     const [companyName, setCompanyName] = useState()
     const [centerName, setCenterName] = useState('')
@@ -36,19 +45,47 @@ export default function AddDistCenter() {
     const [lat, setLat] = useState()
     const [lng, setLng] = useState()
 
+    async function calculateRoute() {
+      if (!originRef.current || !destiantionRef.current) {
+        return
+      }
+      // eslint-disable-next-line no-undef
+      const directionsService = new google.maps.DirectionsService()
+      const results = await directionsService.route({
+        origin: originRef.current,
+        destination: destiantionRef.current,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+      setDirectionsResponse(results)
+      setDistance(results.routes[0].legs[0].distance.text)
+      setDuration(results.routes[0].legs[0].duration.text)
+    }
+  
+    function clearRoute() {
+      setDirectionsResponse(null)
+      setDistance('')
+      setDuration('')
+      originRef.current = null
+      destiantionRef.current = null
+    }
+
     const onMapClick = (e) => {
+      let pos = {
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng(),
+      }
+      console.log(originRef)
+      if (!originRef.current){
+        originRef.current = pos
+      } else {
+        destiantionRef.current = pos
+      }
       let marker = <Marker
               key={`${e.latLng.lat()}-${e.latLng.lng()}`}
-              position={{
-                lat: e.latLng.lat(),
-                lng: e.latLng.lng(),
-              }}
+              position={pos}
               onClick={() => {
-                setSelected({
-                  lat: e.latLng.lat(),
-                  lng: e.latLng.lng(),
-                  time: new Date()
-                });
+                console.log(e.latLng.lat()+"-"+ e.latLng.lng())
               }}
               map={mapRef}
           />
@@ -106,8 +143,17 @@ export default function AddDistCenter() {
                     onClick={onMapClick}
                   >
                   {currentMark}
+                  {directionsResponse && (
+                    <DirectionsRenderer directions={directionsResponse} />
+                  )}
                   </GoogleMap>
-                
+                  <Button variant="success" size="lg" block="block" onClick={calculateRoute}>
+                      Route
+                  </Button>
+
+                  <Button variant="success" size="lg" block="block" onClick={clearRoute}>
+                      Clear
+                  </Button>
                 <div className="form-wrapper mt-5">
               <h1>Add Distribution Center</h1>
               
