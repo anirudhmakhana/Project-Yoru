@@ -2,13 +2,12 @@ import React from "react";
 
 import axios from 'axios';
 
-import { CustomSidebar } from "../../components/sidebar";
+import "../../assets/style/overview.css"
 
 export const OverviewPage = () => {
     return (
-        <div>
-            <h1>Test Overview</h1>
-            <CustomSidebar/>
+        <div id="overview">
+            <h1>Overview</h1>
         </div>
     );
 }
