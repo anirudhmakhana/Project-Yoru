@@ -7,7 +7,8 @@ import {
   GoogleMap,
   Marker,
   Autocomplete,
-  DirectionsRenderer
+  DirectionsRenderer,
+  Polyline
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import axios from 'axios'
@@ -32,8 +33,12 @@ export default function AddDistCenter() {
      /** @type React.MutableRefObject<HTMLInputElement> */
     const originRef = useRef()
     /** @type React.MutableRefObject<HTMLInputElement> */
-    const destiantionRef = useRef()
+    const destinationRef = useRef()
+    /** @type React.MutableRefObject<HTMLInputElement> */
+    const destination2Ref = useRef()
 
+    const [checkpoints, setCheckpoints] = useState([])
+    
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     const [currentMark, setCurrentMark] = useState(null)
     const {id} = useParams()
@@ -46,28 +51,47 @@ export default function AddDistCenter() {
     const [lng, setLng] = useState()
 
     async function calculateRoute() {
-      if (!originRef.current || !destiantionRef.current) {
+      /*if (!originRef.current || !destinationRef.current) {
+        return
+      }*/
+      if ( checkpoints.length < 2) {
         return
       }
       // eslint-disable-next-line no-undef
       const directionsService = new google.maps.DirectionsService()
-      const results = await directionsService.route({
+      /* const results = await directionsService.route({
         origin: originRef.current,
-        destination: destiantionRef.current,
+        destination: destinationRef.current,
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       })
+      const results2 = await directionsService.route({
+        origin: destinationRef.current,
+        destination: destination2Ref.current,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+      })*/
+      let results = []
+      for (let i = 0; i < checkpoints.length - 1; i++ ) {
+        results.push( await directionsService.route({
+          origin: checkpoints[i],
+          destination: checkpoints[i+1],
+          // eslint-disable-next-line no-undef
+          travelMode: google.maps.TravelMode.DRIVING,
+        }))
+      }
       setDirectionsResponse(results)
-      setDistance(results.routes[0].legs[0].distance.text)
-      setDuration(results.routes[0].legs[0].duration.text)
+      //setDistance(results.routes[0].legs[0].distance.text)
+      //setDuration(results.routes[0].legs[0].duration.text)
     }
   
     function clearRoute() {
       setDirectionsResponse(null)
       setDistance('')
       setDuration('')
+      setCheckpoints([])
       originRef.current = null
-      destiantionRef.current = null
+      destinationRef.current = null
     }
 
     const onMapClick = (e) => {
@@ -75,11 +99,16 @@ export default function AddDistCenter() {
         lat: e.latLng.lat(),
         lng: e.latLng.lng(),
       }
+      let temp = checkpoints
+      temp.push(pos)
+      setCheckpoints(temp)
       console.log(originRef)
       if (!originRef.current){
         originRef.current = pos
+      } else if (!destinationRef.current) {
+        destinationRef.current = pos
       } else {
-        destiantionRef.current = pos
+        destination2Ref.current = pos
       }
       let marker = <Marker
               key={`${e.latLng.lat()}-${e.latLng.lng()}`}
@@ -143,9 +172,9 @@ export default function AddDistCenter() {
                     onClick={onMapClick}
                   >
                   {currentMark}
-                  {directionsResponse && (
-                    <DirectionsRenderer directions={directionsResponse} />
-                  )}
+                  {directionsResponse ? (
+                    directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
+                  ): null}
                   </GoogleMap>
                   <Button variant="success" size="lg" block="block" onClick={calculateRoute}>
                       Route

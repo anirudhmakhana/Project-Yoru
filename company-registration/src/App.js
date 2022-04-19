@@ -19,6 +19,7 @@ import MapPage from "./components/map/map.component"
 import AddDistCenter from "./components/add-dist-center.component"
 import ViewStaff from "./components/view-staff.component"
 import { OverviewPage } from './pages/Overview';
+import ViewShipment from "./components/view-shipment.component"
 
 import { CustomSidebar } from './components/sidebar';
 

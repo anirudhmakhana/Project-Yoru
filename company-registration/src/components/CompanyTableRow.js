@@ -17,11 +17,11 @@ export default class CompanyTableRow extends Component {
 
     deleteStaff = (staff) => {
         console.log(staff)
-        // axios.put('http://localhost:4000/companies/delete-key/' + this.props.obj._id + '/' + key)
-        // .catch((error) => {
-        //     console.log(error)
-        // })
-        // window.location.reload(false)
+         axios.put('http://localhost:4000/companies/delete-staff/' + this.props.obj._id + '/' + staff._id)
+         .catch((error) => {
+             console.log(error)
+         })
+         window.location.reload(false)
     }
 
     viewStaff = (staff) => {
