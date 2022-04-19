@@ -33,7 +33,7 @@ export default function AddStaff() {
         const newStaff = {
             firstName: firstName,
             lastName: lastName,
-            walletAddress: walletAddress
+            walletAddress: walletAddress.toLowerCase()
         }
     
         axios.put("http://localhost:4000/companies/add-staff/" + id, newStaff).then( 

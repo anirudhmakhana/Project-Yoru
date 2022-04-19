@@ -19,6 +19,7 @@ import MapPage from "./components/map/map.component"
 import AddDistCenter from "./components/add-dist-center.component"
 import ViewStaff from "./components/view-staff.component"
 import { OverviewPage } from './pages/Overview';
+import ViewShipment from "./components/view-shipment.component"
 
 const createError = require('http-errors')
 
@@ -37,16 +38,25 @@ function App() {
               </NavBar.Brand>
 
               <Nav className="justify-content-end">
+
+                <Nav>
+                  <Link to={"/view-shipment"} class="nav-link">
+                    Shipments
+                  </Link>
+                </Nav>
+
                 <Nav>
                   <Link to={"/map"} class="nav-link">
                     Map
                   </Link>
                 </Nav>
+
                 <Nav>
                   <Link to={"/create-company"} class="nav-link">
                     Create company
                   </Link>
                 </Nav>
+
                 <Nav>
                   <Link to={"/company-list"} class="nav-link">
                     Company List
@@ -57,6 +67,9 @@ function App() {
                     Overview
                   </Link>
                 </Nav>
+
+                
+
               </Nav>
 
             </Container>
@@ -74,8 +87,9 @@ function App() {
                   <Route path="/add-staff/:id" element={<AddStaff/>}/>
                   <Route path="/view-staff/:id" element={<ViewStaff/>}/>
                   <Route path="/add-dist-center/:id" element={<AddDistCenter/>}/>
-                  <Route path="/map/" element={<MapPage/>}/>
+                  <Route path="/map" element={<MapPage/>}/>
                   <Route path="/overview" element={<OverviewPage/>}/>
+                  <Route path="/view-shipment" element={<ViewShipment/>}/>
 
                 </Routes>
               </div>

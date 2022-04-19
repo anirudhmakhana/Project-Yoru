@@ -42,12 +42,12 @@ router.route("/get-company/:id").get((req,res) => {
 
 // Find company by account
 router.route("/get-company-by-account/:acckey").get((req, res) => {
-    companySchema.findOne({"staffs.walletAddress":new ObjectId(req.params.acckey)}, (error, data ) => {
+    companySchema.findOne({"staffs.walletAddress":req.params.acckey}, (error, data ) => {
         if (error) {
             return next(error);
         } else {
             console.log(data)
-            res.json(temp);
+            res.json(data);
         }
     })
 })
@@ -134,9 +134,10 @@ router.route('/delete-company/:id').delete((req, res, next ) => {
 })
 
 // Delete publicKey
-router.route('/delete-key/:id/:acckey').put((req, res, next ) => {
+router.route('/delete-staff/:id/:staffid').put((req, res, next ) => {
+    console.log(typeof req.params.staffid)
     companySchema.findByIdAndUpdate(req.params.id, 
-        {$pull: {publicKeys:req.params.acckey}} , (error, data) => {
+        {$pull: {"staffs":{_id:new ObjectId(req.params.staffid)}}} , (error, data) => {
         if (error) {
             return next(error);
         } else {
