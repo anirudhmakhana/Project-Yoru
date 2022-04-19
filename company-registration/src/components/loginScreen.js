@@ -8,9 +8,8 @@ import MetaMaskAuth from '../metamask-auth'
 
 export default function Login() {
     return (
-        <div className="form-wrapper mt-5">
+        <div className="form-wrapper">
             <h1>Login Using Metamask</h1>
-
             <MetaMaskAuth onAddressChanged={address => {}}/>
         </div>
     )

@@ -47,7 +47,7 @@ export default function CreateCompany() {
     }
 
     return (
-        <div className="form-wrapper mt-5">
+        <div className="form-wrapper">
             <h1>Create Company</h1>
             <Form onSubmit={onSubmit}>
                 <Form.Group controlId="CompanyName">
