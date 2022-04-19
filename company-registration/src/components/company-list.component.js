@@ -27,7 +27,7 @@ export default function CompanyList() {
     }
 
     return (
-        <div className="table-wrapper mt-5">
+        <div className="table-wrapper">
             <h1  className="mb-3">Companies</h1>
             <Table striped bordered hover>
                 <thead>
