@@ -1,4 +1,15 @@
-.sidebarHeader p{
-    padding: 24px;
+#sideNavBar {
+    position: absolute;
+}
+
+.sidebarHeaderContainer .headerLink {
+    text-decoration: none;
+}
+
+.sidebarHeaderContainer p{
+    text-align: center;
+    padding: 30px;
+    font-size: 24px;
     font-weight: bold;
+    color: #ffffff;
 }
