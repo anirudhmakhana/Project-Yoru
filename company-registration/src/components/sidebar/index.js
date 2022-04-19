@@ -17,18 +17,57 @@ import "../../assets/style/sidebar.css";
 
 export const CustomSidebar = () => {
     return (
-        <ProSidebar>
-            <SidebarHeader>
-                Project Yoru
-            </SidebarHeader>
-            <Menu iconShape="square">
-                <MenuItem>Overview</MenuItem>
-                <MenuItem>Shipment</MenuItem>
-                <MenuItem>Edit Shipment</MenuItem>
-                <MenuItem>Update Shipment</MenuItem>
-                <MenuItem>Cancel Shipment</MenuItem>
-                <MenuItem>Place & Location</MenuItem>
-            </Menu>
-        </ProSidebar>
+        <>
+            <ProSidebar id="sideNavBar">
+                <SidebarHeader className="sidebarHeaderContainer">
+                    <Link to={"/"} className="headerLink">
+                        <p>Project Yoru</p>
+                    </Link>
+                </SidebarHeader>
+                <Menu iconShape="square">
+                    <MenuItem active={true}>
+                        <Link to={"/overview"}>Overview</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/shipment"}>Shipment</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/"}>Create Shipment</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/"}>Update Shipment</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/"}>Cancel Shipment</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/"}>Place & Location</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/map"}>Map</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/create-company"}>Create Company</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={"/company-list"}>Company List</Link>
+                    </MenuItem>
+                </Menu>
+            </ProSidebar>
+
+            <Routes>
+                <Route exact path="/" element={<Login/>}/>
+                <Route path="/create-company" element={<CreateCompany/>}/>
+                <Route path="/edit-company/:id" element={<EditCompany/>}/>
+                <Route path="/company-list" element={<CompanyList/>}/>
+                <Route path="/add-staff/:id" element={<AddStaff/>}/>
+                <Route path="/view-staff/:id" element={<ViewStaff/>}/>
+                <Route path="/add-dist-center/:id" element={<AddDistCenter/>}/>
+                <Route path="/map/" element={<MapPage/>}/>
+                <Route path="/overview" element={<OverviewPage/>}/>
+                <Route path="/shipment" element={<ShipmentPage/>}/>
+            </Routes>
+        </>
+        
     );
 }
