@@ -12,6 +12,8 @@ import ViewStaff from "../view-staff.component"
 import { OverviewPage } from "../../pages/Overview";
 import { ShipmentPage } from "../../pages/Shipment";
 
+import 'react-pro-sidebar/dist/css/styles.css';
+import "../../assets/style/sidebar.css";
 
 export const CustomSidebar = () => {
     return (
