@@ -162,7 +162,7 @@ export default function AddDistCenter() {
     
     }
       return (
-        <div style={{width:'100vx', height:'50vh'}}>
+        <div style={{width:'100vw', height:'50vh'}}>
                   <GoogleMap
                     center={{ lat: 13.756331, lng: 100.501762 }}
                     zoom={15}

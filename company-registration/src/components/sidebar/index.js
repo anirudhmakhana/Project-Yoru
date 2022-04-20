@@ -19,7 +19,7 @@ import "../../assets/style/sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-import { SidebarData } from "./sidebarData";
+// import { SidebarData } from "./sidebarData";
 
 import { useState } from "react";
 
