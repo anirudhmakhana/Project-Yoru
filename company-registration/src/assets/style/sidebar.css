@@ -29,18 +29,7 @@
 
 #sideNavBar .pro-sidebar-inner .pro-sidebar-layout .active {
     background: rgba(221, 226, 255, 0.15);
-    margin-left: 0;
     color: #dde2ff;
+    border-radius: 16px;
+    margin: 0 20px 0 20px;
 }
-
-#sideNavBar .pro-sidebar-inner .pro-sidebar-layout .pro-inner-item .active::before {
-    content: "";
-    width: 8px;
-    height: 100%;
-    background: #dde2ff;
-    margin-right: calc(1rem - 8px);
-}
-
-/* #sideNavBar .pro-sidebar-item a.active {
-    color: rgb(221, 226, 255);
-} */
