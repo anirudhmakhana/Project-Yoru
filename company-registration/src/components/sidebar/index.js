@@ -11,7 +11,8 @@ import AddDistCenter from "../add-dist-center.component"
 import ViewStaff from "../view-staff.component"
 import { OverviewPage } from "../../pages/Overview";
 import { ShipmentPage } from "../../pages/Shipment";
-
+import CreateShipment from "../create-shipment.component"
+import ViewShipment from "../view-shipment.component"
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
@@ -32,7 +33,7 @@ export const CustomSidebar = () => {
                         <Link to={"/shipment"}>Shipment</Link>
                     </MenuItem>
                     <MenuItem>
-                        <Link to={"/"}>Create Shipment</Link>
+                        <Link to={"/create-shipment"}>Create Shipment</Link>
                     </MenuItem>
                     <MenuItem>
                         <Link to={"/"}>Update Shipment</Link>
@@ -65,7 +66,9 @@ export const CustomSidebar = () => {
                 <Route path="/add-dist-center/:id" element={<AddDistCenter/>}/>
                 <Route path="/map/" element={<MapPage/>}/>
                 <Route path="/overview" element={<OverviewPage/>}/>
-                <Route path="/shipment" element={<ShipmentPage/>}/>
+                <Route path="/shipment" element={<ViewShipment/>}/>     {/* DON'T FORGET TO CHANGE IT BACK TO SHIPMENT PAGE*/ }
+                <Route path="/create-shipment" element={<CreateShipment/>}/>
+
             </Routes>
         </>
         

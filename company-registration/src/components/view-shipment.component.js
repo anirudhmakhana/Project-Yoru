@@ -11,7 +11,7 @@ export default function ViewShipment() {
     const [allShipments, setAllShipments] = useState([])
 
     //contract variables
-    const contractAddress = "0x1e56630De2CCE2D849A6CF387ea6A87b7Aa060A7"
+    const contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
     const contractABI = abi
     useEffect(
         React.useCallback(() => {
@@ -28,12 +28,15 @@ export default function ViewShipment() {
         const shipmentContract = new ethers.Contract(contractAddress, contractABI.abi, externalProvider);
         
     
-        const filter = shipmentContract.on("NewScanEvent", (from, timestamp, _uid) => {
+        const filter = shipmentContract.on("NewScanEvent", (from, timestamp, _uid ,_productName, _producer, _status) => {
           console.log (
             {
-              from : from,
+              from: from,
               timestamp: timestamp,
-              _uid: _uid
+              _uid: _uid,
+              productName : _productName,
+              producer: _producer,
+              status: _status
             }
           )
         });
@@ -47,21 +50,24 @@ export default function ViewShipment() {
         const shipmentsUntilNow = queryResult.map(matchedEvent => {
           return (
             {
+
               from: matchedEvent.args[0],
-              timestamp: matchedEvent.args[1],
-              _uid: matchedEvent.args[2]
+              _uid: matchedEvent.args[2],
+              productName : matchedEvent.args[3],
+              producer: matchedEvent.args[4],
+              status: matchedEvent.args[5],
             }
           )        
         })
     
-        console.log(queryResult)
+        console.log(shipmentsUntilNow)
     
         setAllShipments(shipmentsUntilNow.reverse())
       }
 
     return (
         <div className="form-wrapper mt-5">
-            {allShipments.map(({from, timestamp, _uid}) => <p>{from} {timestamp} {_uid}</p>)}
+            {allShipments.map(({productName, producer, _uid, status}) => <p>{productName} {producer} {_uid} {status}</p>)}
         </div>
     )
 }
