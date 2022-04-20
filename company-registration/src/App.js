@@ -8,18 +8,7 @@ import React from 'react'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-
-import Login from "./components/loginScreen"
-import CreateCompany from "./components/create-company.component"
-import EditCompany from "./components/edit-company.component"
-import CompanyList from "./components/company-list.component"
-import AddStaff from "./components/add-account.component"
-import MapPage from "./components/map/map.component"
-import AddDistCenter from "./components/add-dist-center.component"
-import ViewStaff from "./components/view-staff.component"
-import { OverviewPage } from './pages/Overview';
-import ViewShipment from "./components/view-shipment.component"
+import { BrowserRouter } from 'react-router-dom';
 
 import { CustomSidebar } from './components/sidebar';
 
