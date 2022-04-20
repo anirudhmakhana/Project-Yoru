@@ -46,7 +46,7 @@ export const CustomSidebar = () => {
         <>
             <ProSidebar id="sideNavBar">
                 <SidebarHeader className="sidebarHeaderContainer">
-                    <Link to={"/"} className="headerLink">
+                    <Link to={"/overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
                         <p>Project Yoru</p>
                     </Link>
                 </SidebarHeader>
