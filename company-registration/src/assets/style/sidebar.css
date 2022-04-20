@@ -1,5 +1,6 @@
 #sideNavBar {
-    position: absolute;
+    position: relative;
+    height: 100vh;
 }
 
 .sidebarHeaderContainer .headerLink {
