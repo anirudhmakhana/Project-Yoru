@@ -15,7 +15,28 @@ import { ShipmentPage } from "../../pages/Shipment";
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+import { SidebarData } from "./sidebarData";
+
+import { useState } from "react";
+
+
+
 export const CustomSidebar = () => {
+
+    const [activeItem, setActiveItem] = useState(null);
+    
+    const handleActive = (event) => {
+        if (!event.target.value.includes("active")) {
+            event.target.toggle('active') ;
+            if (activeItem)
+                activeItem.remove("active") ;
+            setActiveItem(event.target) ;
+            }
+    }
+    
     return (
         <>
             <ProSidebar id="sideNavBar">
