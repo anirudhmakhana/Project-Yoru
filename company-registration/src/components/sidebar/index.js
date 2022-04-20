@@ -27,16 +27,20 @@ import { useState } from "react";
 
 export const CustomSidebar = () => {
 
-    const [activeItem, setActiveItem] = useState(null);
-    
-    const handleActive = (event) => {
-        if (!event.target.value.includes("active")) {
-            event.target.toggle('active') ;
-            if (activeItem)
-                activeItem.remove("active") ;
-            setActiveItem(event.target) ;
-            }
-    }
+    const [activeItemIndex, setActiveItemIndex] = useState(() => {
+        const initialIndex = 
+            window.location.pathname === "/overview" ? 0 
+            : window.location.pathname === "/shipment" ? 1 
+            : window.location. pathname === '/' ? 2 
+            : window.location. pathname === '/' ? 3 
+            : window.location. pathname === '/' ? 4
+            : window.location. pathname === '/' ? 5 
+            : window.location. pathname === '/map' ? 6 
+            : window.location. pathname === '/create-company' ? 7 
+            : window.location. pathname === '/company-list' ? 8 
+            : 0; 
+        return initialIndex;
+    });
     
     return (
         <>
@@ -47,32 +51,32 @@ export const CustomSidebar = () => {
                     </Link>
                 </SidebarHeader>
                 <Menu iconShape="square">
-                    <MenuItem icon={<FontAwesomeIcon icon={faChartPie}/>}>
-                        <Link to={"/overview"} onClick={handleActive}>Overview</Link>
+                    <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
+                        <Link to={"/overview"} onClick={() => {setActiveItemIndex(0)}}>Overview</Link>
                     </MenuItem>
-                    <MenuItem icon={<FontAwesomeIcon icon={faTicket}/>}>
-                        <Link to={"/shipment"} onClick={handleActive}>Shipment</Link>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faTicket}/>}>
+                        <Link to={"/shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
                     </MenuItem>
-                    <MenuItem icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
-                        <Link to={"/"} onClick={handleActive}>Create Shipment</Link>
+                    <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
+                        <Link to={"/"} onClick={() => {setActiveItemIndex(2)}}>Create Shipment</Link>
                     </MenuItem>
-                    <MenuItem icon={<FontAwesomeIcon icon={faPen}/>}>
-                        <Link to={"/"} onClick={handleActive}>Update Shipment</Link>
+                    <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faPen}/>}>
+                        <Link to={"/"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
                     </MenuItem>
-                    <MenuItem icon={<FontAwesomeIcon icon={faBan}/>}>
-                        <Link to={"/"} onClick={handleActive}>Cancel Shipment</Link>
+                    <MenuItem active={activeItemIndex === 4} icon={<FontAwesomeIcon icon={faBan}/>}>
+                        <Link to={"/"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
                     </MenuItem>
-                    <MenuItem icon={<FontAwesomeIcon icon={faLocationDot}/>}>
-                        <Link to={"/"} onClick={handleActive}>Place & Location</Link>
+                    <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
+                        <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
-                    <MenuItem>
-                        <Link to={"/map"} onClick={handleActive}>Map(Temporary Link)</Link>
+                    <MenuItem active={activeItemIndex === 6} >
+                        <Link to={"/map"} onClick={() => {setActiveItemIndex(6)}}>Map(Temporary Link)</Link>
                     </MenuItem>
-                    <MenuItem>
-                        <Link to={"/create-company"} onClick={handleActive}>Create Company(Temporary Link)</Link>
+                    <MenuItem active={activeItemIndex === 7} >
+                        <Link to={"/create-company"} onClick={() => {setActiveItemIndex(7)}}>Create Company(Temporary Link)</Link>
                     </MenuItem>
-                    <MenuItem>
-                        <Link to={"/company-list"} onClick={handleActive}>Company List(Temporary Link)</Link>
+                    <MenuItem active={activeItemIndex === 8} >
+                        <Link to={"/company-list"} onClick={() => {setActiveItemIndex(8)}}>Company List(Temporary Link)</Link>
                     </MenuItem>
                 </Menu>
             </ProSidebar>
