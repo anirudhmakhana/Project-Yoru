@@ -46,32 +46,32 @@ export const CustomSidebar = () => {
                     </Link>
                 </SidebarHeader>
                 <Menu iconShape="square">
-                    <MenuItem active={true}>
-                        <Link to={"/overview"}>Overview</Link>
+                    <MenuItem icon={<FontAwesomeIcon icon={faChartPie}/>}>
+                        <Link to={"/overview"} onClick={handleActive}>Overview</Link>
+                    </MenuItem>
+                    <MenuItem icon={<FontAwesomeIcon icon={faTicket}/>}>
+                        <Link to={"/shipment"} onClick={handleActive}>Shipment</Link>
+                    </MenuItem>
+                    <MenuItem icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
+                        <Link to={"/"} onClick={handleActive}>Create Shipment</Link>
+                    </MenuItem>
+                    <MenuItem icon={<FontAwesomeIcon icon={faPen}/>}>
+                        <Link to={"/"} onClick={handleActive}>Update Shipment</Link>
+                    </MenuItem>
+                    <MenuItem icon={<FontAwesomeIcon icon={faBan}/>}>
+                        <Link to={"/"} onClick={handleActive}>Cancel Shipment</Link>
+                    </MenuItem>
+                    <MenuItem icon={<FontAwesomeIcon icon={faLocationDot}/>}>
+                        <Link to={"/"} onClick={handleActive}>Place & Location</Link>
                     </MenuItem>
                     <MenuItem>
-                        <Link to={"/shipment"}>Shipment</Link>
+                        <Link to={"/map"} onClick={handleActive}>Map(Temporary Link)</Link>
                     </MenuItem>
                     <MenuItem>
-                        <Link to={"/"}>Create Shipment</Link>
+                        <Link to={"/create-company"} onClick={handleActive}>Create Company(Temporary Link)</Link>
                     </MenuItem>
                     <MenuItem>
-                        <Link to={"/"}>Update Shipment</Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to={"/"}>Cancel Shipment</Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to={"/"}>Place & Location</Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to={"/map"}>Map</Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to={"/create-company"}>Create Company</Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to={"/company-list"}>Company List</Link>
+                        <Link to={"/company-list"} onClick={handleActive}>Company List(Temporary Link)</Link>
                     </MenuItem>
                 </Menu>
             </ProSidebar>
