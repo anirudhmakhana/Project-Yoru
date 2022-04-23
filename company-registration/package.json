@@ -34,7 +34,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "victory": "^36.3.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
     "truffle-contract": "^4.0.31",
     "web3": "^1.7.3",
     "web3-eth-contract": "^1.7.3"
