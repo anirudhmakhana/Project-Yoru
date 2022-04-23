@@ -30,7 +30,8 @@ input[type=text] {
     border-radius: 10px;
     height: 4vh;
     width: 100%;
-    padding-left: 10px;
+    padding-left: 15px;
+    background-color: #FCFDFE;
 }
 
 input[type=text]::placeholder {
