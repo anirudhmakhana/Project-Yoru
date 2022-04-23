@@ -3,3 +3,27 @@
     flex: 1;
     justify-content: center;
 }
+
+h3 {
+    color: #A4A6B3;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-weight: bold;
+    color: #252733;
+    font-size: 1.85rem;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #9FA2B4;
+    margin-bottom: 20px;
+}
+
+div.logo {
+    display: flex;
+    margin-bottom: 20px;
+    flex: 0;
+}
