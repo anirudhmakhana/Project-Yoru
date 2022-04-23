@@ -1,0 +1,13 @@
+.card {
+    background: #ffffff;
+    width: 18vw;
+    height: 9vw;
+    border-radius: 16px;
+}
+
+.card h2 {
+    font-size: 1.5em;
+} 
+.card p {
+    font-size: 1.4em;
+}
