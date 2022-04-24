@@ -13,6 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { CustomSidebar } from './components/sidebar';
 
 import { LoginPage } from './pages/Login';
+import { RegisterPage } from './pages/Register';
 
 const createError = require('http-errors')
 
@@ -21,7 +22,8 @@ function App() {
     
     <BrowserRouter>
       <div className="App">
-        <LoginPage/>
+        <RegisterPage/>
+        {/* <LoginPage/> */}
         {/* <CustomSidebar/> */}
       </div>
     </BrowserRouter>
