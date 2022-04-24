@@ -1,9 +1,11 @@
 .startPageContainer {
-    height: 55vh;
+    min-height: 55vh;
+    min-width: 420px;
+    max-width: 25vw;
     border: solid 1px;
     background: #FFFFFF;
     border-radius: 16px;
-    padding: 10px 5vw 10px 5vw ;
+    padding: 10px 2vw 10px 2vw ;
     flex-direction: column;
 }
 
