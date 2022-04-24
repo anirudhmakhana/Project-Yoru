@@ -1,7 +1,7 @@
 .startPageContainer {
     min-height: 55vh;
     min-width: 420px;
-    max-width: 25vw;
+    width: 20vw;
     border: solid 1px;
     background: #FFFFFF;
     border-radius: 16px;
