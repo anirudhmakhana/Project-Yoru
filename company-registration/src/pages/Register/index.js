@@ -1,6 +1,5 @@
 import React from "react";
 
-import "../../assets/style/register.css"
 import "../../assets/style/style.css"
 
 export const RegisterPage = () => {
