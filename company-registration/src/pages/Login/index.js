@@ -25,7 +25,7 @@ export const LoginPage = () => {
                     <input className="signinBtn" type="submit" value="Log In"></input>
                     <div className="buttonContainerRow">
                         <label>Don't have an account ?</label>
-                        <input className="signupBtn" type="submit" value="Sign Up"></input> 
+                        <a href="/register" className="signupBtn">Sign Up</a>
                     </div>
                     
                 </form>

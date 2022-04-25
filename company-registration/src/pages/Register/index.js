@@ -30,7 +30,8 @@ export const RegisterPage = () => {
                     <input className="signinBtn" type="submit" value="Register"></input>
                     <div className="buttonContainerRow">
                         <label>Don't have an account ?</label>
-                        <input className="signupBtn" type="submit" value="Sign In"></input> 
+                        <a href="/" className="signupBtn">Sign In</a>
+                        {/* <input className="signupBtn" type="submit" value="Sign In"></input>  */}
                     </div>
                 </form>
             </div>
