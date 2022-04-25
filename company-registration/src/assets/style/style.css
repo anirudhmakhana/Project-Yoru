@@ -53,6 +53,8 @@ input[type=submit] {
 }
 
 .signupBtn {
+    text-decoration: none;
+    font-weight: bold;
     background: none;
     color: #3751FF;
     padding: 0;
