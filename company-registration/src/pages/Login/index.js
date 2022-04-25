@@ -1,9 +1,46 @@
-import React from "react";
+import axios from "axios";
+import { el } from "date-fns/locale";
+import React, {useState} from "react";
+import { Alert } from "react-bootstrap";
 
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
 
 export const LoginPage = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [userData, setUserData] = useState(null) 
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        if (email.length < 1 ) {
+            console.log('Please enter your email address.')
+        } else if ( password.length < 1) {
+            console.log("Please enter your password.")
+        } 
+        const loginData = {
+            username: email,
+            password: password
+        }
+
+        axios.post("http://localhost:4000/staff/login", loginData)
+        .catch( error => {
+            console.log("Invalid username or password!")
+        }) 
+        .then( res =>{
+            setUserData(res.data)
+        }
+        )
+
+    }
+    function handleChangeEmail(e) {
+        setEmail(e.target.value)
+    }
+
+    function handleChangePassword(e) {
+        setPassword(e.target.value)
+    }
+
     return (
         <div className="loginBackground">
             <div className="startPageContainer">
@@ -13,16 +50,16 @@ export const LoginPage = () => {
 
                 <h2>Log In to Project Yoru</h2>
                 <p>Enter your email and password below</p>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="email">Email</label>
-                        <input type="text" id="email" name="email" placeholder="Email Address"></input>
+                        <input type="text" id="email" name="email" placeholder="Email Address" onChange={handleChangeEmail} value={email}></input>
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="password">Password</label>
-                        <input type="text" id="password" name="password" placeholder="Password"></input>
+                        <input type="text" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
                     </div>
-                    <input className="signinBtn" type="submit" value="Log In"></input>
+                    <input className="signinBtn" type="submit" value="Log In" ></input>
                     <div className="buttonContainerRow">
                         <label>Don't have an account ?</label>
                         <a href="/register" className="signupBtn">Sign Up</a>
