@@ -1,19 +1,13 @@
-import Nav from 'react-bootstrap/Nav';
-import NavBar from 'react-bootstrap/NavBar';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import React from 'react'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 
-import { BrowserRouter } from 'react-router-dom';
-
-import { CustomSidebar } from './components/sidebar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
+import { MainPage } from './pages/Main';
 
 const createError = require('http-errors')
 
@@ -22,9 +16,11 @@ function App() {
     
     <BrowserRouter>
       <div className="App">
-        <RegisterPage/>
-        {/* <LoginPage/> */}
-        {/* <CustomSidebar/> */}
+        <Routes>
+          <Route exact path="/" element={<LoginPage/>} />
+          <Route path="/register" element={<RegisterPage/>} />
+          <Route path="/main" element={<MainPage/>} />
+        </Routes>
       </div>
     </BrowserRouter>
     
