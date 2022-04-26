@@ -7,17 +7,20 @@ import { ethers } from "ethers";
 
 import abi from "../utils/TrackingContract.json"
 
-export default function ViewShipment() {
+export default function TempViewShipment(props) {
     const [allShipments, setAllShipments] = useState([])
-
+    const [shipment, setShipment] = useState({"0":"", "1":"", "2":""})
+    const [shipmentId, setShipmentId] = useState('')
+    const [userData, setUserData] = useState(null)
     //contract variables
     const contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
     const contractABI = abi
     useEffect(
         React.useCallback(() => {
-            getAllShipments()
+            // getAllShipments()
+            setUserData(props.userData)
         })
-    );
+    ,[userData] );
     
     async function getAllShipments() {
 
@@ -65,9 +68,49 @@ export default function ViewShipment() {
         setAllShipments(shipmentsUntilNow.reverse())
       }
 
+    async function handleSubmit(e) {
+      e.preventDefault()
+      if (shipmentId.length < 1 ) {
+          console.log('Please enter shipment ID.')
+      } 
+      axios.get("http://localhost:4000/company/" + userData.companyCode,
+      {headers:{"x-access-token":userData.token}}) 
+      .catch( error =>  {
+        console.log("Cannot find company by code")
+      })
+      .then( res => {
+          console.log(res)
+          axios.get("http://localhost:4010/shipment/" + shipmentId + "/" + res.data.walletPublicKey, 
+          {headers:{"x-access-token":userData.token}}) 
+          .catch( error_shipment => {
+              console.log("Shipment not found!")
+          }) 
+          .then( res_shipment =>{
+              console.log(res_shipment.data)
+              setShipment(res_shipment.data)
+          }
+          )
+      })
+
+      
+
+    }
+    function handleChangeId(e) {
+        setShipmentId(e.target.value)
+    }
+
     return (
         <div className="form-wrapper mt-5">
-            {allShipments.map(({productName, producer, _uid, status}) => <p>{productName} {producer} {_uid} {status}</p>)}
+          <form onSubmit={handleSubmit}>
+            <div className="textInputContainerCol">
+                <label className="inputLabel" for="shipmentId">Shipment ID</label>
+                <input type="text" id="shipmentId" name="shipmentId" placeholder="Shipment ID" onChange={handleChangeId} value={shipmentId}></input>
+            </div>
+            
+            <input className="viewBtn" type="submit" value="View Shipment"></input>
+            
+        </form>
+            <p> {shipment["0"]} {shipment["1"]} {shipment["2"]}</p>
         </div>
     )
 }

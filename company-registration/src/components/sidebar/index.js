@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
 import { ShipmentPage } from "../../pages/Shipment";
+import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
@@ -13,10 +14,14 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot } from 
 
 import { useState } from "react";
 
+import TempViewShipment from "../view-shipment.component"
 
 
-export const CustomSidebar = () => {
-
+export const CustomSidebar = (props) => {
+    const [userData, setUserData] = useState(null)
+    useEffect(() => {
+        setUserData(props.userData)
+      }, [userData]);
     const [activeItemIndex, setActiveItemIndex] = useState(() => {
         const initialIndex = 
             window.location.pathname === "overview" ? 0 
@@ -72,8 +77,8 @@ export const CustomSidebar = () => {
             </ProSidebar>
 
             <Routes>
-                <Route path="overview" element={<OverviewPage/>}/>
-                <Route path="shipment" element={<ShipmentPage/>}/>
+                <Route path="overview" element={<OverviewPage userData={userData}/>}/>
+                <Route path="shipment" element={<TempViewShipment userData={userData}/>}/>
             </Routes>
         </>
         
