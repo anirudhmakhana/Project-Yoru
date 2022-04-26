@@ -6,12 +6,15 @@ import {useNavigate} from "react-router-dom"
 
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
+    
 
 export const LoginPage = (props) => {
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
     const navigate = useNavigate()
+
     async function handleSubmit(e) {
         e.preventDefault()
         if (email.length < 1 ) {
@@ -31,7 +34,7 @@ export const LoginPage = (props) => {
         .then( res =>{
             console.log(res.data)
             setUserData(res.data)
-            navigate("/main", {state:{userData:res.data}})
+            navigate("main/overview", {state:{userData:res.data}})
         }
         )
 
@@ -62,7 +65,7 @@ export const LoginPage = (props) => {
                         <label className="inputLabel" for="password">Password</label>
                         <input type="text" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
                     </div>
-                    <input className="signinBtn" type="submit" value="Log In" ></input>
+                    <input className="signinBtn" type="submit" value="Log In"></input>
                     <div className="buttonContainerRow">
                         <label>Don't have an account ?</label>
                         <a href="/register" className="signupBtn">Sign Up</a>
