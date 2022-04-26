@@ -2,15 +2,16 @@ import axios from "axios";
 import { el } from "date-fns/locale";
 import React, {useState} from "react";
 import { Alert } from "react-bootstrap";
+import {useNavigate} from "react-router-dom"
 
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
 
-export const LoginPage = () => {
+export const LoginPage = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
-
+    const navigate = useNavigate()
     async function handleSubmit(e) {
         e.preventDefault()
         if (email.length < 1 ) {
@@ -28,7 +29,9 @@ export const LoginPage = () => {
             console.log("Invalid username or password!")
         }) 
         .then( res =>{
+            console.log(res.data)
             setUserData(res.data)
+            navigate("/main", {state:{userData:res.data}})
         }
         )
 
