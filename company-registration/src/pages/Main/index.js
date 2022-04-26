@@ -7,8 +7,8 @@ export const MainPage = (props) => {
     const [userData, setUserData] = useState(location.state.userData)
     console.log(userData)
     return (
-        <>
+        <div className="mainPageWrapper">
             <CustomSidebar/>
-        </>
+        </div>
     );
 }
