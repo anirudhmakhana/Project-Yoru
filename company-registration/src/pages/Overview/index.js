@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import axios from 'axios';
 
@@ -7,7 +7,12 @@ import "../../assets/style/overview.css"
 import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
 
-export const OverviewPage = () => {
+export const OverviewPage = (props) => {
+    const [userData, setUserData] = useState(null)
+    useEffect(() => {
+        setUserData(props.userData)
+        console.log(props.userData)
+      }, [userData]);
     return (
         <div id="overview">
             <div className="title-container">
