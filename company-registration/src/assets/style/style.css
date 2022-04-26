@@ -86,3 +86,10 @@ label.inputLabel {
     font-weight: bold;
     opacity: 0.825;
 }
+
+.mainPageWrapper {
+    width: 100vw;
+    height: 100vh;
+    flex: 1;
+    flex-direction: row;
+}

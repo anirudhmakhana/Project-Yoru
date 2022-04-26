@@ -1,7 +1,8 @@
 .loginBackground div{
-    display: flex;
+    display: flex !important;
     flex: 1;
-    justify-content: center;
+    justify-content: center !important;
+    /* height: 100vh; */
 }
 
 h3 {
