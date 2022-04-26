@@ -110,7 +110,10 @@ export default function TempViewShipment(props) {
             <input className="viewBtn" type="submit" value="View Shipment"></input>
             
         </form>
-            <p> {shipment["0"]} {shipment["1"]} {shipment["2"]}</p>
+            <p className="mt-5"> {shipment["0"]} </p>
+            <p>{shipment["1"]} </p>
+            <p className="mb-5">{shipment["2"]}</p>
+            <p>-------------------------------</p>
         </div>
     )
 }
