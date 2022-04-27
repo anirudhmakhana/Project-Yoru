@@ -9,14 +9,15 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAdd } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
-import CompanyList from "../company-list.component";
-import CreateCompany from "../create-company.component"
+import {CompanyList} from "../../pages/CompanyList";
+import {CreateCompany} from "../../pages/CreateCompany"
+import {RegisterAdmin} from "../../pages/RegisterAdmin"
 
 export const AdminSidebar = (props) => {
     const [userData, setUserData] = useState(null)
@@ -27,7 +28,7 @@ export const AdminSidebar = (props) => {
         const initialIndex = 
              window.location. pathname === 'company-list' ? 0
             : window.location. pathname === 'create-company' ? 1
-            // : window.location. pathname === '/company-list' ? 2
+            : window.location. pathname === 'register-admin' ? 2
             : 0; 
         return initialIndex;
     });
@@ -65,19 +66,16 @@ export const AdminSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faBan}/>}>
                         <Link to={"create-company"} onClick={() => {setActiveItemIndex(1)}}>Create Company</Link>
                     </MenuItem>
-                    {/* <MenuItem active={activeItemIndex === 2} >
-                        <Link to={"company-list"} onClick={() => {setActiveItemIndex(2)}}>Company List(Temporary Link)</Link>
-                    </MenuItem> */}
+                    <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
+                        <Link to={"register-admin"} onClick={() => {setActiveItemIndex(2)}}>Register Admin</Link>
+                    </MenuItem>
                 </Menu>
             </ProSidebar>
 
             <Routes>
                 <Route path="company-list" element={<CompanyList userData={userData}/>} />
-<<<<<<< HEAD
                 <Route path="create-company" element={<CreateCompany userData={userData}/>}/>
-                {/* <Route path="shipment" element={<TempViewShipment userData={userData}/>}/> */}
-=======
->>>>>>> companyDB
+                <Route path="register-admin" element={<RegisterAdmin userData={userData}/>}/>
             </Routes>
         </>
         
