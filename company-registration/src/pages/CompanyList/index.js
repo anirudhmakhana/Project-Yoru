@@ -60,10 +60,10 @@ export function CompanyList(props) {
                     {dataTable()}
 
             </Table>
-            <Routes>
+            {/* <Routes>
                 <Route path="edit-company" element={<RegisterAdmin userData={props.userData}/>} />
                 <Route path="add-staff" element={<CreateCompany userData={props.userData}/>}/>
-            </Routes>
+            </Routes> */}
         </div>
         
     )

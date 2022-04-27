@@ -18,6 +18,7 @@ import TempViewShipment from "../view-shipment.component"
 import {CompanyList} from "../../pages/CompanyList";
 import {CreateCompany} from "../../pages/CreateCompany"
 import {RegisterAdmin} from "../../pages/RegisterAdmin"
+import {EditCompany} from "../../pages/EditCompany"
 
 export const AdminSidebar = (props) => {
     const [userData, setUserData] = useState(null)
@@ -76,6 +77,8 @@ export const AdminSidebar = (props) => {
                 <Route path="company-list" element={<CompanyList userData={props.userData}/>} />
                 <Route path="create-company" element={<CreateCompany userData={props.userData}/>}/>
                 <Route path="register-admin" element={<RegisterAdmin userData={props.userData}/>}/>
+                <Route path="company-list/edit-company/:companyCode" element={<EditCompany userData={props.userData}/>}/>
+
             </Routes>
         </>
         

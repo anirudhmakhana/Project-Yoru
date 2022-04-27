@@ -11,6 +11,11 @@ export default class CompanyTableRow extends Component {
         this.state = {
             users: []
         }
+        this.updateTable()
+              
+    }
+
+    updateTable = () => {
         axios.get('http://localhost:4000/staff/getByCompany/' + this.props.obj.companyCode ,
         {headers:{"x-access-token":this.props.userData.token}})
         .then( res => {
@@ -21,30 +26,34 @@ export default class CompanyTableRow extends Component {
         .catch((error) => {
             console.log(error)
         })
-              
     }
 
     deleteCompany = () => {
         console.log('delete Company')
-        // axios.delete('http://localhost:4000/companies/delete-company/' + this.props.obj._id)
-        // .catch((error) => {
-        //     console.log(error)
-        // })
+        axios.delete('http://localhost:4000/company/' + this.props.obj.companyCode,
+         {headers:{"x-access-token":this.props.userData.token}})
+        .catch((error) => {
+            console.log(error)
+        })
+        .then(res => {
+            console.log(res)
+            
+        })
         // window.location.reload(false)
 
     }
 
     deleteStaff = (staff) => {
         console.log(staff)
-        //  axios.put('http://localhost:4000/companies/delete-staff/' + this.props.obj._id + '/' + staff._id)
-        //  .catch((error) => {
-        //      console.log(error)
-        //  })
-        //  window.location.reload(false)
-    }
-
-    viewStaff = (staff) => {
-
+        axios.delete('http://localhost:4000/staff/' + staff.username,
+         {headers:{"x-access-token":this.props.userData.token}})
+        .catch((error) => {
+            console.log(error)
+        })
+        .then(res => {
+            console.log(res)
+            this.updateTable()
+        })
     }
 
     render() {
@@ -55,7 +64,7 @@ export default class CompanyTableRow extends Component {
                 <td>{this.props.obj.companyName}</td>
                 <td>
                     
-                    <Link to={'/edit-company/'+this.props.obj.companyCode}>
+                    <Link to={'edit-company/'+this.props.obj.companyCode}>
                         <Button size="sm" variant="outline-primary">Edit</Button>
                     </Link>
                     &nbsp;&nbsp;
