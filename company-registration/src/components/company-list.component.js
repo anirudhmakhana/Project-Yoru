@@ -8,28 +8,28 @@ export default function CompanyList() {
     const [companies, setCompanies] = useState([])
 
     
-    useEffect(() => {
-        axios.get('http://localhost:4000/companies')
-            .then( res => {
-                setCompanies(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+    // useEffect(() => {
+    //     axios.get('http://localhost:4000/companies')
+    //         .then( res => {
+    //             setCompanies(res.data)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //         })
         
-    }, )
+    // }, )
 
 
-    const dataTable = () => {
-        return companies.map((res, i) => {
-            return <CompanyTableRow obj={res} key={i}/>
-        })
-    }
+    // const dataTable = () => {
+    //     return companies.map((res, i) => {
+    //         return <CompanyTableRow obj={res} key={i}/>
+    //     })
+    // }
 
     return (
         <div className="table-wrapper" style={{width:"100vw"}}>
             <h1  className="mb-3">Companies</h1>
-            <Table striped bordered hover>
+            {/* <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -42,7 +42,7 @@ export default function CompanyList() {
                     {dataTable()}
 
             </Table>
-        
+         */}
         </div>
     )
 }

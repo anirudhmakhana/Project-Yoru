@@ -8,7 +8,7 @@ import "../../assets/style/login.css"
 import "../../assets/style/style.css"
     
 
-export const LoginPage = (props) => {
+export const AdminLoginPage = (props) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -27,14 +27,14 @@ export const LoginPage = (props) => {
             password: password
         }
 
-        axios.post("http://localhost:4000/staff/login", loginData)
+        axios.post("http://localhost:4000/admin/login", loginData)
         .catch( error => {
             console.log("Invalid username or password!")
         }) 
         .then( res =>{
             console.log(res.data)
             setUserData(res.data)
-            navigate("main/overview", {state:{userData:res.data, userType:"staff"}})
+            navigate("main/company-list", {state:{userData:res.data, userType:"admin"}})
         }
         )
 
@@ -51,15 +51,15 @@ export const LoginPage = (props) => {
         <div className="loginBackground">
             <div className="startPageContainer">
                 <div className="logo">
-                    <h3>Project Yoru</h3>
+                    <h3>Admin</h3>
                 </div>
 
                 <h2>Log In to Project Yoru</h2>
-                <p>Enter your email and password below</p>
+                <p>Enter your username and password below</p>
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
-                        <label className="inputLabel" for="email">Email</label>
-                        <input type="text" id="email" name="email" placeholder="Email Address" onChange={handleChangeEmail} value={email}></input>
+                        <label className="inputLabel" for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Username" onChange={handleChangeEmail} value={email}></input>
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="password">Password</label>
