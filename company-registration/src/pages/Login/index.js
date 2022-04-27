@@ -47,6 +47,10 @@ export const LoginPage = (props) => {
         setPassword(e.target.value)
     }
 
+    const forTestOnly = () => {
+        navigate("main/overview")
+    }
+
     return (
         <div className="loginBackground">
             <div className="startPageContainer">
