@@ -14,6 +14,7 @@ import { OverviewPage } from "./pages/Overview";
 import { ShipmentPage } from "./pages/Shipment";
 import { AdminLoginPage } from './pages/AdminLogin';
 import CompanyList  from "./components/company-list.component"
+import CreateCompany from './components/create-company.component';
 const createError = require('http-errors')
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
           <Route path="admin/main" element={<MainPage/>}>
             <Route index element={<CompanyList/>}/>
             <Route path="company-list" element={<CompanyList/>}/>
-            {/* <Route path="shipment" element={<ShipmentPage/>}/> */}
+            <Route path="create-company" element={<CreateCompany/>}/>
           </Route>
         </Routes>
       </div>

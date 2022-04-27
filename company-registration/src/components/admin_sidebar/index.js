@@ -16,7 +16,7 @@ import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
 import CompanyList from "../company-list.component";
-
+import CreateCompany from "../create-company.component"
 
 export const AdminSidebar = (props) => {
     const [userData, setUserData] = useState(null)
@@ -25,15 +25,9 @@ export const AdminSidebar = (props) => {
       }, [userData]);
     const [activeItemIndex, setActiveItemIndex] = useState(() => {
         const initialIndex = 
-            // window.location.pathname === "overview" ? 0 
-            // : window.location.pathname === "shipment" ? 1 
-            // : window.location. pathname === '/' ? 2 
-            // : window.location. pathname === '/' ? 3 
-            // : window.location. pathname === '/' ? 4
-            // : window.location. pathname === '/' ? 5 
-             window.location. pathname === 'map' ? 0
+             window.location. pathname === 'company-list' ? 0
             : window.location. pathname === 'create-company' ? 1
-            : window.location. pathname === '/company-list' ? 2
+            // : window.location. pathname === '/company-list' ? 2
             : 0; 
         return initialIndex;
     });
@@ -42,7 +36,7 @@ export const AdminSidebar = (props) => {
         <>
             <ProSidebar id="sideNavBar">
                 <SidebarHeader className="sidebarHeaderContainer">
-                    <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
+                    <Link to={"company-list"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
                         <p>Project Yoru</p>
                     </Link>
                 </SidebarHeader>
@@ -65,21 +59,21 @@ export const AdminSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem> */}
-                    <MenuItem active={activeItemIndex === 0} >
-                        <Link to={"map"} onClick={() => {setActiveItemIndex(0)}}>Map(Temporary Link)</Link>
+                    <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
+                        <Link to={"company-list"} onClick={() => {setActiveItemIndex(0)}}>Companies List</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 1} >
-                        <Link to={"add-dist-center"} onClick={() => {setActiveItemIndex(1)}}>Create Company(Temporary Link)</Link>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faBan}/>}>
+                        <Link to={"create-company"} onClick={() => {setActiveItemIndex(1)}}>Create Company</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 2} >
+                    {/* <MenuItem active={activeItemIndex === 2} >
                         <Link to={"company-list"} onClick={() => {setActiveItemIndex(2)}}>Company List(Temporary Link)</Link>
-                    </MenuItem>
+                    </MenuItem> */}
                 </Menu>
             </ProSidebar>
 
             <Routes>
                 <Route path="company-list" element={<CompanyList userData={userData}/>} />
-                {/* <Route path="overview" element={<OverviewPage userData={userData}/>}/> */}
+                <Route path="create-company" element={<CreateCompany userData={userData}/>}/>
                 {/* <Route path="shipment" element={<TempViewShipment userData={userData}/>}/> */}
             </Routes>
         </>
