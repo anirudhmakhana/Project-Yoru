@@ -54,6 +54,7 @@ export function CompanyList(props) {
                         <th scope="col">Name</th>
                         <th scope="col">Action</th>
                         <th scope="col">Staff(s)</th>
+                        
                     </tr>
                 </thead>
 

@@ -74,7 +74,7 @@ export default class CompanyTableRow extends Component {
                     &nbsp;&nbsp;
                     <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> Delete</Button>
                 </td>
-                <td>
+                <td align="center">
                         {this.state.users.slice(0, this.state.users.length).map((item, index) => {
                         return (
                             <tr>
