@@ -36,6 +36,8 @@ export const CustomSidebar = (props) => {
             : 0; 
         return initialIndex;
     });
+
+
     
     return (
         <>
@@ -64,16 +66,8 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 6} >
-                        <Link to={"map"} onClick={() => {setActiveItemIndex(6)}}>Map(Temporary Link)</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 7} >
-                        <Link to={"add-dist-center"} onClick={() => {setActiveItemIndex(7)}}>Create Company(Temporary Link)</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 8} >
-                        <Link to={"company-list"} onClick={() => {setActiveItemIndex(8)}}>Company List(Temporary Link)</Link>
-                    </MenuItem>
                 </Menu>
+                
             </ProSidebar>
 
             <Routes>
