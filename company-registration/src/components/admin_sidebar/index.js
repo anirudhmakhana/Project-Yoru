@@ -20,6 +20,7 @@ import {CreateCompany} from "../../pages/CreateCompany"
 import {RegisterAdmin} from "../../pages/RegisterAdmin"
 import {EditCompany} from "../../pages/EditCompany"
 import { AddStaff } from "../../pages/AddStaff";
+import { ViewStaff } from "../../pages/ViewStaff";
 
 export const AdminSidebar = (props) => {
     const [userData, setUserData] = useState(null)
@@ -80,6 +81,7 @@ export const AdminSidebar = (props) => {
                 <Route path="register-admin" element={<RegisterAdmin userData={props.userData}/>}/>
                 <Route path="company-list/edit-company/:companyCode" element={<EditCompany userData={props.userData}/>}/>
                 <Route path="company-list/add-staff/:companyCode" element={<AddStaff userData={props.userData}/>}/>
+                <Route path="company-list/view-staff/:username" element={<ViewStaff userData={props.userData}/>}/>
 
             </Routes>
         </>

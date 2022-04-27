@@ -81,7 +81,7 @@ export default class CompanyTableRow extends Component {
                                 <td>{item.fullName}</td>
                                 <td>
                                     &nbsp;&nbsp;
-                                    <Link to={'/view-staff/'+item.username}>
+                                    <Link to={'view-staff/'+item.username}>
                                     <Button size="sm" variant="outline-primary">View</Button>
                                     </Link>
                                     &nbsp;&nbsp;
