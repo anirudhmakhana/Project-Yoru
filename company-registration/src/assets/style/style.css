@@ -92,3 +92,9 @@ label.inputLabel {
     height: 100%;
     display: flex;
 }
+
+.adminPageHeader {
+    color: #FFFFFF;
+    font-size: 3em;
+    font-weight: bold;
+}

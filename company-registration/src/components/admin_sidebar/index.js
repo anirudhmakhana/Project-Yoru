@@ -73,9 +73,9 @@ export const AdminSidebar = (props) => {
             </ProSidebar>
 
             <Routes>
-                <Route path="company-list" element={<CompanyList userData={userData}/>} />
-                <Route path="create-company" element={<CreateCompany userData={userData}/>}/>
-                <Route path="register-admin" element={<RegisterAdmin userData={userData}/>}/>
+                <Route path="company-list" element={<CompanyList userData={props.userData}/>} />
+                <Route path="create-company" element={<CreateCompany userData={props.userData}/>}/>
+                <Route path="register-admin" element={<RegisterAdmin userData={props.userData}/>}/>
             </Routes>
         </>
         
