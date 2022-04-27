@@ -68,7 +68,7 @@ export default class CompanyTableRow extends Component {
                         <Button size="sm" variant="outline-primary">Edit</Button>
                     </Link>
                     &nbsp;&nbsp;
-                    <Link to={'/add-staff/'+this.props.obj.companyCode}>
+                    <Link to={'add-staff/'+this.props.obj.companyCode}>
                         <Button size="sm" variant="outline-success">Add Account</Button>
                     </Link>
                     &nbsp;&nbsp;
