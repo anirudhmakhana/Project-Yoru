@@ -79,8 +79,6 @@ export const AdminSidebar = (props) => {
 
             <Routes>
                 <Route path="company-list" element={<CompanyList userData={userData}/>} />
-                {/* <Route path="overview" element={<OverviewPage userData={userData}/>}/> */}
-                {/* <Route path="shipment" element={<TempViewShipment userData={userData}/>}/> */}
             </Routes>
         </>
         
