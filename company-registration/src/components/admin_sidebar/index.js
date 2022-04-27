@@ -73,8 +73,11 @@ export const AdminSidebar = (props) => {
 
             <Routes>
                 <Route path="company-list" element={<CompanyList userData={userData}/>} />
+<<<<<<< HEAD
                 <Route path="create-company" element={<CreateCompany userData={userData}/>}/>
                 {/* <Route path="shipment" element={<TempViewShipment userData={userData}/>}/> */}
+=======
+>>>>>>> companyDB
             </Routes>
         </>
         

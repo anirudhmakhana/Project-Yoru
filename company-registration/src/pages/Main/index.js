@@ -23,7 +23,7 @@ export const MainPage = (props) => {
     }
     return (
         <div className="mainPageWrapper">
-            <CustomSidebar userData = {userData}/>
+            <CustomSidebar />
         </div>
     );
 }
