@@ -22,7 +22,7 @@ import TempViewShipment from "../view-shipment.component"
 
 
 
-export const CustomSidebar = (props) => {
+export const ManagerSidebar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     // useEffect(() => {
     //     setUserData(props.userData)
@@ -71,12 +71,12 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
-                    {/* <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
+                    <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
-                    </MenuItem> */}
+                    </MenuItem>
                     <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
@@ -91,9 +91,9 @@ export const CustomSidebar = (props) => {
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<TempViewShipment/>}/>
-                {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
+                <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
-                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}
+                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
 
                 {/* Need to improve pages style and may change to other register page */}
 
