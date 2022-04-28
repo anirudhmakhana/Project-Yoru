@@ -5,7 +5,7 @@ import axios from "axios";
 import "../../assets/style/style.css"
 
 export const AddStaffPage = (props) => {
-    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')

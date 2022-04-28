@@ -11,17 +11,17 @@ export default function TempViewShipment(props) {
     const [allShipments, setAllShipments] = useState([])
     const [shipment, setShipment] = useState({"0":"", "1":"", "2":""})
     const [shipmentId, setShipmentId] = useState('')
-    const [userData, setUserData] = useState(null)
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     //contract variables
     const contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
     const contractABI = abi
-    useEffect(
-        React.useCallback(() => {
-            // getAllShipments()
-            setUserData(props.userData)
-            console.log(props.userData)
-        })
-    ,[userData] );
+    // useEffect(
+    //     React.useCallback(() => {
+    //         // getAllShipments()
+    //         setUserData(props.userData)
+    //         console.log(props.userData)
+    //     })
+    // ,[userData] );
     
     async function getAllShipments() {
 

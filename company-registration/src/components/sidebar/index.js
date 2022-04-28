@@ -23,10 +23,10 @@ import TempViewShipment from "../view-shipment.component"
 
 
 export const CustomSidebar = (props) => {
-    const [userData, setUserData] = useState(null)
-    useEffect(() => {
-        setUserData(props.userData)
-      }, [userData]);
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    // useEffect(() => {
+    //     setUserData(props.userData)
+    //   }, [userData]);
     const [activeItemIndex, setActiveItemIndex] = useState(() => {
         const initialIndex = 
             window.location.pathname === "overview" ? 0 
@@ -72,14 +72,15 @@ export const CustomSidebar = (props) => {
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
-                        <Link to={"register-staff/"+props.userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
+                        <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
-                        <Link to={"staff-list/"+props.userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
+                        <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
+                            localStorage.clear()
                             setActiveItemIndex(8)}}>Log Out</Link>
                     </MenuItem>
 
@@ -88,11 +89,11 @@ export const CustomSidebar = (props) => {
             </ProSidebar>
 
             <Routes>
-                <Route path="overview" element={<OverviewPage userData={props.userData}/>}/>
-                <Route path="shipment" element={<TempViewShipment userData={props.userData}/>}/>
-                <Route path="register-staff/:companyCode" element={<AddStaffPage userData={props.userData}/>}/> 
-                <Route path="staff-list/:companyCode" element={<StaffListPage userData={props.userData}/>}/> 
-                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage userData={props.userData}/>}/>
+                <Route path="overview" element={<OverviewPage/>}/>
+                <Route path="shipment" element={<TempViewShipment/>}/>
+                <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
+                <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
+                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
 
                 {/* Need to improve pages style and may change to other register page */}
 

@@ -12,12 +12,12 @@ export function StaffListPage(props) {
     const { companyCode } = useParams()
 
     const [staffs, setStaffs] = useState([])
-    const [userData, setUserData] = useState(null) 
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [companyName, setCompanyName] = useState(null)
     useEffect(() => {
-        setUserData(props.userData)
-        console.log(props.userData)
-        axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":props.userData.token}})
+        // setUserData(props.userData)
+        // console.log(props.userData)
+        axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":userData.token}})
         .then( res => {
             setCompanyName(res.data.companyName)
             console.log(res.data)
@@ -30,7 +30,7 @@ export function StaffListPage(props) {
     }, [userData]);
 
     const updateData = () => {
-        axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,{headers:{"x-access-token":props.userData.token}})
+        axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,{headers:{"x-access-token":userData.token}})
         .then( res => {
             setStaffs(res.data)
             console.log(res.data)

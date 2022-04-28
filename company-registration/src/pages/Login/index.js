@@ -34,7 +34,9 @@ export const LoginPage = (props) => {
         .then( res =>{
             console.log(res.data)
             setUserData(res.data)
-            navigate("main/overview", {state:{userData:res.data, userType:"staff"}})
+            localStorage.setItem("userData", JSON.stringify(res.data))
+            localStorage.setItem("userType", "staff")
+            navigate("main/overview")
         }
         )
 

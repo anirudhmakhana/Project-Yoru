@@ -5,25 +5,19 @@ import { CustomSidebar } from "../../components/sidebar";
 
 export const MainPage = (props) => {
     let location = useLocation()
-    const [userData, setUserData] = useState(null)
-    const [userType, setUserType] = useState(null)
-    useEffect(() => {
-        setUserData(location.state.userData)
-        setUserType(location.state.userType)
-        console.log(location.state.userData)
-      }, [userData, userType]);
-    // console.log(location.state.userData)
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [userType, setUserType] = useState(localStorage.getItem("userType"))
 
     if ( userType == "admin" ) {
         return (
             <div className="mainPageWrapper">
-                <AdminSidebar userData = {userData}/>
+                <AdminSidebar/>
             </div>
         );
     } else if (userType == "staff"){
         return (
             <div className="mainPageWrapper">
-                <CustomSidebar userData={userData}/>
+                <CustomSidebar/>
             </div>
         );
     }

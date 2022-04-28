@@ -35,7 +35,8 @@ export const AdminLoginPage = (props) => {
             console.log(res.data)
             setUserData(res.data)
             localStorage.setItem("userData", JSON.stringify(res.data))
-            navigate("main/company-list", {state:{userData:res.data, userType:"admin"}})
+            localStorage.setItem("userType", "admin")
+            navigate("main/company-list")
         }
         )
 

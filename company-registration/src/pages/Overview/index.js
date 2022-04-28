@@ -8,11 +8,11 @@ import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
 
 export const OverviewPage = (props) => {
-    const [userData, setUserData] = useState(null)
-    useEffect(() => {
-        setUserData(props.userData)
-        console.log(props.userData)
-      }, [userData]);
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    // useEffect(() => {
+    //     setUserData(props.userData)
+    //     console.log(props.userData)
+    //   }, [userData]);
     return (
         <div id="overview">
             <div className="title-container">
