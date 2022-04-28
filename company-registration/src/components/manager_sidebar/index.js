@@ -7,13 +7,14 @@ import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
+import { EditCompanyPage } from "../../pages/EditCompany";
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen, faCube, faCubes, faBuilding } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -37,7 +38,8 @@ export const ManagerSidebar = (props) => {
             : window.location.pathname === '/' ? 5 
             : window.location.pathname === 'register-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
-            : window.location.pathname === '/' ? 8 
+            : window.location.pathname === 'edit-company' ? 8
+            : window.location.pathname === '/' ? 9
             : 0; 
         return initialIndex;
     });
@@ -56,7 +58,7 @@ export const ManagerSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
                         <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}}>Overview</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faTicket}/>}>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faCubes}/>}>
                         <Link to={"shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
@@ -77,11 +79,14 @@ export const ManagerSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
+                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faBuilding}/>}>
+                        <Link to={"edit-company/"+userData.companyCode} onClick={() => {setActiveItemIndex(8)}}>Edit Company</Link>
+                    </MenuItem>
+                    <MenuItem active={activeItemIndex === 9} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
                             localStorage.clear()
-                            setActiveItemIndex(8)}}>Log Out</Link>
+                            setActiveItemIndex(9)}}>Log Out</Link>
                     </MenuItem>
 
                 </Menu>
@@ -94,6 +99,7 @@ export const ManagerSidebar = (props) => {
                 <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
+                <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
 
                 {/* Need to improve pages style and may change to other register page */}
 
