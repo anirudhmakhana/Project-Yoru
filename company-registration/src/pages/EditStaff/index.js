@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 import "../../assets/style/style.css"
 
-export const AddStaffPage = (props) => {
+export const EditStaffPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirm, setConfirm] = useState('')
-    const [fullName, setFullName] = useState('')
-    const [contact, setContact] = useState('')
-
-    // useEffect(() => {
-        
-    //     setUserData(props.userData)
-    //     // console.log(props.userData)
-    //   }, [userData]);
-
+    const [username, setUsername] = useState(eval('('+localStorage.getItem("userData")+')').username)
+    const [password, setPassword] = useState(eval('('+localStorage.getItem("userData")+')').password)
+    const [fullName, setFullName] = useState(eval('('+localStorage.getItem("userData")+')').fullName)
+    const [contact, setContact] = useState(eval('('+localStorage.getItem("userData")+')').email)
+    const navigate = useNavigate()
 
     const handleChangeUsername = (e) => {
         setUsername( e.target.value )
@@ -27,14 +20,6 @@ export const AddStaffPage = (props) => {
      const handleChangeContact = (e) => {
          setContact(e.target.value)
      }
- 
-    const handleChangePassword = (e) => {
-        setPassword(e.target.value)
-    }
- 
-    const handleChangeConfirm = (e) => {
-        setConfirm(e.target.value)
-    }
 
      const handleChangeFullName = (e) => {
         setFullName(e.target.value)
@@ -52,29 +37,30 @@ export const AddStaffPage = (props) => {
         }
         else if ( contact.length < 1) {
             console.log("Please enter your contact email.")
-        } else if (confirm != password)  {
-            console.log("Passwords are not matching!")
-            setConfirm("")
         } else {
             const newAccount = {
                 username: username,
                 password: password,
                 fullName: fullName,
                 email: contact,
-                positionLevel: "staff",
                 companyCode: companyCode
             }
             console.log(newAccount)
     
-            axios.post("http://localhost:4000/staff/register", newAccount,  {headers:{"x-access-token":userData.token}})
+            axios.put("http://localhost:4000/staff/update/"+ username, newAccount,  {headers:{"x-access-token":userData.token}})
             .catch( error => {
                 console.log(error)
             }) 
             .then( res =>{
-                console.log("New account created!")
+                console.log("Account updated!")
+                const edittedData = res.data
+                edittedData.token = userData.token
+                localStorage.setItem("userData", JSON.stringify(edittedData))
+                console.log(edittedData)
+                // navigate("/main/staff-list/"+companyCode)
+                navigate(-1)
                 setUsername("")
                 setPassword("")
-                setConfirm("")
                 setContact("")
                 setFullName("")
                 
@@ -97,7 +83,10 @@ export const AddStaffPage = (props) => {
                         <label className="inputLabel" for="companyCode">Company</label>
                         <input type="text" id="companyCode" name="companyCode" placeholder={companyCode} disabled></input>
                     </div>
-                    
+                    <div className="textInputContainerCol">
+                        <label className="inputLabel" for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder={username} value={username} onChange={handleChangeUsername} disabled></input>
+                    </div>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="fullname">Full Name</label>
                         <input type="text" id="fullname" name="fullname" placeholder="e.g. Adam Eve" value={fullName} onChange={handleChangeFullName}></input>
@@ -106,20 +95,9 @@ export const AddStaffPage = (props) => {
                         <label className="inputLabel" for="contact">Email</label>
                         <input type="text" id="contact" name="contact" placeholder="e.g. adam.eve@eden.com" value={contact} onChange={handleChangeContact}></input>
                     </div>
-                    <div className="textInputContainerCol">
-                        <label className="inputLabel" for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleChangeUsername}></input>
-                    </div>
-                    <div className="textInputContainerCol"> 
-                        <label className="inputLabel" for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handleChangePassword}></input>
-                    </div>
-                    <div className="textInputContainerCol"> 
-                        <label className="inputLabel" for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password"
-                        value={confirm} onChange={handleChangeConfirm}></input>
-                    </div>
-                    <input className="signinBtn" type="submit" value="Register"></input>
+                    
+                
+                    <input className="signinBtn" type="submit" value="Update"></input>
                     
                 </form>
             </div>

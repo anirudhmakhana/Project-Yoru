@@ -16,7 +16,8 @@ export function StaffListPage(props) {
     const [companyName, setCompanyName] = useState(null)
     useEffect(() => {
         // setUserData(props.userData)
-        // console.log(props.userData)
+        console.log(localStorage.getItem("userData"))
+        console.log(userData)
         axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":userData.token}})
         .then( res => {
             setCompanyName(res.data.companyName)

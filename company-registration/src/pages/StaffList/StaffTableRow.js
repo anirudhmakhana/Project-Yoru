@@ -43,13 +43,13 @@ export default class CompanyTableRow extends Component {
                     </Link>
                     &nbsp;&nbsp; */}
                     {this.props.obj.username == this.props.userData.username ?(
-                        <Button size="sm" onClick={() => {
-                            console.log('disabled')
-                        }}variant="outline-dark" disabled> Delete</Button>
+                        <Link to={'edit-staff/'+this.props.userData.username}>
+                        <Button size="sm" variant="primary">EDIT</Button>
+                        </Link>
                     ): (
                     <Button size="sm" onClick={() => {
                         this.deleteStaff(this.props.obj)
-                    }}variant="outline-danger"> Delete</Button>) }
+                    }}variant="outline-danger"> DELETE</Button>) }
                     
                 </td>       
 

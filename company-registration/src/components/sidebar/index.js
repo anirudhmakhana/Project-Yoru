@@ -7,6 +7,7 @@ import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
+import { EditStaffPage } from "../../pages/EditStaff";
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -35,7 +36,7 @@ export const CustomSidebar = (props) => {
             : window.location.pathname === '/' ? 3 
             : window.location.pathname === '/' ? 4
             : window.location.pathname === '/' ? 5 
-            : window.location.pathname === 'register-staff' ? 6 
+            : window.location.pathname === 'edit-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
             : window.location.pathname === '/' ? 8 
             : 0; 
@@ -71,10 +72,10 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
-                    {/* <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
-                        <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
+                    <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
+                        <Link to={"edit-staff/"+userData.companyCode+"/"+userData.username} onClick={() => {setActiveItemIndex(6)}}>Edit Account</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
+                    {/* <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
                     </MenuItem> */}
                     <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
@@ -91,6 +92,7 @@ export const CustomSidebar = (props) => {
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<TempViewShipment/>}/>
+                <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
                 {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}

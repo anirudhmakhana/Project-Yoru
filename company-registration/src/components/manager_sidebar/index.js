@@ -8,6 +8,7 @@ import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
 import { EditCompanyPage } from "../../pages/EditCompany";
+import { EditStaffPage } from "../../pages/EditStaff";
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -100,6 +101,7 @@ export const ManagerSidebar = (props) => {
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
                 <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
+                <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>
 
                 {/* Need to improve pages style and may change to other register page */}
 

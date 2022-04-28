@@ -65,14 +65,14 @@ export default class CompanyTableRow extends Component {
                 <td>
                     
                     <Link to={'edit-company/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="outline-primary">Edit</Button>
+                        <Button size="sm" variant="primary">EDIT</Button>
                     </Link>
                     &nbsp;&nbsp;
                     <Link to={'add-staff/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="outline-success">Add Account</Button>
+                        <Button size="sm" variant="success">ADD STAFF</Button>
                     </Link>
                     &nbsp;&nbsp;
-                    <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> Delete</Button>
+                    <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> DELETE</Button>
                 </td>
                 <td align="center">
                         {this.state.users.slice(0, this.state.users.length).map((item, index) => {
@@ -82,12 +82,12 @@ export default class CompanyTableRow extends Component {
                                 <td>
                                     &nbsp;&nbsp;
                                     <Link to={'view-staff/'+item.username}>
-                                    <Button size="sm" variant="outline-primary">View</Button>
+                                    <Button size="sm" variant="secondary">VIEW</Button>
                                     </Link>
                                     &nbsp;&nbsp;
                                     <Button size="sm" onClick={() => {
                                         this.deleteStaff(item)
-                                    }}variant="outline-danger"> Delete</Button>
+                                    }}variant="outline-danger"> DELETE</Button>
                                 </td>
                                 
                             </tr>
