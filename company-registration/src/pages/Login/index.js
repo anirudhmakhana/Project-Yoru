@@ -10,20 +10,20 @@ import "../../assets/style/style.css"
 
 export const LoginPage = (props) => {
 
-    const [email, setEmail] = useState('')
+    const [username, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
     const navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
-        if (email.length < 1 ) {
+        if (username.length < 1 ) {
             console.log('Please enter your email address.')
         } else if ( password.length < 1) {
             console.log("Please enter your password.")
         } 
         const loginData = {
-            username: email,
+            username: username,
             password: password
         }
 
@@ -41,7 +41,7 @@ export const LoginPage = (props) => {
         )
 
     }
-    function handleChangeEmail(e) {
+    function handleChangeUsername(e) {
         setEmail(e.target.value)
     }
 
@@ -61,11 +61,11 @@ export const LoginPage = (props) => {
                 </div>
 
                 <h2>Log In to Project Yoru</h2>
-                <p>Enter your email and password below</p>
+                <p>Enter your username and password below</p>
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
-                        <label className="inputLabel" for="email">Email</label>
-                        <input type="text" id="email" name="email" placeholder="Email Address" onChange={handleChangeEmail} value={email}></input>
+                        <label className="inputLabel" for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Username" onChange={handleChangeUsername} value={username}></input>
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="password">Password</label>

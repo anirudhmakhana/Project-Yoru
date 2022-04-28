@@ -36,7 +36,7 @@ export default class CompanyTableRow extends Component {
              <th scope="row">{this.props.index}</th>
                 <td>{this.props.obj.fullName}</td>
                 <td>{this.props.obj.username}</td>
-                <td>{this.props.obj.contactNumber}</td>
+                <td>{this.props.obj.email}</td>
                 <td>
                     {/* <Link to={'view-staff/'+this.props.obj.username}>
                     <Button size="sm" variant="outline-primary">View</Button>

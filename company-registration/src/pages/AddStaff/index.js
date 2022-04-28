@@ -51,7 +51,7 @@ export const AddStaffPage = (props) => {
             console.log("Please enter your full name.")
         }
         else if ( contact.length < 1) {
-            console.log("Please enter your contact.")
+            console.log("Please enter your contact email.")
         } else if (confirm != password)  {
             console.log("Passwords are not matching!")
             setConfirm("")
@@ -60,7 +60,7 @@ export const AddStaffPage = (props) => {
                 username: username,
                 password: password,
                 fullName: fullName,
-                contactNumber: contact,
+                email: contact,
                 companyCode: companyCode
             }
             console.log(newAccount)
@@ -102,8 +102,8 @@ export const AddStaffPage = (props) => {
                         <input type="text" id="fullname" name="fullname" placeholder="e.g. Adam Eve" value={fullName} onChange={handleChangeFullName}></input>
                     </div>
                     <div className="textInputContainerCol">
-                        <label className="inputLabel" for="contact">Contact</label>
-                        <input type="text" id="contact" name="contact" placeholder="e.g. 0912345678" value={contact} onChange={handleChangeContact}></input>
+                        <label className="inputLabel" for="contact">Email</label>
+                        <input type="text" id="contact" name="contact" placeholder="e.g. adam.eve@eden.com" value={contact} onChange={handleChangeContact}></input>
                     </div>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="username">Username</label>

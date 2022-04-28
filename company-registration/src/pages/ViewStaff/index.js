@@ -9,7 +9,7 @@ export const ViewStaffPage = (props) => {
     const { username } = useParams()
     const [companyCode, setCompanyCode] = useState('')
     const [fullName, setFullName] = useState('')
-    const [contact, setContact] = useState('')
+    const [email, setEmail] = useState('')
 
     useEffect(() => {
         
@@ -19,7 +19,7 @@ export const ViewStaffPage = (props) => {
         .then( res => {
             console.log(res.data)
             setFullName(res.data.fullName)
-            setContact(res.data.contactNumber)
+            setEmail(res.data.email)
             setCompanyCode(res.data.companyCode)
         })
         .catch((error) => {
@@ -51,8 +51,8 @@ export const ViewStaffPage = (props) => {
                     </div>
 
                     <div className="textInputContainerCol">
-                        <label className="inputLabel" for="contact">Contact</label>
-                        <input type="text" id="contact" name="contact" value={contact}  disabled></input>
+                        <label className="inputLabel" for="contact">Email</label>
+                        <input type="text" id="contact" name="contact" value={email}  disabled></input>
                     </div>
                     
 

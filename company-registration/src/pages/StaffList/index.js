@@ -69,7 +69,7 @@ export function StaffListPage(props) {
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Contact</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Action</th>
                         
                     </tr>
