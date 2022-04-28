@@ -8,7 +8,7 @@ import "../../assets/style/login.css"
 import "../../assets/style/style.css"
     
 
-export const RegisterAdmin = (props) => {
+export const RegisterAdminPage = (props) => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')

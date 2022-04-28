@@ -1,40 +1,52 @@
 import React, { Component, useEffect, useState } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
-import CompanyTableRow from './CompanyTableRow'
-import { Routes, Route, Link } from "react-router-dom";
+import StaffTableRow from './StaffTableRow'
+import { Routes, Route, Link, useParams } from "react-router-dom";
 
 import { CreateCompanyPage } from '../CreateCompany'
 import { RegisterAdminPage } from '../RegisterAdmin'
 import "../../assets/style/companyList.css";
 
-export function CompanyListPage(props) {
+export function StaffListPage(props) {
+    const { companyCode } = useParams()
 
-    const [companies, setCompanies] = useState([])
+    const [staffs, setStaffs] = useState([])
     const [userData, setUserData] = useState(null) 
     useEffect(() => {
         setUserData(props.userData)
         console.log(props.userData)
+
         updateData()
-        
         // console.log(props.userData)
-      }, [userData]);
-    
+    }, [userData]);
+
     const updateData = () => {
-        axios.get('http://localhost:4000/company',{headers:{"x-access-token":props.userData.token}})
+        axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,{headers:{"x-access-token":props.userData.token}})
         .then( res => {
-            setCompanies(res.data)
+            setStaffs(res.data)
             console.log(res.data)
         })
         .catch((error) => {
             console.log(error)
         })
     }
+    // useEffect(() => {
+    //     axios.get('http://localhost:4000/companies')
+    //         .then( res => {
+    //             setCompanies(res.data)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //         })
+        
+    // }, )
 
 
     const dataTable = () => {
-        return companies.map((res, i) => {
-            return <CompanyTableRow userData={userData} obj={res} key={i} refresh={updateData}/>
+        return staffs.map((res, i) => {
+            console.log(i)
+            return <StaffTableRow userData={userData} obj={res} index={i+1} refresh={updateData}/>
         })
     }
 
@@ -44,10 +56,11 @@ export function CompanyListPage(props) {
             <Table className="table table-bordered table-dark">
                 <thead>
                     <tr>
-                        <th scope="col">Code</th>
+                        <th scope="col">#</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Contact</th>
                         <th scope="col">Action</th>
-                        <th scope="col">Staff(s)</th>
                         
                     </tr>
                 </thead>

@@ -4,7 +4,7 @@ import axios from "axios";
 
 import "../../assets/style/style.css"
 
-export const ViewStaff = (props) => {
+export const ViewStaffPage = (props) => {
     const [userData, setUserData] = useState(null)
     const { username } = useParams()
     const [companyCode, setCompanyCode] = useState('')

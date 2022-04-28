@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 
-export function EditCompany(props) {
+export function EditCompanyPage(props) {
     const [userData, setUserData] = useState(null) 
     console.log(props)
     const { companyCode } = useParams()

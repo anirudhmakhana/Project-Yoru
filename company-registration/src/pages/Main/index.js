@@ -20,10 +20,12 @@ export const MainPage = (props) => {
                 <AdminSidebar userData = {userData}/>
             </div>
         );
+    } else if (userType == "staff"){
+        return (
+            <div className="mainPageWrapper">
+                <CustomSidebar userData={userData}/>
+            </div>
+        );
     }
-    return (
-        <div className="mainPageWrapper">
-            <CustomSidebar userData={userData}/>
-        </div>
-    );
+    
 }

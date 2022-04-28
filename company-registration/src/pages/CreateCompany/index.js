@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 
-export function CreateCompany(props) {
+export function CreateCompanyPage(props) {
     const [userData, setUserData] = useState(null) 
 
     const [companyCode, setCompanyCode] = useState('')

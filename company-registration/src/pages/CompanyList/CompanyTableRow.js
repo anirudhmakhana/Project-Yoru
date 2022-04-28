@@ -37,7 +37,7 @@ export default class CompanyTableRow extends Component {
         })
         .then(res => {
             console.log(res)
-            
+            this.props.refresh()
         })
         // window.location.reload(false)
 

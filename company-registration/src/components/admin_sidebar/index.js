@@ -15,12 +15,12 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
-import {CompanyList} from "../../pages/CompanyList";
-import {CreateCompany} from "../../pages/CreateCompany"
-import {RegisterAdmin} from "../../pages/RegisterAdmin"
-import {EditCompany} from "../../pages/EditCompany"
-import { AddStaff } from "../../pages/AddStaff";
-import { ViewStaff } from "../../pages/ViewStaff";
+import {CompanyListPage} from "../../pages/CompanyList";
+import {CreateCompanyPage} from "../../pages/CreateCompany"
+import {RegisterAdminPage} from "../../pages/RegisterAdmin"
+import {EditCompanyPage} from "../../pages/EditCompany"
+import { AddStaffPage } from "../../pages/AddStaff";
+import { ViewStaffPage } from "../../pages/ViewStaff";
 
 export const AdminSidebar = (props) => {
     const [userData, setUserData] = useState(null)
@@ -76,12 +76,12 @@ export const AdminSidebar = (props) => {
             </ProSidebar>
 
             <Routes>
-                <Route path="company-list" element={<CompanyList userData={props.userData}/>} />
-                <Route path="create-company" element={<CreateCompany userData={props.userData}/>}/>
-                <Route path="register-admin" element={<RegisterAdmin userData={props.userData}/>}/>
-                <Route path="company-list/edit-company/:companyCode" element={<EditCompany userData={props.userData}/>}/>
-                <Route path="company-list/add-staff/:companyCode" element={<AddStaff userData={props.userData}/>}/>
-                <Route path="company-list/view-staff/:username" element={<ViewStaff userData={props.userData}/>}/>
+                <Route path="company-list" element={<CompanyListPage userData={props.userData}/>} />
+                <Route path="create-company" element={<CreateCompanyPage userData={props.userData}/>}/>
+                <Route path="register-admin" element={<RegisterAdminPage userData={props.userData}/>}/>
+                <Route path="company-list/edit-company/:companyCode" element={<EditCompanyPage userData={props.userData}/>}/>
+                <Route path="company-list/add-staff/:companyCode" element={<AddStaffPage userData={props.userData}/>}/>
+                <Route path="company-list/view-staff/:username" element={<ViewStaffPage userData={props.userData}/>}/>
 
             </Routes>
         </>

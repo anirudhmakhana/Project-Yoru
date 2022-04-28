@@ -3,18 +3,23 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
 import { ShipmentPage } from "../../pages/Shipment";
+import { RegisterPage} from "../../pages/Register"
+import { AddStaffPage } from "../../pages/AddStaff";
+import { StaffListPage } from "../../pages/StaffList";
+import { ViewStaffPage } from "../../pages/ViewStaff"
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
+
 
 
 export const CustomSidebar = (props) => {
@@ -26,13 +31,13 @@ export const CustomSidebar = (props) => {
         const initialIndex = 
             window.location.pathname === "overview" ? 0 
             : window.location.pathname === "shipment" ? 1 
-            : window.location. pathname === '/' ? 2 
-            : window.location. pathname === '/' ? 3 
-            : window.location. pathname === '/' ? 4
-            : window.location. pathname === '/' ? 5 
-            : window.location. pathname === 'map' ? 6 
-            : window.location. pathname === 'create-company' ? 7 
-            : window.location. pathname === '/company-list' ? 8 
+            : window.location.pathname === '/' ? 2 
+            : window.location.pathname === '/' ? 3 
+            : window.location.pathname === '/' ? 4
+            : window.location.pathname === '/' ? 5 
+            : window.location.pathname === 'register-staff' ? 6 
+            : window.location.pathname === 'staff-list' ? 7 
+            : window.location.pathname === '/company-list' ? 8 
             : 0; 
         return initialIndex;
     });
@@ -66,6 +71,13 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
+                    <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
+                        <Link to={"register-staff/"+props.userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
+                    </MenuItem>
+                    <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
+                        <Link to={"staff-list/"+props.userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
+                    </MenuItem>
+
                 </Menu>
                 
             </ProSidebar>
@@ -73,6 +85,12 @@ export const CustomSidebar = (props) => {
             <Routes>
                 <Route path="overview" element={<OverviewPage userData={props.userData}/>}/>
                 <Route path="shipment" element={<TempViewShipment userData={props.userData}/>}/>
+                <Route path="register-staff/:companyCode" element={<AddStaffPage userData={props.userData}/>}/> 
+                <Route path="staff-list/:companyCode" element={<StaffListPage userData={props.userData}/>}/> 
+                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage userData={props.userData}/>}/>
+
+                {/* Need to improve pages style and may change to other register page */}
+
             </Routes>
         </>
         

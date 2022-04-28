@@ -4,7 +4,7 @@ import axios from "axios";
 
 import "../../assets/style/style.css"
 
-export const AddStaff = (props) => {
+export const AddStaffPage = (props) => {
     const [userData, setUserData] = useState(null)
     const { companyCode } = useParams()
     const [username, setUsername] = useState('')
