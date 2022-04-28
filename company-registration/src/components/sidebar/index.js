@@ -13,7 +13,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -37,7 +37,7 @@ export const CustomSidebar = (props) => {
             : window.location.pathname === '/' ? 5 
             : window.location.pathname === 'register-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
-            : window.location.pathname === '/company-list' ? 8 
+            : window.location.pathname === '/' ? 8 
             : 0; 
         return initialIndex;
     });
@@ -76,6 +76,11 @@ export const CustomSidebar = (props) => {
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+props.userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
+                    </MenuItem>
+                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
+                        <Link to={"/"} onClick={() => {
+                            //TODO: clear local storage here
+                            setActiveItemIndex(8)}}>Log Out</Link>
                     </MenuItem>
 
                 </Menu>

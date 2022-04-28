@@ -9,7 +9,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAdd, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -29,9 +29,10 @@ export const AdminSidebar = (props) => {
       }, [userData]);
     const [activeItemIndex, setActiveItemIndex] = useState(() => {
         const initialIndex = 
-             window.location. pathname === 'company-list' ? 0
-            : window.location. pathname === 'create-company' ? 1
-            : window.location. pathname === 'register-admin' ? 2
+             window.location.pathname === 'company-list' ? 0
+            : window.location.pathname === 'create-company' ? 1
+            : window.location.pathname === 'register-admin' ? 2
+            : window.location.pathname === '/' ? 3
             : 0; 
         return initialIndex;
     });
@@ -71,6 +72,11 @@ export const AdminSidebar = (props) => {
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"register-admin"} onClick={() => {setActiveItemIndex(2)}}>Register Admin</Link>
+                    </MenuItem>
+                    <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
+                        <Link to={"/"} onClick={() => {
+                            //TODO: clear local storage here
+                            setActiveItemIndex(3)}}>Log Out</Link>
                     </MenuItem>
                 </Menu>
             </ProSidebar>
