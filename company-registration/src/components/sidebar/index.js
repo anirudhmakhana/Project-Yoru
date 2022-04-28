@@ -71,8 +71,8 @@ export const CustomSidebar = (props) => {
             </ProSidebar>
 
             <Routes>
-                <Route path="overview" element={<OverviewPage userData={userData}/>}/>
-                <Route path="shipment" element={<TempViewShipment userData={userData}/>}/>
+                <Route path="overview" element={<OverviewPage userData={props.userData}/>}/>
+                <Route path="shipment" element={<TempViewShipment userData={props.userData}/>}/>
             </Routes>
         </>
         

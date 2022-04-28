@@ -5,8 +5,8 @@ import { CustomSidebar } from "../../components/sidebar";
 
 export const MainPage = (props) => {
     let location = useLocation()
-    const [userData, setUserData] = useState()
-    const [userType, setUserType] = useState()
+    const [userData, setUserData] = useState(null)
+    const [userType, setUserType] = useState(null)
     useEffect(() => {
         setUserData(location.state.userData)
         setUserType(location.state.userType)
@@ -23,7 +23,7 @@ export const MainPage = (props) => {
     }
     return (
         <div className="mainPageWrapper">
-            <CustomSidebar />
+            <CustomSidebar userData={userData}/>
         </div>
     );
 }

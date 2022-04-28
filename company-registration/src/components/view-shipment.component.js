@@ -19,6 +19,7 @@ export default function TempViewShipment(props) {
         React.useCallback(() => {
             // getAllShipments()
             setUserData(props.userData)
+            console.log(props.userData)
         })
     ,[userData] );
     
