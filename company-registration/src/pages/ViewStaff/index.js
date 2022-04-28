@@ -5,7 +5,7 @@ import axios from "axios";
 import "../../assets/style/style.css"
 
 export const ViewStaffPage = (props) => {
-    const [userData, setUserData] = useState(null)
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { username } = useParams()
     const [companyCode, setCompanyCode] = useState('')
     const [fullName, setFullName] = useState('')
@@ -13,9 +13,9 @@ export const ViewStaffPage = (props) => {
 
     useEffect(() => {
         
-        setUserData(props.userData)
+        // setUserData(props.userData)
         axios.get('http://localhost:4000/staff/' + username ,
-        {headers:{"x-access-token":props.userData.token}})
+        {headers:{"x-access-token":userData.token}})
         .then( res => {
             console.log(res.data)
             setFullName(res.data.fullName)

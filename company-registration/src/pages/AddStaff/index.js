@@ -5,7 +5,7 @@ import axios from "axios";
 import "../../assets/style/style.css"
 
 export const AddStaffPage = (props) => {
-    const [userData, setUserData] = useState(null)
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -13,11 +13,11 @@ export const AddStaffPage = (props) => {
     const [fullName, setFullName] = useState('')
     const [contact, setContact] = useState('')
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        setUserData(props.userData)
-        // console.log(props.userData)
-      }, [userData]);
+    //     setUserData(props.userData)
+    //     // console.log(props.userData)
+    //   }, [userData]);
 
 
     const handleChangeUsername = (e) => {

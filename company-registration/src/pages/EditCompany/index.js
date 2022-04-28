@@ -7,8 +7,7 @@ import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 
 export function EditCompanyPage(props) {
-    const [userData, setUserData] = useState(null) 
-    console.log(props)
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
     // const [companyCode, setCompanyCode] = useParams().companyCode
     const [companyName, setCompanyName] = useState('')
@@ -18,9 +17,9 @@ export function EditCompanyPage(props) {
 
     useEffect(() => {
         
-        setUserData(props.userData)
+        // setUserData(props.userData)
         axios.get('http://localhost:4000/company/' + companyCode ,
-        {headers:{"x-access-token":props.userData.token}})
+        {headers:{"x-access-token":userData.token}})
         .then( res => {
             setCompanyName(res.data.companyName)
             setManagerContact(res.data.managerContact)
@@ -31,7 +30,7 @@ export function EditCompanyPage(props) {
             console.log(error)
         })
         // console.log(props.userData)
-      }, [userData, companyCode]);
+      }, [ companyCode]);
 
     const handleChangeCompanyName = (e) => {
        setCompanyName( e.target.value )
@@ -51,6 +50,7 @@ export function EditCompanyPage(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(userData)
         if (companyName.length < 1) {
             alert("Please enter company name.")
         }

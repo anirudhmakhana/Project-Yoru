@@ -23,16 +23,16 @@ import { AddStaffPage } from "../../pages/AddStaff";
 import { ViewStaffPage } from "../../pages/ViewStaff";
 
 export const AdminSidebar = (props) => {
-    const [userData, setUserData] = useState(null)
-    useEffect(() => {
-        setUserData(props.userData)
-      }, [userData]);
+    const userData = useState(eval('('+localStorage.getItem("userData")+')'))
+    // useEffect(() => {
+    //     setUserData(localStorage.getItem("userData"))
+    //   }, [userData]);
     const [activeItemIndex, setActiveItemIndex] = useState(() => {
         const initialIndex = 
              window.location.pathname === 'company-list' ? 0
             : window.location.pathname === 'create-company' ? 1
             : window.location.pathname === 'register-admin' ? 2
-            : window.location.pathname === '/' ? 3
+            : window.location.pathname === '/admin' ? 3
             : 0; 
         return initialIndex;
     });
@@ -74,20 +74,21 @@ export const AdminSidebar = (props) => {
                         <Link to={"register-admin"} onClick={() => {setActiveItemIndex(2)}}>Register Admin</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
-                        <Link to={"/"} onClick={() => {
+                        <Link to={"/admin"} onClick={() => {
                             //TODO: clear local storage here
+                            localStorage.clear()
                             setActiveItemIndex(3)}}>Log Out</Link>
                     </MenuItem>
                 </Menu>
             </ProSidebar>
 
             <Routes>
-                <Route path="company-list" element={<CompanyListPage userData={props.userData}/>} />
-                <Route path="create-company" element={<CreateCompanyPage userData={props.userData}/>}/>
-                <Route path="register-admin" element={<RegisterAdminPage userData={props.userData}/>}/>
-                <Route path="company-list/edit-company/:companyCode" element={<EditCompanyPage userData={props.userData}/>}/>
-                <Route path="company-list/add-staff/:companyCode" element={<AddStaffPage userData={props.userData}/>}/>
-                <Route path="company-list/view-staff/:username" element={<ViewStaffPage userData={props.userData}/>}/>
+                <Route path="company-list" element={<CompanyListPage/>} />
+                <Route path="create-company" element={<CreateCompanyPage/>}/>
+                <Route path="register-admin" element={<RegisterAdminPage/>}/>
+                <Route path="company-list/edit-company/:companyCode" element={<EditCompanyPage/>}/>
+                <Route path="company-list/add-staff/:companyCode" element={<AddStaffPage/>}/>
+                <Route path="company-list/view-staff/:username" element={<ViewStaffPage/>}/>
 
             </Routes>
         </>

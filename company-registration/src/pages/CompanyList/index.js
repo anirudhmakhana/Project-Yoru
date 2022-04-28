@@ -11,20 +11,21 @@ import "../../assets/style/companyList.css";
 export function CompanyListPage(props) {
 
     const [companies, setCompanies] = useState([])
-    const [userData, setUserData] = useState(null) 
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     useEffect(() => {
-        setUserData(props.userData)
-        console.log(props.userData)
+        // setUserData(localStorage.getItem("userData"))
+        console.log(userData)
         updateData()
         
         // console.log(props.userData)
       }, [userData]);
     
     const updateData = () => {
-        axios.get('http://localhost:4000/company',{headers:{"x-access-token":props.userData.token}})
+
+        axios.get('http://localhost:4000/company',{headers:{"x-access-token":userData.token}})
         .then( res => {
             setCompanies(res.data)
-            console.log(res.data)
+            // console.log(res.data)
         })
         .catch((error) => {
             console.log(error)
@@ -51,8 +52,8 @@ export function CompanyListPage(props) {
                         
                     </tr>
                 </thead>
-
-                    {dataTable()}
+            
+                    {userData ? (dataTable()) : (<></>)}
 
             </Table>
             {/* <Routes>

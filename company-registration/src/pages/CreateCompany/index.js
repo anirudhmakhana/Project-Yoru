@@ -6,7 +6,7 @@ import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 
 export function CreateCompanyPage(props) {
-    const [userData, setUserData] = useState(null) 
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
 
     const [companyCode, setCompanyCode] = useState('')
     const [companyName, setCompanyName] = useState('')
@@ -14,10 +14,10 @@ export function CreateCompanyPage(props) {
     const [publicKey, setPublicKey] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
-    useEffect(() => {
-        setUserData(props.userData)
-        // console.log(props.userData)
-      }, [userData]);
+    // useEffect(() => {
+    //     setUserData(props.userData)
+    //     // console.log(props.userData)
+    //   }, [userData]);
 
     const handleChangeCompanyName = (e) => {
        setCompanyName( e.target.value )

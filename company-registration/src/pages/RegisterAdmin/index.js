@@ -13,12 +13,12 @@ export const RegisterAdminPage = (props) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirm, setConfirm] = useState('')
-    const [userData, setUserData] = useState(null) 
+    const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const navigate = useNavigate()
-    useEffect(() => {
-        setUserData(props.userData)
-        // console.log(props.userData)
-      }, [userData]);
+    // useEffect(() => {
+    //     setUserData(props.userData)
+    //     // console.log(props.userData)
+    //   }, [userData]);
     async function handleSubmit(e) {
         e.preventDefault()
         if (username.length < 1 ) {
@@ -34,7 +34,7 @@ export const RegisterAdminPage = (props) => {
                 password: password
             }
     
-            axios.post("http://localhost:4000/admin/register", newAccount,  {headers:{"x-access-token":userData.token}})
+            axios.post("http://localhost:4000/admin/register", newAccount,{headers:{"x-access-token":userData.token}})
             .catch( error => {
                 console.log(error)
             }) 
