@@ -111,11 +111,11 @@ export const AddStaffPage = (props) => {
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="password">Password</label>
-                        <input type="text" id="password" name="password" placeholder="Password" value={password} onChange={handleChangePassword}></input>
+                        <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handleChangePassword}></input>
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="confirmPassword">Confirm Password</label>
-                        <input type="text" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password"
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password"
                         value={confirm} onChange={handleChangeConfirm}></input>
                     </div>
                     <input className="signinBtn" type="submit" value="Register"></input>

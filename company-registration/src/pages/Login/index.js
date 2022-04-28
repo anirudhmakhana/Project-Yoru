@@ -69,13 +69,13 @@ export const LoginPage = (props) => {
                     </div>
                     <div className="textInputContainerCol"> 
                         <label className="inputLabel" for="password">Password</label>
-                        <input type="text" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
+                        <input type="password" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
                     </div>
                     <input className="signinBtn" type="submit" value="Log In"></input>
-                    <div className="buttonContainerRow">
+                    {/* <div className="buttonContainerRow">
                         <label>Don't have an account ?</label>
                         <a href="/register" className="signupBtn">Sign Up</a>
-                    </div>
+                    </div> */}
                     
                 </form>
             </div>

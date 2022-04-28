@@ -46,6 +46,27 @@ input[type=text]:focus {
     border: solid 2px #3751FF;
 }
 
+
+input[type=password] {
+    border: solid 1px #F0F1F7;
+    border-radius: 10px;
+    height: 4vh;
+    width: 100%;
+    padding-left: 15px;
+    background-color: #FCFDFE;
+}
+
+input[type=password]::placeholder {
+    color: #9FA2B4;
+    opacity: 0.7;
+}
+
+input[type=password]:focus {
+    outline: none !important;
+    border: solid 2px #3751FF;
+}
+
+
 input[type=submit] {
     border: none;
     border-radius: 10px;
