@@ -13,10 +13,18 @@ export function StaffListPage(props) {
 
     const [staffs, setStaffs] = useState([])
     const [userData, setUserData] = useState(null) 
+    const [companyName, setCompanyName] = useState(null)
     useEffect(() => {
         setUserData(props.userData)
         console.log(props.userData)
-
+        axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":props.userData.token}})
+        .then( res => {
+            setCompanyName(res.data.companyName)
+            console.log(res.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
         updateData()
         // console.log(props.userData)
     }, [userData]);
@@ -52,7 +60,9 @@ export function StaffListPage(props) {
 
     return (
         <div className="table-wrapper" style={{width:"100vw"}} id={"companyList"}>
-            <h1  className="adminPageHeader">Companies</h1>
+            {companyName ? (<h1  className="adminPageHeader">{companyName}</h1>)
+            : (<h1  className="adminPageHeader">{companyCode}</h1>)}
+            
             <Table className="table table-bordered table-dark">
                 <thead>
                     <tr>
