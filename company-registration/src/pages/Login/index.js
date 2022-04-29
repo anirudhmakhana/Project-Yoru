@@ -27,15 +27,18 @@ export const LoginPage = (props) => {
             username: username,
             password: password
         }
-        try { 
-            const res = await StaffAccountService.login(loginData)
+        await StaffAccountService.login(loginData)
+        .then(res => {
+            console.log(res)
             setUserData(res.data)
             localStorage.setItem("userData", JSON.stringify(res.data))
             localStorage.setItem("userType", "staff")
             navigate("main/overview")
-        } catch (err) { 
+        })
+        .catch( error => {
             console.log("Invalid username or password!")
-        }
+        }) 
+        
 
     }
     function handleChangeUsername(e) {

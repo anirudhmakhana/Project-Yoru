@@ -48,7 +48,6 @@ export const EditStaffPage = (props) => {
             }
             console.log(newAccount)
             StaffAccountService.updateStaff(username, newAccount, userData.token)
-            .catch(error => console.log(error))
             .then( res => {console.log("Account updated!")
                     const edittedData = res.data
                     edittedData.token = userData.token
@@ -60,7 +59,7 @@ export const EditStaffPage = (props) => {
                     setPassword("")
                     setContact("")
                     setFullName("") })
-
+            .catch(error => console.log(error))
         }
         
 

@@ -74,11 +74,11 @@ export function EditCompanyPage(props) {
                 walletPublicKey: publicKey, 
                 walletPrivateKey: privateKey}
             CompanyService.updateCompany(companyCode, companyObject, userData.token)
+            .then(res => console.log(res.data))
             .catch( error => {
                 console.log(error)
             }) 
-            .then( 
-                res => console.log(res.data))
+            
     
             // console.log("created success")
             // console.log('Name:' + this.state.companyName)

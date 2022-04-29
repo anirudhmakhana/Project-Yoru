@@ -6,7 +6,7 @@ class StaffAccountService {
         const response = await axios.get('http://localhost:4000/staff/' + username ,
         {headers:{"x-access-token":token}})
             .catch((error) => {
-                return error
+                throw error
             })
         return response
     }
@@ -15,7 +15,7 @@ class StaffAccountService {
         const response = await axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,
         {headers:{"x-access-token":token}})
         .catch((error) => {
-            return error
+            throw error
         })
         return response
     }
@@ -23,7 +23,7 @@ class StaffAccountService {
     async login( loginData ) { 
         const response = await axios.post("http://localhost:4000/staff/login", loginData)
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }
@@ -31,7 +31,7 @@ class StaffAccountService {
     async updateStaff( username, newData, token ) {
         const response = await axios.put("http://localhost:4000/staff/update/"+ username, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
-                return error
+                throw error
             }) 
         return response
     }
@@ -40,7 +40,7 @@ class StaffAccountService {
         const response = await axios.post("http://localhost:4000/staff/register", newAccount,  
         {headers:{"x-access-token":token}})
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }
@@ -49,7 +49,7 @@ class StaffAccountService {
         const response = await axios.delete('http://localhost:4000/staff/' + username,
         {headers:{"x-access-token":token}})
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }

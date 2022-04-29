@@ -5,7 +5,7 @@ class AdminAccountService {
     async registerAdmin( newAccount, token ) { 
         const response = await axios.post("http://localhost:4000/admin/register", newAccount,{headers:{"x-access-token":token}})
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }
@@ -13,7 +13,7 @@ class AdminAccountService {
     async login( loginData ) { 
         const response = await axios.post("http://localhost:4000/admin/login", loginData)
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }

@@ -20,6 +20,7 @@ export function StaffListPage(props) {
         console.log(userData)
         CompanyService.getCompanyByCode(companyCode, userData.token)
         .then( company => setCompanyName(company.data.companyName))
+        .catch(err => console.log(err))        
 
         updateData()
         // console.log(props.userData)
@@ -28,7 +29,7 @@ export function StaffListPage(props) {
     const updateData = () => {
         StaffAccountService.getStaffByCompany(companyCode, userData.token )
         .then(res => setStaffs(res.data))
-        
+        .catch(err => console.log(err))        
     }
 
 

@@ -32,6 +32,9 @@ export const ViewStaffPage = (props) => {
             setEmail(res.data.email)
             setCompanyCode(res.data.companyCode)
         })
+        .catch(err => {
+            console.log(err)
+        })
         
         // console.log(props.userData)
       }, [userData]);

@@ -67,9 +67,6 @@ export const AddStaffPage = (props) => {
             }
             console.log(newAccount)
             StaffAccountService.registerStaff(newAccount, userData.token)
-            .catch( error => {
-                console.log(error)
-            }) 
             .then( res =>{
                 console.log("New account created!")
                 setUsername("")
@@ -78,8 +75,11 @@ export const AddStaffPage = (props) => {
                 setContact("")
                 setFullName("")
                 
-            }
-            )
+            })
+            .catch( error => {
+                console.log(error)
+            }) 
+            
         }
         
 

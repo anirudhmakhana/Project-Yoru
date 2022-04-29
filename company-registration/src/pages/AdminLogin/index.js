@@ -28,17 +28,16 @@ export const AdminLoginPage = (props) => {
             password: password
         }
         AdminAccountService.login(loginData)
-        .catch( error => {
-            console.log("Invalid username or password!")
-        }) 
         .then( res =>{
             console.log(res.data)
             setUserData(res.data)
             localStorage.setItem("userData", JSON.stringify(res.data))
             localStorage.setItem("userType", "admin")
             navigate("main/company-list")
-        }
-        )
+        })
+        .catch( error => {
+            console.log("Invalid username or password!")
+        }) 
 
     }
     function handleChangeEmail(e) {

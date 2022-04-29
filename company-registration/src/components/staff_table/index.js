@@ -18,13 +18,14 @@ export class StaffTable extends Component {
             console.log("You cannot delete your own account!")
         } else {
             StaffAccountService.deleteStaff(staff.username, this.props.userData.token)
-           .catch((error) => {
+            .then(res => {
+                console.log(res)
+                this.props.refresh()
+            })
+            .catch((error) => {
                console.log(error)
            })
-           .then(res => {
-               console.log(res)
-               this.props.refresh()
-           })
+           
         }
         
     }

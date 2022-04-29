@@ -32,12 +32,12 @@ export class CompanyTable extends Component {
     deleteCompany = () => {
         console.log('delete Company')
         CompanyService.deleteCompany(this.props.obj.companyCode, this.props.userData.token)
-        .catch((error) => {
-            console.log(error)
-        })
         .then(res => {
             console.log(res)
             this.props.refresh()
+        })
+        .catch((error) => {
+            console.log(error)
         })
         // window.location.reload(false)
 
@@ -46,12 +46,12 @@ export class CompanyTable extends Component {
     deleteStaff = (staff) => {
         console.log(staff)
         StaffAccountService.deleteStaff(staff.username, this.props.userData.token)
-        .catch((error) => {
-            console.log(error)
-        })
         .then(res => {
             console.log(res)
             this.updateTable()
+        })
+        .catch((error) => {
+            console.log(error)
         })
     }
 

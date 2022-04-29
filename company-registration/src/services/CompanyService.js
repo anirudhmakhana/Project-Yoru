@@ -5,7 +5,7 @@ class CompanyService {
     async getCompanyByCode( companyCode, token ) { 
         const response = await axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":token}})
         .catch((error) => {
-            return error
+            throw error
         })
         return response
 
@@ -14,7 +14,7 @@ class CompanyService {
     async updateCompany( companyCode, newData, token ) {
         const response = await axios.put("http://localhost:4000/company/update/"+ companyCode, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
-                return error
+                throw error
             }) 
         return response
     }
@@ -23,7 +23,7 @@ class CompanyService {
         const response = await axios.post("http://localhost:4000/company/", newData, 
         {headers:{"x-access-token":token}})
             .catch( error => {
-                return error
+                throw error
             }) 
         return response
     }
@@ -32,7 +32,7 @@ class CompanyService {
         const response = await axios.delete('http://localhost:4000/company/' + companyCode,
         {headers:{"x-access-token":token}})
         .catch( error => {
-            return error
+            throw error
         }) 
         return response
     }

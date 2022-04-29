@@ -28,14 +28,14 @@ export const RegisterAdminPage = (props) => {
                 username: username,
                 password: password
             }
-            try { 
-                const res = await AdminAccountService.registerAdmin(newAccount, userData.token)
+            AdminAccountService.registerAdmin(newAccount, userData.token)
+            .then(res  => {
                 setUsername("")
                 setPassword("")
                 setConfirm("")
-            } catch (err) { 
-                console.log(err)
-            }
+            })
+            .catch(err => console.log(err))
+            
         }
         
 
