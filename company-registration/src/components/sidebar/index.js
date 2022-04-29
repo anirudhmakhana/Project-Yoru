@@ -2,7 +2,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent } fr
 import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
-import { ShipmentPage } from "../../pages/Shipment";
+import { ShipmentListPage } from "../../pages/ShipmentList";
 import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
@@ -91,7 +91,7 @@ export const CustomSidebar = (props) => {
 
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
-                <Route path="shipment" element={<TempViewShipment/>}/>
+                <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
                 {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 

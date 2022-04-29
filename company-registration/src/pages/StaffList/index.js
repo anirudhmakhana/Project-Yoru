@@ -56,7 +56,7 @@ export function StaffListPage(props) {
                     </tr>
                 </thead>
 
-                    {dataTable()}
+                {userData ? (dataTable()) : (<></>)}
 
             </Table>
         </div>

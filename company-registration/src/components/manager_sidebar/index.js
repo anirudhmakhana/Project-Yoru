@@ -2,7 +2,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent } fr
 import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
-import { ShipmentPage } from "../../pages/Shipment";
+import { ShipmentListPage } from "../../pages/ShipmentList";
 import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";

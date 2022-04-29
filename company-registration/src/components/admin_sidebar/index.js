@@ -2,7 +2,6 @@ import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent } fr
 import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
-import { ShipmentPage } from "../../pages/Shipment";
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';

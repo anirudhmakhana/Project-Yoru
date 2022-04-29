@@ -16,8 +16,8 @@ export default function TempViewShipment(props) {
     //contract variables
     
     useEffect(() => {
-            ShipmentService.getAllShipments()
-            .then( res => setAllShipments(res))
+            // ShipmentService.getAllShipments()
+            // .then( res => setAllShipments(res))
         }
     ,[allShipments] );
 
