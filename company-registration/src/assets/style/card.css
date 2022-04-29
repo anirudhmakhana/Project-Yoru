@@ -5,9 +5,17 @@
     border-radius: 16px;
 }
 
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .card h2 {
     font-size: 1.5em;
 } 
 .card p {
+    margin-bottom: 0;
     font-size: 1.4em;
 }
