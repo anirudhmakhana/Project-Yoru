@@ -97,8 +97,8 @@ export const ManagerSidebar = (props) => {
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<TempViewShipment/>}/>
-                <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
-                <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
+                <Route path="register-staff/:companyCode" element={<AddStaffPage/>}/> 
+                <Route path="staff-list/:companyCode" element={<StaffListPage />}/>
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
                 <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
                 <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>

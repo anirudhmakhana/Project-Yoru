@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import { ShipmentTable } from "../../components/shipment_table";
-import ShipmentService from '../../services/ShipmentService';
-import Table from 'react-bootstrap/Table'
+import ShipmentService from "../../services/ShipmentService";
+import Table from 'react-bootstrap/Table';
 
-import "../../assets/style/shipment.css"
+import "../../assets/style/shipment.css";
 
 export const ShipmentListPage = () => {
     const [allShipments, setAllShipments] = useState(null)

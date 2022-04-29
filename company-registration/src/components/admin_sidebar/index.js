@@ -1,7 +1,6 @@
 import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent } from "react-pro-sidebar";
 import { Routes, Route, Link } from "react-router-dom";
 
-import { OverviewPage } from "../../pages/Overview";
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -14,10 +13,10 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
-import {CompanyListPage} from "../../pages/CompanyList";
-import {CreateCompanyPage} from "../../pages/CreateCompany"
-import {RegisterAdminPage} from "../../pages/RegisterAdmin"
-import {EditCompanyPage} from "../../pages/EditCompany"
+import { CompanyListPage } from "../../pages/CompanyList";
+import { CreateCompanyPage } from "../../pages/CreateCompany"
+import { RegisterAdminPage } from "../../pages/RegisterAdmin"
+import { EditCompanyPage} from "../../pages/EditCompany"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { ViewStaffPage } from "../../pages/ViewStaff";
 
@@ -45,24 +44,6 @@ export const AdminSidebar = (props) => {
                     </Link>
                 </SidebarHeader>
                 <Menu iconShape="square">
-                    {/* <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
-                        <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}}>Overview</Link>
-                    </MenuItem> */}
-                    {/* <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faTicket}/>}>
-                        <Link to={"shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
-                    </MenuItem> */}
-                    {/* <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(2)}}>Create Shipment</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faPen}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 4} icon={<FontAwesomeIcon icon={faBan}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
-                    </MenuItem> */}
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
                         <Link to={"company-list"} onClick={() => {setActiveItemIndex(0)}}>Companies List</Link>
                     </MenuItem>
