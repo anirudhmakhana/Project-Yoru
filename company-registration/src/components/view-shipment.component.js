@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { ethers } from "ethers";
 
-import abi from "../utils/TrackingContract.json"
+import ShipmentService from '../services/ShipmentService'
+import CompanyService from '../services/CompanyService'
 
 export default function TempViewShipment(props) {
     const [allShipments, setAllShipments] = useState([])
@@ -13,76 +14,25 @@ export default function TempViewShipment(props) {
     const [shipmentId, setShipmentId] = useState('')
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     //contract variables
-    const contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
-    const contractABI = abi
-    // useEffect(
-    //     React.useCallback(() => {
-    //         // getAllShipments()
-    //         setUserData(props.userData)
-    //         console.log(props.userData)
-    //     })
-    // ,[userData] );
     
-    async function getAllShipments() {
-
-        const externalProvider = new ethers.providers.JsonRpcProvider(
-          `https://rinkeby.infura.io/v3/6c9af8d40e4d4ff0bad46e193bc1aa8b`,
-          "rinkeby"
-        );
-        const shipmentContract = new ethers.Contract(contractAddress, contractABI.abi, externalProvider);
-        
-    
-        const filter = shipmentContract.on("NewScanEvent", (from, timestamp, _uid ,_productName, _producer, _status) => {
-          console.log (
-            {
-              from: from,
-              timestamp: timestamp,
-              _uid: _uid,
-              productName : _productName,
-              producer: _producer,
-              status: _status
-            }
-          )
-        });
-        const startBlock = 10526213; // Contract creation block.
-        const endBlock = await externalProvider.getBlockNumber();
-        
-        console.log("hello", endBlock)
-    
-        const queryResult = await shipmentContract.queryFilter(filter, startBlock, endBlock);
-        
-        const shipmentsUntilNow = queryResult.map(matchedEvent => {
-          return (
-            {
-
-              from: matchedEvent.args[0],
-              _uid: matchedEvent.args[2],
-              productName : matchedEvent.args[3],
-              producer: matchedEvent.args[4],
-              status: matchedEvent.args[5],
-            }
-          )        
-        })
-    
-        console.log(shipmentsUntilNow)
-    
-        setAllShipments(shipmentsUntilNow.reverse())
-      }
+    useEffect(() => {
+            ShipmentService.getAllShipments()
+            .then( res => setAllShipments(res))
+        }
+    ,[allShipments] );
 
     async function handleSubmit(e) {
       e.preventDefault()
       if (shipmentId.length < 1 ) {
           console.log('Please enter shipment ID.')
       } 
-      axios.get("http://localhost:4000/company/" + userData.companyCode,
-      {headers:{"x-access-token":userData.token}}) 
+      CompanyService.getCompanyByCode(userData.companyCode, userData.token)
       .catch( error =>  {
         console.log("Cannot find company by code")
       })
       .then( res => {
           console.log(res)
-          axios.get("http://localhost:4010/shipment/" + shipmentId + "/" + res.data.walletPublicKey, 
-          {headers:{"x-access-token":userData.token}}) 
+          ShipmentService.getShipmentById(shipmentId, res.data.walletPublicKey, userData.token)
           .catch( error_shipment => {
               console.log("Shipment not found!")
           }) 
@@ -115,6 +65,7 @@ export default function TempViewShipment(props) {
             <p>{shipment["1"]} </p>
             <p className="mb-5">{shipment["2"]}</p>
             <p>-------------------------------</p>
+            {allShipments.slice(0, 7).map(({productName, producer, _uid, status}) => <p>{productName} {producer} {_uid} {status}</p>)}
         </div>
     )
 }
