@@ -11,10 +11,13 @@ export const ShipmentListPage = () => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
 
     useEffect(() => {
-            // ShipmentService.getAllShipments()
-            // .then( res => setAllShipments(res))
+            ShipmentService.getAllShipments()
+            .then( res => setAllShipments(res))
+            .catch(err => {
+                setAllShipments([])
+                console.log(err)})
         }
-    ,[userData] );
+    ,[] );
 
     const dataTable = () => {
         return allShipments.map((res, i) => {

@@ -51,7 +51,7 @@ class ShipmentService {
         // console.log(shipmentsUntilNow)
     
         // return (shipmentsUntilNow.reverse())
-        return null
+        throw "Not avaiable right now."
     }
     
     async getShipmentById( shipmentId, walletPublicKey, token ) { 
