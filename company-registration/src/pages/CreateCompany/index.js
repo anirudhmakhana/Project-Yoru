@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
+import CompanyService from '../../services/CompanyService'
 
 export function CreateCompanyPage(props) {
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -62,9 +63,8 @@ export function CreateCompanyPage(props) {
                 managerContact: managerContact, 
                 walletPublicKey: publicKey, 
                 walletPrivateKey: privateKey}
-    
-            axios.post("http://localhost:4000/company/", companyObject, 
-            {headers:{"x-access-token":userData.token}})
+
+            CompanyService.createCompany(companyObject, userData.token)
             .catch( error => {
                 console.log(error)
             }) 

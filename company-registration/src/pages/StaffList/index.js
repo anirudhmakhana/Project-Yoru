@@ -1,11 +1,11 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
-import StaffTableRow from './StaffTableRow'
-import { Routes, Route, Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { StaffTable } from "../../components/staff_table"
+import StaffAccountService from '../../services/StaffAccountService';
+import CompanyService from '../../services/CompanyService';
 
-import { CreateCompanyPage } from '../CreateCompany'
-import { RegisterAdminPage } from '../RegisterAdmin'
 import "../../assets/style/companyList.css";
 
 export function StaffListPage(props) {
@@ -18,44 +18,24 @@ export function StaffListPage(props) {
         // setUserData(props.userData)
         console.log(localStorage.getItem("userData"))
         console.log(userData)
-        axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":userData.token}})
-        .then( res => {
-            setCompanyName(res.data.companyName)
-            console.log(res.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+        CompanyService.getCompanyByCode(companyCode, userData.token)
+        .then( company => setCompanyName(company.data.companyName))
+
         updateData()
         // console.log(props.userData)
     }, [userData]);
 
     const updateData = () => {
-        axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,{headers:{"x-access-token":userData.token}})
-        .then( res => {
-            setStaffs(res.data)
-            console.log(res.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
-    // useEffect(() => {
-    //     axios.get('http://localhost:4000/companies')
-    //         .then( res => {
-    //             setCompanies(res.data)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
+        StaffAccountService.getStaffByCompany(companyCode, userData.token )
+        .then(res => setStaffs(res.data))
         
-    // }, )
+    }
 
 
     const dataTable = () => {
         return staffs.map((res, i) => {
             console.log(i)
-            return <StaffTableRow userData={userData} obj={res} index={i+1} refresh={updateData}/>
+            return <StaffTable userData={userData} obj={res} index={i+1} refresh={updateData}/>
         })
     }
 
@@ -79,10 +59,6 @@ export function StaffListPage(props) {
                     {dataTable()}
 
             </Table>
-            {/* <Routes>
-                <Route path="edit-company" element={<RegisterAdmin userData={props.userData}/>} />
-                <Route path="add-staff" element={<CreateCompany userData={props.userData}/>}/>
-            </Routes> */}
         </div>
         
     )

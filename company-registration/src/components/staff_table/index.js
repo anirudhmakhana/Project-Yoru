@@ -2,8 +2,9 @@ import React, { Component, setState } from 'react'
 import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+import StaffAccountService from '../../services/StaffAccountService'
 
-export default class CompanyTableRow extends Component {
+export class StaffTable extends Component {
 
     constructor(props) {
         super(props)
@@ -16,8 +17,7 @@ export default class CompanyTableRow extends Component {
         if ( staff.username == this.props.userData.username) {
             console.log("You cannot delete your own account!")
         } else {
-            axios.delete('http://localhost:4000/staff/' + staff.username,
-            {headers:{"x-access-token":this.props.userData.token}})
+            StaffAccountService.deleteStaff(staff.username, this.props.userData.token)
            .catch((error) => {
                console.log(error)
            })

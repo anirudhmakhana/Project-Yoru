@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
+import CompanyService from '../../services/CompanyService'
 
 export function EditCompanyPage(props) {
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -18,8 +19,8 @@ export function EditCompanyPage(props) {
     useEffect(() => {
         
         // setUserData(props.userData)
-        axios.get('http://localhost:4000/company/' + companyCode ,
-        {headers:{"x-access-token":userData.token}})
+
+        CompanyService.getCompanyByCode(companyCode, userData.token)
         .then( res => {
             setCompanyName(res.data.companyName)
             setManagerContact(res.data.managerContact)
@@ -72,9 +73,7 @@ export function EditCompanyPage(props) {
                 managerContact: managerContact, 
                 walletPublicKey: publicKey, 
                 walletPrivateKey: privateKey}
-    
-            axios.put("http://localhost:4000/company/update/"+companyCode, companyObject, 
-            {headers:{"x-access-token":userData.token}})
+            CompanyService.updateCompany(companyCode, companyObject, userData.token)
             .catch( error => {
                 console.log(error)
             }) 

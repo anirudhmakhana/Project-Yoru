@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import { Alert } from "react-bootstrap";
 import {useNavigate} from "react-router-dom"
 
+import StaffAccountService from "../../services/StaffAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
     
@@ -26,19 +27,15 @@ export const LoginPage = (props) => {
             username: username,
             password: password
         }
-
-        axios.post("http://localhost:4000/staff/login", loginData)
-        .catch( error => {
-            console.log("Invalid username or password!")
-        }) 
-        .then( res =>{
-            console.log(res.data)
+        try { 
+            const res = await StaffAccountService.login(loginData)
             setUserData(res.data)
             localStorage.setItem("userData", JSON.stringify(res.data))
             localStorage.setItem("userType", "staff")
             navigate("main/overview")
+        } catch (err) { 
+            console.log("Invalid username or password!")
         }
-        )
 
     }
     function handleChangeUsername(e) {
@@ -48,11 +45,7 @@ export const LoginPage = (props) => {
     function handleChangePassword(e) {
         setPassword(e.target.value)
     }
-
-    const forTestOnly = () => {
-        navigate("main/overview")
-    }
-
+    
     return (
         <div className="loginBackground">
             <div className="startPageContainer">

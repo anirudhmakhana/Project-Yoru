@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
-import CompanyTableRow from './CompanyTableRow'
+import {CompanyTable} from '../../components/company_table'
 import { Routes, Route, Link } from "react-router-dom";
 
 import { CreateCompanyPage } from '../CreateCompany'
@@ -35,7 +35,7 @@ export function CompanyListPage(props) {
 
     const dataTable = () => {
         return companies.map((res, i) => {
-            return <CompanyTableRow userData={userData} obj={res} key={i} refresh={updateData}/>
+            return <CompanyTable userData={userData} obj={res} key={i} refresh={updateData}/>
         })
     }
 

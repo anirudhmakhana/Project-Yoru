@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom'
 import axios from "axios";
+import StaffAccountService from "../../services/StaffAccountService";
 
 import "../../assets/style/style.css"
 
@@ -14,17 +15,24 @@ export const ViewStaffPage = (props) => {
     useEffect(() => {
         
         // setUserData(props.userData)
-        axios.get('http://localhost:4000/staff/' + username ,
-        {headers:{"x-access-token":userData.token}})
-        .then( res => {
-            console.log(res.data)
+        // axios.get('http://localhost:4000/staff/' + username ,
+        // {headers:{"x-access-token":userData.token}})
+        // .then( res => {
+        //     console.log(res.data)
+        //     setFullName(res.data.fullName)
+        //     setEmail(res.data.email)
+        //     setCompanyCode(res.data.companyCode)
+        // })
+        // .catch((error) => {
+        //     console.log(error)
+        // })
+        StaffAccountService.getStaffByUsername(username, userData.token)
+        .then(res => {
             setFullName(res.data.fullName)
             setEmail(res.data.email)
             setCompanyCode(res.data.companyCode)
         })
-        .catch((error) => {
-            console.log(error)
-        })
+        
         // console.log(props.userData)
       }, [userData]);
 

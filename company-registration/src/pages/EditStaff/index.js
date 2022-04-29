@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 import "../../assets/style/style.css"
+import StaffAccountService from "../../services/StaffAccountService";
 
 export const EditStaffPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -46,26 +47,20 @@ export const EditStaffPage = (props) => {
                 companyCode: companyCode
             }
             console.log(newAccount)
-    
-            axios.put("http://localhost:4000/staff/update/"+ username, newAccount,  {headers:{"x-access-token":userData.token}})
-            .catch( error => {
-                console.log(error)
-            }) 
-            .then( res =>{
-                console.log("Account updated!")
-                const edittedData = res.data
-                edittedData.token = userData.token
-                localStorage.setItem("userData", JSON.stringify(edittedData))
-                console.log(edittedData)
-                // navigate("/main/staff-list/"+companyCode)
-                navigate(-1)
-                setUsername("")
-                setPassword("")
-                setContact("")
-                setFullName("")
-                
-            }
-            )
+            StaffAccountService.updateStaff(username, newAccount, userData.token)
+            .catch(error => console.log(error))
+            .then( res => {console.log("Account updated!")
+                    const edittedData = res.data
+                    edittedData.token = userData.token
+                    localStorage.setItem("userData", JSON.stringify(edittedData))
+                    console.log(edittedData)
+                    // navigate("/main/staff-list/"+companyCode)
+                    navigate(-1)
+                    setUsername("")
+                    setPassword("")
+                    setContact("")
+                    setFullName("") })
+
         }
         
 

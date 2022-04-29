@@ -1,9 +1,7 @@
-import axios from "axios";
-import { el } from "date-fns/locale";
 import React, {useState, useEffect} from "react";
 import { Alert } from "react-bootstrap";
 import {useNavigate} from "react-router-dom"
-
+import AdminAccountService from "../../services/AdminAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
     
@@ -15,10 +13,7 @@ export const RegisterAdminPage = (props) => {
     const [confirm, setConfirm] = useState('')
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const navigate = useNavigate()
-    // useEffect(() => {
-    //     setUserData(props.userData)
-    //     // console.log(props.userData)
-    //   }, [userData]);
+
     async function handleSubmit(e) {
         e.preventDefault()
         if (username.length < 1 ) {
@@ -33,18 +28,14 @@ export const RegisterAdminPage = (props) => {
                 username: username,
                 password: password
             }
-    
-            axios.post("http://localhost:4000/admin/register", newAccount,{headers:{"x-access-token":userData.token}})
-            .catch( error => {
-                console.log(error)
-            }) 
-            .then( res =>{
-                console.log("New account created!")
+            try { 
+                const res = await AdminAccountService.registerAdmin(newAccount, userData.token)
                 setUsername("")
                 setPassword("")
                 setConfirm("")
+            } catch (err) { 
+                console.log(err)
             }
-            )
         }
         
 

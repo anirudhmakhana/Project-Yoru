@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import axios from "axios";
 
 import "../../assets/style/style.css"
+import StaffAccountService from "../../services/StaffAccountService";
 
 export const AddStaffPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -65,8 +66,7 @@ export const AddStaffPage = (props) => {
                 companyCode: companyCode
             }
             console.log(newAccount)
-    
-            axios.post("http://localhost:4000/staff/register", newAccount,  {headers:{"x-access-token":userData.token}})
+            StaffAccountService.registerStaff(newAccount, userData.token)
             .catch( error => {
                 console.log(error)
             }) 

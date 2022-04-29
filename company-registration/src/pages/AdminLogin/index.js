@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom"
 
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
+import AdminAccountService from "../../services/AdminAccountService";
     
 
 export const AdminLoginPage = (props) => {
@@ -26,8 +27,7 @@ export const AdminLoginPage = (props) => {
             username: email,
             password: password
         }
-
-        axios.post("http://localhost:4000/admin/login", loginData)
+        AdminAccountService.login(loginData)
         .catch( error => {
             console.log("Invalid username or password!")
         }) 
