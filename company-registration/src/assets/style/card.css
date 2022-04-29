@@ -18,6 +18,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: transform 200ms ease-in;
 }
 
 .card h2 {
