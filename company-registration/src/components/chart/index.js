@@ -42,7 +42,7 @@ const data2 = [
 export const FrequencyChart = () => {
     return (
         <>
-           <VictoryChart width={450} height={300} containerComponent={<VictoryVoronoiContainer/>}>
+           <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
                <VictoryGroup color="#3751FF"
                 labels={({ datum }) => `shipped: ${datum.y}`}
                 labelComponent={
