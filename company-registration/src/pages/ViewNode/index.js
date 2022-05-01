@@ -72,7 +72,7 @@ export const ViewNodePage = () => {
                 <div className="title-container">
                     <h1>Node : {node.nodeCode}</h1>
                 </div>
-                <div style={{width:'50vw', height:'50vh'}}>
+                <div style={{width:'82vw', height:'50vh'}}>
                   <GoogleMap
                     center={{ lat: node.lat, lng: node.lng }}
                     zoom={15}

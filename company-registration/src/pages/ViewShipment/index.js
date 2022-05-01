@@ -141,9 +141,12 @@ export const ViewShipmentPage = () => {
                     >
                     <div>
                         <h2>
-                        <span>
-                           📦{shipment.uid}
-                        </span>
+                        
+                    {shipment.status == "shipping" 
+                    ? (<span>🚚 {shipment.uid}</span>) :
+                     (<span>📦 {shipment.uid}</span>)}
+                           
+                        
                         </h2>
                         <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
                         <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
