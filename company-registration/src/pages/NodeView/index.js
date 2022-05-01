@@ -14,12 +14,14 @@ import {
   } from "@react-google-maps/api";
 import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
+import ShipmentService from '../../services/ShipmentService';
 
 export const NodeViewPage = () => {
     const [node, setNode] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { nodeCode } = useParams()
     const navigate = useNavigate()
+    const [stock, setStock] = useState([])
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     // const [currentMark, setCurrentMark] = useState(null)
 
@@ -39,6 +41,15 @@ export const NodeViewPage = () => {
         NodeDataService.getNodeByCode(nodeCode,userData.token)
         .then( res => {console.log(res)
             setNode(res)
+        })
+        .catch( err => {
+            setNode(null)
+            console.log(err)
+        })
+
+        ShipmentService.getStockByNode(nodeCode,userData.token)
+        .then( res => {console.log(res)
+            setStock(res)
         })
         .catch( err => {
             setNode(null)
@@ -97,10 +108,10 @@ export const NodeViewPage = () => {
                 <div className="body-main">
                     <p className="mt-5"> {node.nodeCode} </p>
                     <p>{node.address} </p>
-                    <p className="mb-5">{node.companyCode}</p>
-                    <p className="mb-5">{node.phoneNumber}</p>
-                    <p className="mb-5">{node.status}</p>
-    
+                    <p className="mb-5">Company: {node.companyCode}</p>
+                    <p className="mb-5">Contact: {node.phoneNumber}</p>
+                    <p className="mb-5">Status: {node.status}</p>
+                    <p className="mb-5">In-stock shipment: {stock.length}</p>
                 </div>
                 
             </div>

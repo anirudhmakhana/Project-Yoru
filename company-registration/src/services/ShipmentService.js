@@ -11,6 +11,26 @@ class ShipmentService {
         //     "rinkeby"
         //   );
         // this.shipmentContract = new ethers.Contract(this.contractAddress, this.contractABI.abi, this.externalProvider);
+        this.shipments = [
+            {uid:"SHP001", originNode:"LKB-1003", status:"shipping", currentNode:"LKB-1003", scannedTime:1651393111, destinationNode:"CNX-2040"},
+            {uid:"SHP002", originNode:"LKB-1003", status:"arrived", currentNode:"RAM-52011", scannedTime:1651220311, destinationNode:"BANG-RAK-HQ1"},
+            {uid:"SHP003", originNode:"CNX-2040", status:"completed", currentNode:"LKB-1003", scannedTime:1651306711, destinationNode:"LKB-1003"}
+        ]
+
+        this.scannedData = [
+            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime:1651385911, status:"created"},
+            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime:1651393111, status:"shipping"},
+
+            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:1651120311, status:"created"},
+            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:1651217311, status:"shipping"},
+            {uid:"SHP002", scannedAt:"RAM-52011", scannedTime:1651220311, status:"arrived"},
+            
+            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:1651203711, status:"created"},
+            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:1651205011, status:"shipping"},
+            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:1651300711, status:"arrived"},
+            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:1651303711, status:"shipping"},
+            {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:1651306711, status:"completed"},
+        ]
     }
     
     async getAllShipments() {
@@ -51,7 +71,7 @@ class ShipmentService {
         // console.log(shipmentsUntilNow)
     
         // return (shipmentsUntilNow.reverse())
-        throw "Not avaiable right now."
+        return this.shipments
     }
     
     async getShipmentById( shipmentId, walletPublicKey, token ) { 
@@ -61,7 +81,23 @@ class ShipmentService {
         //     return error
         // })
         // return response
-        return null
+        var temp = null
+        this.shipments.forEach( (shipment,ind) => {
+            if (shipment.uid == shipmentId ) {
+                temp = ind
+            }
+        })
+        return this.shipments[temp]
+    }
+
+    async getStockByNode( nodeCode, token ) {
+        var result = []
+        for( let i = 0; i < this.shipments.length; i++ ) {
+            if ( this.shipments[i].status == "arrived" && this.shipments[i].currentNode == nodeCode) {
+                result.push(this.shipments[i])
+            }
+        }
+        return result
     }
 }
 
