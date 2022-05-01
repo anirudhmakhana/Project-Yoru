@@ -25,7 +25,30 @@ export const OverviewPage = (props) => {
                 <Card title="On hold" info="0"/>
             </div>
             <div className="body-main">
-                <FrequencyChart/>
+                <div className="chart-container">
+                    <div className="chart-title-container">
+                        <h3 className="chart-title">Today's shipping</h3>
+                        <p>25 May 2022</p>
+                    </div>
+                    <div className="body-chart-container">
+                        <FrequencyChart/>
+                    </div>
+                </div>
+                <div className="chart-info-right">
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Hello</p>
+                    </div>
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Hello 2</p>
+                    </div>
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Hello 3</p>
+                    </div>
+                    <hr/>
+                </div>
             </div>
         </div>
     );
