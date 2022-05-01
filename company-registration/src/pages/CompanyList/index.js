@@ -40,9 +40,12 @@ export function CompanyListPage(props) {
     }
 
     return (
-        <div className="table-wrapper" style={{width:"100vw"}} id={"companyList"}>
-            <h1  className="adminPageHeader">Companies</h1>
-            <Table className="table table-bordered table-dark">
+        <div id="shipment">
+            <div className="title-container">
+                <h1  className="adminPageHeader">Companies</h1>
+            </div>
+            
+            <Table className="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Code</th>

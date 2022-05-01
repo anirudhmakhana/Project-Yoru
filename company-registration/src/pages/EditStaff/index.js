@@ -66,6 +66,7 @@ export const EditStaffPage = (props) => {
     }
  
     return (
+        
         <div className="loginBackground">
             <div className="startPageContainer">
                 <div className="logo">

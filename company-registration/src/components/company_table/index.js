@@ -64,11 +64,11 @@ export class CompanyTable extends Component {
                 <td>
                     
                     <Link to={'edit-company/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="primary">EDIT</Button>
+                        <Button size="sm" variant="dark">EDIT</Button>
                     </Link>
                     &nbsp;&nbsp;
                     <Link to={'add-staff/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="success">ADD STAFF</Button>
+                        <Button size="sm" variant="primary">ADD STAFF</Button>
                     </Link>
                     &nbsp;&nbsp;
                     <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> DELETE</Button>
@@ -81,7 +81,7 @@ export class CompanyTable extends Component {
                                 <td>
                                     &nbsp;&nbsp;
                                     <Link to={'view-staff/'+item.username}>
-                                    <Button size="sm" variant="secondary">VIEW</Button>
+                                    <Button size="sm" variant="dark">VIEW</Button>
                                     </Link>
                                     &nbsp;&nbsp;
                                     <Button size="sm" onClick={() => {

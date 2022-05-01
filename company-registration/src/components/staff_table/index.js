@@ -34,7 +34,7 @@ export class StaffTable extends Component {
         return (
             <tbody>
              <tr>   
-             <th scope="row">{this.props.index}</th>
+             <th className='td-key'>{this.props.index}</th>
                 <td>{this.props.obj.fullName}</td>
                 <td>{this.props.obj.username}</td>
                 <td>{this.props.obj.email}</td>
@@ -45,7 +45,7 @@ export class StaffTable extends Component {
                     &nbsp;&nbsp; */}
                     {this.props.obj.username == this.props.userData.username ?(
                         <Link to={'edit-staff/'+this.props.userData.username}>
-                        <Button size="sm" variant="primary">EDIT</Button>
+                        <Button size="sm" variant="dark">EDIT</Button>
                         </Link>
                     ): (
                     <Button size="sm" onClick={() => {

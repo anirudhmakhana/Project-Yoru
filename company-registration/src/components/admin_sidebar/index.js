@@ -7,7 +7,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAdd, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAdd, faLockOpen, faInstitution } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -44,10 +44,10 @@ export const AdminSidebar = (props) => {
                     </Link>
                 </SidebarHeader>
                 <Menu iconShape="square">
-                    <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
+                    <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faInstitution}/>}>
                         <Link to={"company-list"} onClick={() => {setActiveItemIndex(0)}}>Companies List</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faBan}/>}>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
                         <Link to={"create-company"} onClick={() => {setActiveItemIndex(1)}}>Create Company</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
