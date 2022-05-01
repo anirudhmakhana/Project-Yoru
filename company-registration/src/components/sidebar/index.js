@@ -14,6 +14,8 @@ import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
 import { EditStaffPage } from "../../pages/EditStaff";
+import { ViewShipmentPage } from "../../pages/ViewShipment";
+
 import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -27,7 +29,7 @@ import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
-import { NodeViewPage } from "../../pages/NodeView";
+import { ViewNodePage } from "../../pages/ViewNode";
 
 
 
@@ -100,13 +102,15 @@ export const CustomSidebar = (props) => {
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<ShipmentListPage/>}/>
+                <Route path="shipment/view-shipment/:shipmentId" element={<ViewShipmentPage/>}/>
+
                 <Route path="create" element={<CreateSHP/>}/>
                 <Route path="update" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="location" element={<LocationPage/>}/>
                 <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
-                <Route path="node/view-node/:nodeCode" element={<NodeViewPage/>}/>
+                <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
                 
                 {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 

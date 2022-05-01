@@ -12,7 +12,7 @@ export const NodeListPage = () => {
 
     useEffect(() => {
         NodeDataService.getAllNode(userData.token)
-        .then( res => setAllNodes(res))
+        .then( res => setAllNodes(res.data))
         .catch( err => {
             setAllNodes([])
             console.log(err)

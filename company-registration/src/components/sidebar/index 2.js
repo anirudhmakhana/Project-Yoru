@@ -7,7 +7,6 @@ import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
-import { EditCompanyPage } from "../../pages/EditCompany";
 import { EditStaffPage } from "../../pages/EditStaff";
 import { useEffect } from "react"
 
@@ -15,18 +14,17 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen, faCube, faCubes, faBuilding } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
-import { ViewNodePage } from "../../pages/ViewNode";
 
 
 
-export const ManagerSidebar = (props) => {
+export const CustomSidebar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     // useEffect(() => {
     //     setUserData(props.userData)
@@ -39,10 +37,9 @@ export const ManagerSidebar = (props) => {
             : window.location.pathname === '/' ? 3 
             : window.location.pathname === '/' ? 4
             : window.location.pathname === 'node' ? 5 
-            : window.location.pathname === 'register-staff' ? 6 
+            : window.location.pathname === 'edit-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
-            : window.location.pathname === 'edit-company' ? 8
-            : window.location.pathname === '/' ? 9
+            : window.location.pathname === '/' ? 8 
             : 0; 
         return initialIndex;
     });
@@ -61,7 +58,7 @@ export const ManagerSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
                         <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}}>Overview</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faCubes}/>}>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faTicket}/>}>
                         <Link to={"shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
@@ -77,19 +74,16 @@ export const ManagerSidebar = (props) => {
                         <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
-                        <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
+                        <Link to={"edit-staff/"+userData.companyCode+"/"+userData.username} onClick={() => {setActiveItemIndex(6)}}>Edit Account</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
+                    {/* <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faBuilding}/>}>
-                        <Link to={"edit-company/"+userData.companyCode} onClick={() => {setActiveItemIndex(8)}}>Edit Company</Link>
-                    </MenuItem>
-                    <MenuItem active={activeItemIndex === 9} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
+                    </MenuItem> */}
+                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
                             localStorage.clear()
-                            setActiveItemIndex(9)}}>Log Out</Link>
+                            setActiveItemIndex(8)}}>Log Out</Link>
                     </MenuItem>
 
                 </Menu>
@@ -98,14 +92,14 @@ export const ManagerSidebar = (props) => {
 
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
-                <Route path="shipment" element={<TempViewShipment/>}/>
-                <Route path="register-staff/:companyCode" element={<AddStaffPage/>}/> 
-                <Route path="staff-list/:companyCode" element={<StaffListPage />}/>
-                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
-                <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
-                <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>
+                <Route path="shipment" element={<ShipmentListPage/>}/>
+                <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
-                <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
+                {/* <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/> */}
+                {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
+                <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
+                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}
+
                 {/* Need to improve pages style and may change to other register page */}
 
             </Routes>

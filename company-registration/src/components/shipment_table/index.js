@@ -20,9 +20,9 @@ export class ShipmentTable extends Component {
     updateTable = () => {
         NodeDataService.getCompanyOfNode(this.props.obj.originNode, this.props.userData.token)
         .then( res => {
-            console.log(res)
+            console.log(res.data)
             this.setState({
-                company: res
+                company: res.data
             })
         })
         .catch((error) => {
@@ -34,7 +34,7 @@ export class ShipmentTable extends Component {
             <tbody>
              <tr>   
              <td className='td-key'>{this.props.obj.uid}</td>
-                <td>{this.props.obj.productName}</td>
+                <td>{this.props.obj.description}</td>
                 <td>{this.state.company}</td>
                 <td>{this.props.obj.currentNode}</td>
                 <td>{this.props.obj.status.toUpperCase()}</td>
@@ -45,7 +45,7 @@ export class ShipmentTable extends Component {
                     </Link>
                     &nbsp;&nbsp; */}
                 
-                    <Link to={'view-shipment/'+this.props.obj._uid}>
+                    <Link to={'view-shipment/'+this.props.obj.uid}>
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
                     

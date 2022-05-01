@@ -12,9 +12,14 @@ class ShipmentService {
         //   );
         // this.shipmentContract = new ethers.Contract(this.contractAddress, this.contractABI.abi, this.externalProvider);
         this.shipments = [
-            {uid:"SHP001", originNode:"LKB-1003", status:"shipping", currentNode:"LKB-1003", scannedTime:1651393111, destinationNode:"CNX-2040"},
-            {uid:"SHP002", originNode:"LKB-1003", status:"arrived", currentNode:"RAM-52011", scannedTime:1651220311, destinationNode:"BANG-RAK-HQ1"},
-            {uid:"SHP003", originNode:"CNX-2040", status:"completed", currentNode:"LKB-1003", scannedTime:1651306711, destinationNode:"LKB-1003"}
+            {uid:"SHP001", description:"Stainless Steel 2 rolls", originNode:"LKB-1003", status:"shipping", 
+            currentNode:"LKB-1003", scannedTime:1651393111, destinationNode:"CNX-2040"},
+
+            {uid:"SHP002", description:"PS5 2EA, Nintendo Switch 1EA", originNode:"LKB-1003", status:"arrived", 
+            currentNode:"RAM-52011", scannedTime:1651220311, destinationNode:"BANG-RAK-HQ1"},
+
+            {uid:"SHP003", description:"Fender Telecaster Jim Root", originNode:"CNX-2040", status:"completed", 
+            currentNode:"LKB-1003", scannedTime:1651306711, destinationNode:"LKB-1003"}
         ]
 
         this.scannedData = [
@@ -32,6 +37,16 @@ class ShipmentService {
             {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:1651306711, status:"completed"},
         ]
     }
+    compareTime = ( a, b ) => {
+    if ( a.scannedTime < b.scannedTime ){
+        return -1;
+    }
+    if ( a.scannedTime > b.scannedTime ){
+        return 1;
+    }
+    return 0;
+    }
+
     
     async getAllShipments() {
 
@@ -71,7 +86,7 @@ class ShipmentService {
         // console.log(shipmentsUntilNow)
     
         // return (shipmentsUntilNow.reverse())
-        return this.shipments
+        return {data:this.shipments}
     }
     
     async getShipmentById( shipmentId, walletPublicKey, token ) { 
@@ -87,7 +102,7 @@ class ShipmentService {
                 temp = ind
             }
         })
-        return this.shipments[temp]
+        return {data:this.shipments[temp]}
     }
 
     async getStockByNode( nodeCode, token ) {
@@ -97,7 +112,17 @@ class ShipmentService {
                 result.push(this.shipments[i])
             }
         }
-        return result
+        return {data:result}
+    }
+
+    async getPathByShipmentId( shipmentId, token) {
+        var result = []
+        for (let i = 0; i < this.scannedData.length; i++ ){
+            if ( this.scannedData[i].uid == shipmentId && this.scannedData[i].status != "shipping") {
+                result.push(this.scannedData[i])
+            }
+        }
+        return {data:result.sort((a,b) => a.scannedTime - b.scannedTime)}
     }
 }
 

@@ -12,7 +12,7 @@ export const ShipmentListPage = () => {
 
     useEffect(() => {
             ShipmentService.getAllShipments()
-            .then( res => setAllShipments(res))
+            .then( res => setAllShipments(res.data))
             .catch(err => {
                 setAllShipments([])
                 console.log(err)})
@@ -34,7 +34,7 @@ export const ShipmentListPage = () => {
                 <thead>
                     <tr>
                         <th scope="col">Shipment ID</th>
-                        <th scope="col">Shipment Name</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Producer</th>
                         <th scope="col">Current Location</th>
 

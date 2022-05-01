@@ -16,13 +16,14 @@ import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 
-export const NodeViewPage = () => {
+export const ViewNodePage = () => {
     const [node, setNode] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { nodeCode } = useParams()
     const navigate = useNavigate()
     const [stock, setStock] = useState([])
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
+    const google = window.google
     // const [currentMark, setCurrentMark] = useState(null)
 
     const { isLoaded } = useJsApiLoader({
@@ -40,7 +41,7 @@ export const NodeViewPage = () => {
     useEffect(() => {
         NodeDataService.getNodeByCode(nodeCode,userData.token)
         .then( res => {console.log(res)
-            setNode(res)
+            setNode(res.data)
         })
         .catch( err => {
             setNode(null)
@@ -49,7 +50,7 @@ export const NodeViewPage = () => {
 
         ShipmentService.getStockByNode(nodeCode,userData.token)
         .then( res => {console.log(res)
-            setStock(res)
+            setStock(res.data)
         })
         .catch( err => {
             setNode(null)
