@@ -20,6 +20,7 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
+import { NodeListPage } from "../../pages/NodeList";
 
 
 
@@ -35,7 +36,7 @@ export const CustomSidebar = (props) => {
             : window.location.pathname === '/' ? 2 
             : window.location.pathname === '/' ? 3 
             : window.location.pathname === '/' ? 4
-            : window.location.pathname === '/' ? 5 
+            : window.location.pathname === 'node' ? 5 
             : window.location.pathname === 'edit-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
             : window.location.pathname === '/' ? 8 
@@ -70,7 +71,7 @@ export const CustomSidebar = (props) => {
                         <Link to={"/"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
+                        <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"edit-staff/"+userData.companyCode+"/"+userData.username} onClick={() => {setActiveItemIndex(6)}}>Edit Account</Link>
@@ -93,6 +94,8 @@ export const CustomSidebar = (props) => {
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
+                <Route path="node" element={<NodeListPage/>}/>
+                {/* <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/> */}
                 {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}

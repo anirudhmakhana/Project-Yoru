@@ -21,6 +21,7 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
+import { NodeListPage } from "../../pages/NodeList";
 
 
 
@@ -36,7 +37,7 @@ export const ManagerSidebar = (props) => {
             : window.location.pathname === '/' ? 2 
             : window.location.pathname === '/' ? 3 
             : window.location.pathname === '/' ? 4
-            : window.location.pathname === '/' ? 5 
+            : window.location.pathname === 'node' ? 5 
             : window.location.pathname === 'register-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
             : window.location.pathname === 'edit-company' ? 8
@@ -72,7 +73,7 @@ export const ManagerSidebar = (props) => {
                         <Link to={"/"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
+                        <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
@@ -102,6 +103,7 @@ export const ManagerSidebar = (props) => {
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
                 <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
                 <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>
+                <Route path="node" element={<NodeListPage/>}/>
 
                 {/* Need to improve pages style and may change to other register page */}
 
