@@ -11,7 +11,7 @@ export const NodeListPage = () => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
 
     useEffect(() => {
-        NodeDataService.getAllNode()
+        NodeDataService.getAllNode(userData.token)
         .then( res => setAllNodes(res))
         .catch( err => {
             setAllNodes([])
@@ -29,7 +29,7 @@ export const NodeListPage = () => {
     return (
         <div id="shipment">
             <div className="title-container">
-                <h1>Shipment</h1>
+                <h1>Node</h1>
             </div>
             <Table className="table table-hover">
                 <thead>

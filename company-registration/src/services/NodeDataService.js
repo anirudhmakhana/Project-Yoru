@@ -2,10 +2,8 @@ import axios from "axios";
 
 class NodeDataService {
 
-    
-
-    async getAllNode() { 
-        return [ 
+    constructor() {
+        this.allNodes = [ 
             {nodeCode:"LKB-1003", companyCode:"YORU", address:"123 Ladkrabang 14 Alley, Lad krabang, Bangkok 10520",
              lat:13.717731, lng:100.712577, phoneNumber:"021231212", status:"active"},
 
@@ -18,6 +16,11 @@ class NodeDataService {
              {nodeCode:"BANG-RAK-HQ1", companyCode:"YORU", address:"476 Maha Phruttharam, Bang Rak, Bangkok 10500",
              lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"}
             ]
+    }
+    
+
+    async getAllNode(token) { 
+        return this.allNodes
     }
 
     async getNodeByCompany( companyCode, token ) {
@@ -34,6 +37,17 @@ class NodeDataService {
              {nodeCode:"BANG-RAK-HQ1", companyCode:"YORU", address:"476 Maha Phruttharam, Bang Rak, Bangkok 10500",
              lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"}
             ]
+    }
+
+    async getNodeByCode(nodeCode, token) {
+        var temp = null
+        this.allNodes.forEach( (node,ind) => {
+            if (node.nodeCode == nodeCode ) {
+                console.log( node.nodeCode, nodeCode)
+                temp = ind
+            }
+        })
+        return this.allNodes[temp]
     }
 
     

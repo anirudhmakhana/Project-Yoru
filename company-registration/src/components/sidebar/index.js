@@ -21,6 +21,7 @@ import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
+import { NodeViewPage } from "../../pages/NodeView";
 
 
 
@@ -95,7 +96,7 @@ export const CustomSidebar = (props) => {
                 <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
-                {/* <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/> */}
+                <Route path="node/view-node/:nodeCode" element={<NodeViewPage/>}/>
                 {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}
