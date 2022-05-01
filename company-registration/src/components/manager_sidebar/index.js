@@ -23,6 +23,7 @@ import { useState } from "react";
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
+import { ViewShipmentPage } from "../../pages/ViewShipment";
 
 
 
@@ -98,7 +99,8 @@ export const ManagerSidebar = (props) => {
 
             <Routes>
                 <Route path="overview" element={<OverviewPage/>}/>
-                <Route path="shipment" element={<TempViewShipment/>}/>
+                <Route path="shipment" element={<ShipmentListPage/>}/>
+                <Route path="shipment/view-shipment/:shipmentId" element={<ViewShipmentPage/>}/>
                 <Route path="register-staff/:companyCode" element={<AddStaffPage/>}/> 
                 <Route path="staff-list/:companyCode" element={<StaffListPage />}/>
                 <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/>
