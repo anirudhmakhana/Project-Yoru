@@ -36,6 +36,8 @@ export const ShipmentListPage = () => {
                         <th scope="col">Shipment ID</th>
                         <th scope="col">Shipment Name</th>
                         <th scope="col">Producer</th>
+                        <th scope="col">Current Location</th>
+
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
 

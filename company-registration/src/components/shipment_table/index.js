@@ -3,23 +3,42 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import StaffAccountService from '../../services/StaffAccountService'
+import ShipmentService from '../../services/ShipmentService'
+import NodeDataService from '../../services/NodeDataService'
 
 export class ShipmentTable extends Component {
 
     constructor(props) {
         super(props)
         console.log(this.props)  
+        this.state = {
+            company: ""
+        }
+        this.updateTable()
 
     }
-
+    updateTable = () => {
+        NodeDataService.getCompanyOfNode(this.props.obj.originNode, this.props.userData.token)
+        .then( res => {
+            console.log(res)
+            this.setState({
+                company: res
+            })
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
     render() {
         return (
             <tbody>
              <tr>   
-             <td className='td-key'>{this.props.obj._uid}</td>
+             <td className='td-key'>{this.props.obj.uid}</td>
                 <td>{this.props.obj.productName}</td>
-                <td>{this.props.obj.producer}</td>
-                <td>{this.props.obj.status}</td>
+                <td>{this.state.company}</td>
+                <td>{this.props.obj.currentNode}</td>
+                <td>{this.props.obj.status.toUpperCase()}</td>
+                
                 <td>
                     {/* <Link to={'view-staff/'+this.props.obj.username}>
                     <Button size="sm" variant="outline-primary">View</Button>

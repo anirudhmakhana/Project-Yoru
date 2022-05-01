@@ -50,6 +50,17 @@ class NodeDataService {
         return this.allNodes[temp]
     }
 
+    async getCompanyOfNode( nodeCode, token ) {
+        var temp = null
+        this.allNodes.forEach( (node,ind) => {
+            if (node.nodeCode == nodeCode ) {
+                temp = ind
+            }
+        })
+        console.log(this.allNodes[temp].companyCode)
+        return this.allNodes[temp].companyCode
+    }
+
     
 
 }
