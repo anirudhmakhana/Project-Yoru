@@ -22,6 +22,7 @@ import { useState } from "react";
 
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
+import { NodeViewPage } from "../../pages/NodeView";
 
 
 
@@ -104,7 +105,7 @@ export const ManagerSidebar = (props) => {
                 <Route path="edit-company/:companyCode" element={<EditCompanyPage/>}/>
                 <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
-
+                <Route path="node/view-node/:nodeCode" element={<NodeViewPage/>}/>
                 {/* Need to improve pages style and may change to other register page */}
 
             </Routes>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams,useNavigate } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
 
 import Table from 'react-bootstrap/Table'
 import {
@@ -13,12 +14,12 @@ import {
   } from "@react-google-maps/api";
 import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
-import { NodeTable } from '../../components/node_table';
 
 export const NodeViewPage = () => {
     const [node, setNode] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { nodeCode } = useParams()
+    const navigate = useNavigate()
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     // const [currentMark, setCurrentMark] = useState(null)
 
@@ -51,9 +52,15 @@ export const NodeViewPage = () => {
         return (
             <div id="shipment">
                 <div className="title-container">
+                    <Button type="button" onClick={() => {
+                        navigate(-1)
+                    }}className="btn btn-dark"> Back</Button>                
+                </div>
+                
+                <div className="title-container">
                     <h1>Node : {node.nodeCode}</h1>
                 </div>
-                <div style={{width:'100vw', height:'50vh'}}>
+                <div style={{width:'50vw', height:'50vh'}}>
                   <GoogleMap
                     center={{ lat: node.lat, lng: node.lng }}
                     zoom={15}

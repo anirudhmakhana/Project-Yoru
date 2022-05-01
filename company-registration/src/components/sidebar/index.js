@@ -43,7 +43,7 @@ export const CustomSidebar = (props) => {
             : window.location.pathname === 'create' ? 2
             : window.location.pathname === 'update' ? 3 
             : window.location.pathname === 'cancel' ? 4
-            : window.location.pathname === 'location' ? 5 
+            : window.location.pathname === 'node' ? 5   //can change to location page later
             : window.location.pathname === 'edit-staff' ? 6 
             : window.location.pathname === 'node' ? 7 
             : window.location.pathname === '/' ? 8 
@@ -78,14 +78,14 @@ export const CustomSidebar = (props) => {
                         <Link to={"cancel"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
-                        <Link to={"location"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
+                        <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>   {/* may change to location page later */}
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"edit-staff/"+userData.companyCode+"/"+userData.username} onClick={() => {setActiveItemIndex(6)}}>Edit Account</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faMap}/>}>
+                    {/* <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faMap}/>}>
                         <Link to={"node"} onClick={() => {setActiveItemIndex(7)}}>Node List</Link>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
