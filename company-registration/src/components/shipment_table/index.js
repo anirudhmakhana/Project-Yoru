@@ -6,8 +6,6 @@ import StaffAccountService from '../../services/StaffAccountService'
 import ShipmentService from '../../services/ShipmentService'
 import NodeDataService from '../../services/NodeDataService'
 
-import "../../assets/style/table.css"
-
 export class ShipmentTable extends Component {
 
     constructor(props) {
@@ -34,30 +32,30 @@ export class ShipmentTable extends Component {
     render() {
         return (
             <tbody>
-             <tr>   
-                <td className='td-key'>{this.props.obj.uid}</td>
-                <td>{this.props.obj.description}</td>
-                <td>{this.state.company}</td>
-                <td>{this.props.obj.currentNode}</td>
-                <td>{this.props.obj.status.toUpperCase()}</td>
-                
-                <td>
-                    {/* <Link to={'view-staff/'+this.props.obj.username}>
-                    <Button size="sm" variant="outline-primary">View</Button>
-                    </Link>
-                    &nbsp;&nbsp; */}
-                
-                    <Link to={'view-shipment/'+this.props.obj.uid}>
-                    <Button size="sm" variant="dark">VIEW</Button>
-                    </Link>
-                    &nbsp;&nbsp;
+                <tr>   
+                    <td className='td-key'>{this.props.obj.uid}</td>
+                    <td>{this.props.obj.description}</td>
+                    <td>{this.state.company}</td>
+                    <td>{this.props.obj.currentNode}</td>
+                    <td>{this.props.obj.status.toUpperCase()}</td>
+                    
+                    <td>
+                        {/* <Link to={'view-staff/'+this.props.obj.username}>
+                        <Button size="sm" variant="outline-primary">View</Button>
+                        </Link>
+                        &nbsp;&nbsp; */}
+                    
+                        <Link to={'view-shipment/'+this.props.obj.uid}>
+                        <Button size="sm" variant="dark">VIEW</Button>
+                        </Link>
+                        &nbsp;&nbsp;
 
-                    <Link to={'update/'+this.props.obj.uid}>
-                    <Button size="sm" variant="dark">##TEMP##UPDATE</Button>
-                    </Link>
-                </td>       
+                        <Link to={'update/'+this.props.obj.uid}>
+                        <Button size="sm" variant="dark">##TEMP##UPDATE</Button>
+                        </Link>
+                    </td>       
 
-            </tr>
+                </tr>
             
             </tbody>
 
