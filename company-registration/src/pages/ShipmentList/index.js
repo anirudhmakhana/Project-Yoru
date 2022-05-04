@@ -26,7 +26,7 @@ export const ShipmentListPage = () => {
     }
 
     return (
-        <div id="shipment">
+        <div className="shipment">
             <div className="title-container">
                 <h1>Shipment</h1>
             </div>
