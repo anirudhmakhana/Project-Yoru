@@ -34,21 +34,20 @@ export const ShipmentListPage = () => {
                 <h3 className="tableTitle">All Shipments</h3>
                 <br/>
                 <Table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Shipment ID</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Producer</th>
-                        <th scope="col">Current Location</th>
+                    <thead>
+                        <tr>
+                            <th scope="col">Shipment ID</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Producer</th>
+                            <th scope="col">Current Location</th>
 
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    {userData && allShipments ? (dataTable()) : (<></>)}
 
-                    </tr>
-                </thead>
-                {userData && allShipments ? (dataTable()) : (<></>)}
-
-            </Table>
+                </Table>
             </div>
             
         </div>
