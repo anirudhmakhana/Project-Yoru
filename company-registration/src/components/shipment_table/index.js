@@ -48,7 +48,9 @@ export class ShipmentTable extends Component {
                     <Link to={'view-shipment/'+this.props.obj.uid}>
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
-                    
+                    <Link to={'update/'+this.props.obj.uid}>
+                    <Button size="sm" variant="dark">UPDATE</Button>
+                    </Link>
                 </td>       
 
             </tr>

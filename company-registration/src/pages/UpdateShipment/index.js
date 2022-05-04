@@ -21,7 +21,7 @@ const google = window.google
 export const UpdateSHP = () => {
     const [shipment, setShipment] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const shipmentId  = "SHP001"
+    const {shipmentId}  = useParams()
     const availableStatus = ["arrived", "shipping", "cancel"]
     const navigate = useNavigate()
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
@@ -95,7 +95,7 @@ export const UpdateSHP = () => {
                     setPath(res_path.data)
                     if (isLoaded ){ 
                         res_path.data.push({scannedAt:result.data.nodeCode})
-                        console.log(res_path.data)
+                        console.log('######',res_path.data)
                         const results = await getDirection(res_path.data)
                         console.log(results)
                         setDirectionsResponse(results)
@@ -176,6 +176,15 @@ export const UpdateSHP = () => {
                     setCurrentNode(res_current.data)
                     setUpdateNode(res_current.data)
                     setUpdateCompany(res_current.data.companyCode)
+                    ShipmentService.getStockByNode(res_current.data.nodeCode, userData.token)
+                    .then( res_stock => {
+                        console.log(res_stock.data)
+                        setNodeStock(res_stock.data)
+                    })
+                    .catch(err_stock => {
+                        setNodeStock(null)
+                        console.log(err_stock)
+                    })
 
                 })
                 .catch( err => {
