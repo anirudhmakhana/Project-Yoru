@@ -33,11 +33,11 @@
 }
 
 #shipment th {
-    color: #7A7C88;
+    color: #9FA2B4;
     font-size: 15px;
     font-weight: bold;
     text-align:left;
-
+    padding-left: 1%;
 }
 
 #shipment td {
@@ -45,7 +45,13 @@
     font-size: 15px;
     font-weight: normal;
     text-align:left;
+    border: none;
+    vertical-align: middle;
+    padding: 1.5% 0 1.5% 1%;
+}
 
+#shipment tbody {
+    border-top: 1px solid #ddd !important;
 }
 
 #shipment .td-key {
