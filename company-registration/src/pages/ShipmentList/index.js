@@ -15,7 +15,7 @@ export const ShipmentListPage = () => {
             .then( res => setAllShipments(res.data))
             .catch(err => {
                 setAllShipments([])
-                console.log(err)})
+                console.log(err)}) 
         }
     ,[] );
 
@@ -30,7 +30,10 @@ export const ShipmentListPage = () => {
             <div className="title-container">
                 <h1>Shipment</h1>
             </div>
-            <Table className="table table-hover">
+            <div className="shipmentTableContainer">
+                <h3 className="tableTitle">All Shipments</h3>
+                <br/>
+                <Table className="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Shipment ID</th>
@@ -43,10 +46,11 @@ export const ShipmentListPage = () => {
 
                     </tr>
                 </thead>
-            
-                    {userData && allShipments ? (dataTable()) : (<></>)}
+                {userData && allShipments ? (dataTable()) : (<></>)}
 
             </Table>
+            </div>
+            
         </div>
     );
 }

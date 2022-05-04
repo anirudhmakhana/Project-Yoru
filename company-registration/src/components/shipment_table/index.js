@@ -6,6 +6,8 @@ import StaffAccountService from '../../services/StaffAccountService'
 import ShipmentService from '../../services/ShipmentService'
 import NodeDataService from '../../services/NodeDataService'
 
+import "../../assets/style/table.css"
+
 export class ShipmentTable extends Component {
 
     constructor(props) {
@@ -33,7 +35,7 @@ export class ShipmentTable extends Component {
         return (
             <tbody>
              <tr>   
-             <td className='td-key'>{this.props.obj.uid}</td>
+                <td className='td-key'>{this.props.obj.uid}</td>
                 <td>{this.props.obj.description}</td>
                 <td>{this.state.company}</td>
                 <td>{this.props.obj.currentNode}</td>

@@ -51,31 +51,34 @@ export const LoginPage = (props) => {
     }
     
     return (
-        <div className="loginBackground">
-            <div className="startPageContainer">
-                <div className="logo">
-                    <h3>Project Yoru</h3>
-                </div>
+        <div className="backgroundLogin">
+            <div className="loginContainer">
+                <div className="startPageContainer">
+                    <div className="logo">
+                        <h3>Project Yoru</h3>
+                    </div>
 
-                <h2>Log In to Project Yoru</h2>
-                <p>Enter your username and password below</p>
-                <form onSubmit={handleSubmit}>
-                    <div className="textInputContainerCol">
-                        <label className="inputLabel" for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Username" onChange={handleChangeUsername} value={username}></input>
-                    </div>
-                    <div className="textInputContainerCol"> 
-                        <label className="inputLabel" for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
-                    </div>
-                    <input className="signinBtn" type="submit" value="Log In"></input>
-                    {/* <div className="buttonContainerRow">
-                        <label>Don't have an account ?</label>
-                        <a href="/register" className="signupBtn">Sign Up</a>
-                    </div> */}
-                    
-                </form>
+                    <h2>Log In to Project Yoru</h2>
+                    <p>Enter your username and password below</p>
+                    <form onSubmit={handleSubmit}>
+                        <div className="textInputContainerCol">
+                            <label className="inputLabel" for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Username" onChange={handleChangeUsername} value={username}></input>
+                        </div>
+                        <div className="textInputContainerCol"> 
+                            <label className="inputLabel" for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
+                        </div>
+                        <input className="signinBtn" type="submit" value="Log In"></input>
+                        {/* <div className="buttonContainerRow">
+                            <label>Don't have an account ?</label>
+                            <a href="/register" className="signupBtn">Sign Up</a>
+                        </div> */}
+                        
+                    </form>
+                </div>
             </div>
         </div>
+        
     );
 }
