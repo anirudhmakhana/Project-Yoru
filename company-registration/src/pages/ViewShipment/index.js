@@ -46,6 +46,7 @@ export const ViewShipmentPage = () => {
     }
 
     async function getDirection(path) {
+        console.log(google)
         const directionsService = new google.maps.DirectionsService()
         
         var checkpoints = []

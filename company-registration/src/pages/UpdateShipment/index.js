@@ -50,6 +50,7 @@ export const UpdateSHP = () => {
     }
 
     async function getDirection(p) {
+        console.log(google)
         const directionsService = new google.maps.DirectionsService()
         
         var checkpoints = []
