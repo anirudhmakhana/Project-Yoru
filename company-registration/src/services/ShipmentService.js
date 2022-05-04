@@ -4,7 +4,7 @@ import abi from "../utils/TrackingContract.json"
 
 class ShipmentService {
     constructor() {
-        // this.contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
+        // this.contractAddress = "0x70CB7E6DEFd1a235Ff11a45e4a382F6E0dFC7DB7"
         // this.contractABI = abi
         // this.externalProvider = new ethers.providers.JsonRpcProvider(
         //     `https://rinkeby.infura.io/v3/6c9af8d40e4d4ff0bad46e193bc1aa8b`,
@@ -13,13 +13,13 @@ class ShipmentService {
         // this.shipmentContract = new ethers.Contract(this.contractAddress, this.contractABI.abi, this.externalProvider);
         this.shipments = [
             {uid:"SHP001", description:"Stainless Steel 2 rolls", originNode:"LKB-1003", status:"shipping", 
-            currentNode:"LKB-1003", scannedTime:1651393111, destinationNode:"CNX-2040"},
+            currentNode:"LKB-1003", scannedTime:1651393111, companyCode:"YORU", destinationNode:"CNX-2040"},
 
             {uid:"SHP002", description:"PS5 2EA, Nintendo Switch 1EA", originNode:"LKB-1003", status:"arrived", 
-            currentNode:"RAM-52011", scannedTime:1651220311, destinationNode:"BANG-RAK-HQ1"},
+            currentNode:"RAM-52011", scannedTime:1651220311, companyCode:"YORU", destinationNode:"BANG-RAK-HQ1"},
 
             {uid:"SHP003", description:"Fender Telecaster Jim Root", originNode:"CNX-2040", status:"completed", 
-            currentNode:"LKB-1003", scannedTime:1651306711, destinationNode:"LKB-1003"}
+            currentNode:"LKB-1003", scannedTime:1651306711, companyCode:"YORU", destinationNode:"LKB-1003"}
         ]
 
         this.scannedData = [

@@ -15,6 +15,8 @@ import {
 import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
+const google = window.google
+
 
 export const ViewNodePage = () => {
     const [node, setNode] = useState(null)
@@ -23,7 +25,6 @@ export const ViewNodePage = () => {
     const navigate = useNavigate()
     const [stock, setStock] = useState([])
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
-    const google = window.google
     // const [currentMark, setCurrentMark] = useState(null)
 
     const { isLoaded } = useJsApiLoader({

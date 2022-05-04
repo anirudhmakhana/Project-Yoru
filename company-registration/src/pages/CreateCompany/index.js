@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 import CompanyService from '../../services/CompanyService'
-
+const google = window.google
 export function CreateCompanyPage(props) {
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
 
