@@ -112,6 +112,7 @@ class ShipmentService {
                 result.push(this.shipments[i])
             }
         }
+        console.log(result)
         return {data:result}
     }
 
@@ -123,6 +124,15 @@ class ShipmentService {
             }
         }
         return {data:result.sort((a,b) => a.scannedTime - b.scannedTime)}
+    }
+
+    async shipmentIdExisted( shipmentId, token ) {
+        for ( let i = 0; i < this.shipments.length;i++) {
+            if ( this.shipments[i].uid == shipmentId) {
+                return {data:true}
+            }
+        }
+        return {data:false}
     }
 }
 

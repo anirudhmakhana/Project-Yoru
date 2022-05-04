@@ -24,7 +24,23 @@ class NodeDataService {
     }
 
     async getNodeByCompany( companyCode, token ) {
-        return {data:this.allNodes}
+        const result = []
+        this.allNodes.forEach( node => {
+            if (node.companyCode == companyCode) {
+                result.push(node)
+            }
+        })
+        return {data:result}
+    }
+
+    async getActiveNodeByCompany( companyCode, token ) {
+        const result = []
+        this.allNodes.forEach( node => {
+            if (node.companyCode == companyCode && node.status == "active") {
+                result.push(node)
+            }
+        })
+        return {data:result}
     }
 
     async getNodeByCode(nodeCode, token) {
