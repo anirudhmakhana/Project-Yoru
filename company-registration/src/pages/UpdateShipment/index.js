@@ -239,6 +239,23 @@ export const UpdateSHP = () => {
                         <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
                     </div>
                     </InfoWindow>
+                    {updateNode && updateNode != currentNode ? (
+                        <InfoWindow
+                        position={{ lat: updateNode.lat, lng: updateNode.lng }}
+                        onCloseClick={() => {
+                        }}>
+                        <div>
+                            <h2>
+                            <span>📦 {updateNode.nodeCode}</span>
+                            </h2>
+                            <p style={{color:"#000000"}}>Company: {updateNode.companyCode}</p>
+                            <p style={{color:"#000000"}}>Address: {updateNode.address}</p>
+                            <p style={{color:"#000000"}}>Contact: {updateNode.phoneNumber}</p>
+                            <p style={{color:"#000000"}}>Stocking: {nodeStock.length} shipment(s)</p>
+        
+                        </div>
+                        </InfoWindow>
+                    ): null}
                     {/*
                     <Marker
                         key={`${shipment.lat}-${shipment.lng}`}
@@ -254,7 +271,7 @@ export const UpdateSHP = () => {
                 <div className="body-main">
             <Dropdown onSelect={handleCompanyDropdown}>
 
-                {shipment.status == "arrived" ? (
+                {shipment.status != "shipping" ? (
                 <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.companyCode}</Dropdown.Toggle>)
                  : (updateCompany ? ( <Dropdown.Toggle variant="primary" id="dropdown-basic" >{updateCompany}</Dropdown.Toggle>) 
                     : (<Dropdown.Toggle variant="primary" id="dropdown-basic">Company</Dropdown.Toggle>))}
@@ -266,7 +283,7 @@ export const UpdateSHP = () => {
             </Dropdown>
 
             <Dropdown onSelect={handleNodeDropdown}>
-                {shipment.status == "arrived" ? (
+                {shipment.status != "shipping" ? (
                     <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.nodeCode}</Dropdown.Toggle>)
                     : (
                     updateCompany ? 
@@ -276,7 +293,9 @@ export const UpdateSHP = () => {
 
                  : (<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>Node</Dropdown.Toggle>))}
             <Dropdown.Menu >
-                {companyNodes.map( node => <Dropdown.Item eventKey={node.nodeCode}>{node.nodeCode}</Dropdown.Item>)}
+                {companyNodes.map( node => {
+                    if (node.nodeCode != currentNode.nodeCode) 
+                    return <Dropdown.Item eventKey={node.nodeCode}>{node.nodeCode}</Dropdown.Item>})}
             </Dropdown.Menu>
             </Dropdown>
 
