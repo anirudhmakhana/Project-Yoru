@@ -47,10 +47,17 @@ class ShipmentService {
     return 0;
     }
 
-    
-    async getAllShipments() {
+    async getAllShipmentsBlock() {
+        
+    }
+    async getAllShipments(token) {
 
-    
+        const response = await axios.get('http://localhost:4000/shipment/', {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        
+        return response
         // const filter = this.shipmentContract.on("NewScanEvent", (from, timestamp, _uid ,_productName, _producer, _status) => {
         //   console.log (
         //     {
@@ -86,10 +93,10 @@ class ShipmentService {
         // console.log(shipmentsUntilNow)
     
         // return (shipmentsUntilNow.reverse())
-        return {data:this.shipments}
+        // return {data:this.shipments}
     }
     
-    async getShipmentById( shipmentId, walletPublicKey, token ) { 
+    async getShipmentByIdChain( shipmentId, walletPublicKey, token ) { 
         // const response = await axios.get("http://localhost:4010/shipment/" + shipmentId + "/" + walletPublicKey, 
         // {headers:{"x-access-token":token}})
         // .catch((error) => {
@@ -104,6 +111,17 @@ class ShipmentService {
         })
         return {data:this.shipments[temp]}
     }
+
+    async getShipmentById( shipmentId, token ) { 
+        const response = await axios.get("http://localhost:4000/shipment/" + shipmentId , 
+        {headers:{"x-access-token":token}})
+        .catch((error) => {
+            return error
+        })
+        return response
+    
+    }
+
 
     async getStockByNode( nodeCode, token ) {
         var result = []

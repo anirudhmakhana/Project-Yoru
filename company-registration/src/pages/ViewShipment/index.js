@@ -74,7 +74,9 @@ export const ViewShipmentPage = () => {
 
         CompanyService.getCompanyByCode(userData.companyCode, userData.token)
         .then( result => {
-            ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
+            // ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
+            ShipmentService.getShipmentById(shipmentId ,userData.token)
+
             .then( res => {console.log(res.data)
                 setShipment(res.data)
                 ShipmentService.getPathByShipmentId(shipmentId, userData.token)

@@ -11,7 +11,7 @@ export const ShipmentListPage = () => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
 
     useEffect(() => {
-            ShipmentService.getAllShipments()
+            ShipmentService.getAllShipments(userData.token)
             .then( res => setAllShipments(res.data))
             .catch(err => {
                 setAllShipments([])
