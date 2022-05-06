@@ -24,6 +24,10 @@ import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
 import { ViewShipmentPage } from "../../pages/ViewShipment";
+import { CreateSHP } from "../../pages/CreateShipment";
+import { UpdateSHP } from "../../pages/UpdateShipment";
+import { CancelSHP } from "../../pages/CancelShipment";
+import { ScanSHP } from "../../pages/ScanShipment";
 
 
 
@@ -36,9 +40,9 @@ export const ManagerSidebar = (props) => {
         const initialIndex = 
             window.location.pathname === "overview" ? 0 
             : window.location.pathname === "shipment" ? 1 
-            : window.location.pathname === '/' ? 2 
-            : window.location.pathname === '/' ? 3 
-            : window.location.pathname === '/' ? 4
+            : window.location.pathname === 'create' ? 2 
+            : window.location.pathname === 'scan' ? 3 
+            : window.location.pathname === 'cancel' ? 4
             : window.location.pathname === 'node' ? 5 
             : window.location.pathname === 'register-staff' ? 6 
             : window.location.pathname === 'staff-list' ? 7 
@@ -66,13 +70,13 @@ export const ManagerSidebar = (props) => {
                         <Link to={"shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(2)}}>Create Shipment</Link>
+                        <Link to={"create"} onClick={() => {setActiveItemIndex(2)}}>Create Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faPen}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
+                        <Link to={"scan"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 4} icon={<FontAwesomeIcon icon={faBan}/>}>
-                        <Link to={"/"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
+                        <Link to={"cancel"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
@@ -108,6 +112,13 @@ export const ManagerSidebar = (props) => {
                 <Route path="staff-list/:companyCode/edit-staff/:username" element={<EditStaffPage/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
+                <Route path="create" element={<CreateSHP/>}/>
+
+                {/* CHANGE TO scan/update/:shipmentId */}
+                <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
+                <Route path="cancel" element={<CancelSHP/>}/>
+                <Route path="scan" element={<ScanSHP/>}/>
+
                 {/* Need to improve pages style and may change to other register page */}
 
             </Routes>

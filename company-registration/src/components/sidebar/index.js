@@ -30,6 +30,7 @@ import { useState } from "react";
 import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
+import { ScanSHP } from "../../pages/ScanShipment";
 
 
 
@@ -43,7 +44,7 @@ export const CustomSidebar = (props) => {
             window.location.pathname === "overview" ? 0 
             : window.location.pathname === "shipment" ? 1 
             : window.location.pathname === 'create' ? 2
-            : window.location.pathname === 'update' ? 3 
+            : window.location.pathname === 'scan' ? 3 
             : window.location.pathname === 'cancel' ? 4
             : window.location.pathname === 'node' ? 5   //can change to location page later
             : window.location.pathname === 'edit-staff' ? 6 
@@ -74,7 +75,7 @@ export const CustomSidebar = (props) => {
                         <Link to={"create"} onClick={() => {setActiveItemIndex(2)}}>Create Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 3} icon={<FontAwesomeIcon icon={faPen}/>}>
-                        <Link to={"update"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
+                        <Link to={"scan"} onClick={() => {setActiveItemIndex(3)}}>Update Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 4} icon={<FontAwesomeIcon icon={faBan}/>}>
                         <Link to={"cancel"} onClick={() => {setActiveItemIndex(4)}}>Cancel Shipment</Link>
@@ -103,9 +104,12 @@ export const CustomSidebar = (props) => {
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="shipment/view-shipment/:shipmentId" element={<ViewShipmentPage/>}/>
+                <Route path="scan" element={<ScanSHP/>}/>
 
                 <Route path="create" element={<CreateSHP/>}/>
-                <Route path="update" element={<UpdateSHP/>}/>
+
+                {/* CHANGE TO scan/update/:shipmentId */}
+                <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="location" element={<LocationPage/>}/>
                 <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>

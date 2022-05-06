@@ -1,22 +1,49 @@
-#shipment {
+.shipment {
     width: 100%;
     height: 100%;
     padding: 0 1.5vw 0 1.5vw;
 }
 
-#shipment h1 {
+.shipment h1 {
     color: #252733;
     font-size: 2em;
     font-weight: bold;
+    margin-bottom: 0;
 }
 
-#shipment .title-container {
+.shipment h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.shipment h4 {
+    color: #9FA2B4;
+    font-size: 1.25em;
+    margin-bottom: 0;
+}
+
+.shipment p {
+    color: #000000
+}
+
+.shipment .title-container {
     display: flex;
     justify-content: flex-start;
-    margin: 2vh 0 2vh 0;
+    margin: 2vh 0 3vh 0;
 }
 
-#shipment .body-top {
+.shipment .shipmentTitleContainer {
+    text-align: left;
+}
+
+.shipment .infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.shipment .body-top {
     display: flex;
     flex: 1;
     flex-direction: row;
@@ -24,7 +51,7 @@
     margin-bottom: 2vh;
 }
 
-#shipment .body-main {
+.shipment .body-main {
     width: 100%;
     height: 68vh;
     background: #ffffff;
@@ -32,25 +59,70 @@
     border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-#shipment th {
-    color: #7A7C88;
+.shipment th {
+    color: #9FA2B4;
     font-size: 15px;
     font-weight: bold;
     text-align:left;
-
+    padding-left: 1%;
 }
 
-#shipment td {
+.shipment td {
     color: #000000;
     font-size: 15px;
     font-weight: normal;
     text-align:left;
-
+    border: none;
+    vertical-align: middle;
+    padding: 1.5% 0 1.5% 1%;
 }
 
-#shipment .td-key {
+.shipment tbody {
+    border-top: 1px solid #ddd !important;
+}
+
+.shipment .td-key {
     color: #000000;
     font-size: 15px;
     font-weight: bold;
     text-align:left;
+}
+
+.shipmentTableContainer {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 16px;
+    height: 90%;
+    padding: 2%;
+    text-align: left;
+}
+
+.backBtn {
+    color: black;
+    margin-right: 1%;
+    background: none;
+    border: none;
+}
+
+.backBtn:hover {
+    color: #2b42d8;
+    background: none;
+    border: none;
+}
+
+.alignTopIcon {
+    vertical-align: top;
+}
+
+.tableTitle {
+    color: #252733;
+}
+
+.viewShipment {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 16px;
+    height: 90%;
+    max-height: 90%;
+    padding: 2% 4% 2% 4%;
 }

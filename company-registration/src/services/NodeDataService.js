@@ -20,43 +20,53 @@ class NodeDataService {
     
 
     async getAllNode(token) { 
-        return {data:this.allNodes}
+        const response = await axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        return response
     }
 
     async getNodeByCompany( companyCode, token ) {
-        return {data:this.allNodes}
+        const response = await axios.get('http://localhost:4000/node/bycompany/'+companyCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        return response
+    }
+
+    async getActiveNodeByCompany( companyCode, token ) {
+        const response = await axios.get('http://localhost:4000/node/active/'+companyCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        return response
     }
 
     async getNodeByCode(nodeCode, token) {
-        var temp = null
-        this.allNodes.forEach( (node,ind) => {
-            if (node.nodeCode == nodeCode ) {
-                console.log( node.nodeCode, nodeCode)
-                temp = ind
-            }
+        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
         })
-        return {data:this.allNodes[temp]}
+        return response
     }
 
     async getCompanyOfNode( nodeCode, token ) {
-        var temp = null
-        this.allNodes.forEach( (node,ind) => {
-            if (node.nodeCode == nodeCode ) {
-                temp = ind
-            }
+        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
         })
-        console.log(this.allNodes[temp].companyCode)
-        return {data:this.allNodes[temp].companyCode}
+        response.data = response.data.companyCode
+        return response
     }
 
     async getCoordinateByNode( nodeCode, token ) {
-        var temp = null
-        this.allNodes.forEach( (node,ind) => {
-            if (node.nodeCode == nodeCode ) {
-                temp = ind
-            }
+        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
         })
-        return {data:{lat:this.allNodes[temp].lat, lng:this.allNodes[temp].lng}}
+        response.data ={lat:response.data.lat, lng:response.data.lng}
+        return response
     }
     
 

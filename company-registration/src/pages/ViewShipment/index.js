@@ -9,12 +9,17 @@ import {
     InfoWindow,
     Autocomplete,
     DirectionsRenderer,
-  } from "@react-google-maps/api";
+} from "@react-google-maps/api";
+
 import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import CompanyService from '../../services/CompanyService';
 import { getOverlayDirection } from 'react-bootstrap/esm/helpers';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
 const google = window.google
 
 export const ViewShipmentPage = () => {
@@ -41,6 +46,7 @@ export const ViewShipmentPage = () => {
     }
 
     async function getDirection(path) {
+        console.log(google)
         const directionsService = new google.maps.DirectionsService()
         
         var checkpoints = []
@@ -68,7 +74,9 @@ export const ViewShipmentPage = () => {
 
         CompanyService.getCompanyByCode(userData.companyCode, userData.token)
         .then( result => {
-            ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
+            // ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
+            ShipmentService.getShipmentById(shipmentId ,userData.token)
+
             .then( res => {console.log(res.data)
                 setShipment(res.data)
                 ShipmentService.getPathByShipmentId(shipmentId, userData.token)
@@ -112,76 +120,84 @@ export const ViewShipmentPage = () => {
     if ( shipment && currentNode ) {
         
         return (
-            <div id="shipment">
+            <div className="shipment">
                 <div className="title-container">
-                    <Button type="button" onClick={() => {
-                        navigate(-1)
-                    }}className="btn btn-dark"> Back</Button>                
+                    <h1>Shipment</h1>
                 </div>
-                
-                <div className="title-container">
-                    <h1>Shipment : {shipment.uid}</h1>
-                </div>
-                <div style={{width:'82vw', height:'50vh'}}>
-                  <GoogleMap
-                    center={{ lat: currentNode.lat, lng: currentNode.lng }}
-                    zoom={15}
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    options={options}
-                    onLoad={map => setMapRef(map)}
-                    onClick={()=>{}}
-                  >
-                  {directionsResponse ? (
-                    directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
-                  ): null}
-                   <InfoWindow
-                    position={{ lat: currentNode.lat, lng: currentNode.lng }}
-                    onCloseClick={() => {
-                    }}
-                    >
-                    <div>
-                        <h2>
-                        
-                    {shipment.status == "shipping" 
-                    ? (<span>🚚 {shipment.uid}</span>) :
-                     (<span>📦 {shipment.uid}</span>)}
-                           
-                        
-                        </h2>
-                        <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
-                        <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+                <div className="viewShipment">
+                    <div className="title-container">
+                        <Button type="button" onClick={() => {
+                            navigate(-1)
+                        }}className="backBtn">
+                            <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
+                        </Button>
+                        <div className="shipmentTitleContainer">
+                            <h2>Shipment: {shipment.description}</h2>
+                            <h4>ID: {shipment.uid}</h4>
+                        </div>
                     </div>
-                    </InfoWindow>
-                    {/*
-                    <Marker
-                        key={`${shipment.lat}-${shipment.lng}`}
-                        position={{lat:shipment.lat, lng:shipment.lng}}
-                        onClick={() => {
-                        console.log(shipment.lat+"-"+ shipment.lgn)
-                        }}
-                        map={mapRef}
-                    /> */}
-                  </GoogleMap>
+                    <div className="infoContainer">
+                        {/* <p>{shipment.description}</p> */}
+                        <p>Status: {shipment.status}</p>
+                        <p>Origin: {shipment.originNode}</p>
+                        <p>Current Location: {shipment.currentNode}</p>
+                        <p>Destination: {shipment.destinationNode}</p>
+                    </div>
+                    <div style={{width:'30vw', height:'50vh', textAlign: "left"}}>
+                        <h2>Map</h2>
+                        <GoogleMap
+                            center={{ lat: currentNode.lat, lng: currentNode.lng }}
+                            zoom={15}
+                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            options={options}
+                            onLoad={map => setMapRef(map)}
+                            onClick={()=>{}}
+                        >
+                        {directionsResponse ? (
+                            directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
+                        ): null}
+                        <InfoWindow
+                            position={{ lat: currentNode.lat, lng: currentNode.lng }}
+                            onCloseClick={() => {
+                            }}
+                            >
+                            <div>
+                                <h2>
+                                
+                            {shipment.status == "shipping" 
+                            ? (<span>🚚 {shipment.uid}</span>) :
+                            (<span>📦 {shipment.uid}</span>)}
+                                
+                                
+                                </h2>
+                                <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
+                                <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+                            </div>
+                            </InfoWindow>
+                            {/*
+                            <Marker
+                                key={`${shipment.lat}-${shipment.lng}`}
+                                position={{lat:shipment.lat, lng:shipment.lng}}
+                                onClick={() => {
+                                console.log(shipment.lat+"-"+ shipment.lgn)
+                                }}
+                                map={mapRef}
+                            /> */}
+                        </GoogleMap>
+                    </div>
+                    
+                    
                 </div>
-                <div className="body-main">
-                    <p className="mt-5"> {shipment.uid} </p>
-                    <p>{shipment.description} </p>
-                    <p className="mb-5">Origin: {shipment.originNode}</p>
-                    <p className="mb-5">Current: {shipment.currentNode}</p>
-                    <p className="mb-5">Destination: {shipment.destinationNode}</p>
-                    <p className="mb-5">Status: {shipment.status}</p>
-                </div>
-                
             </div>
+            
         );
     } else {
-        return (<div id="shipment">
+        return (
+            <div className="shipment">
                 <div className="title-container">
                     <h1>Node</h1>
                     <h2>Cannot find any Node</h2>
                 </div>
-            
-                
             </div>)
     }
 }

@@ -4,7 +4,7 @@ import abi from "../utils/TrackingContract.json"
 
 class ShipmentService {
     constructor() {
-        // this.contractAddress = "0xD3Dd4FD11B1Bad20E32436140532869BE2542554"
+        // this.contractAddress = "0x70CB7E6DEFd1a235Ff11a45e4a382F6E0dFC7DB7"
         // this.contractABI = abi
         // this.externalProvider = new ethers.providers.JsonRpcProvider(
         //     `https://rinkeby.infura.io/v3/6c9af8d40e4d4ff0bad46e193bc1aa8b`,
@@ -13,13 +13,13 @@ class ShipmentService {
         // this.shipmentContract = new ethers.Contract(this.contractAddress, this.contractABI.abi, this.externalProvider);
         this.shipments = [
             {uid:"SHP001", description:"Stainless Steel 2 rolls", originNode:"LKB-1003", status:"shipping", 
-            currentNode:"LKB-1003", scannedTime:1651393111, destinationNode:"CNX-2040"},
+            currentNode:"LKB-1003", scannedTime:1651393111, companyCode:"YORU", destinationNode:"CNX-2040"},
 
             {uid:"SHP002", description:"PS5 2EA, Nintendo Switch 1EA", originNode:"LKB-1003", status:"arrived", 
-            currentNode:"RAM-52011", scannedTime:1651220311, destinationNode:"BANG-RAK-HQ1"},
+            currentNode:"RAM-52011", scannedTime:1651220311, companyCode:"YORU", destinationNode:"BANG-RAK-HQ1"},
 
             {uid:"SHP003", description:"Fender Telecaster Jim Root", originNode:"CNX-2040", status:"completed", 
-            currentNode:"LKB-1003", scannedTime:1651306711, destinationNode:"LKB-1003"}
+            currentNode:"LKB-1003", scannedTime:1651306711, companyCode:"YORU", destinationNode:"LKB-1003"}
         ]
 
         this.scannedData = [
@@ -47,10 +47,17 @@ class ShipmentService {
     return 0;
     }
 
-    
-    async getAllShipments() {
+    async getAllShipmentsBlock() {
+        
+    }
+    async getAllShipments(token) {
 
-    
+        const response = await axios.get('http://localhost:4000/shipment/', {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        
+        return response
         // const filter = this.shipmentContract.on("NewScanEvent", (from, timestamp, _uid ,_productName, _producer, _status) => {
         //   console.log (
         //     {
@@ -86,10 +93,10 @@ class ShipmentService {
         // console.log(shipmentsUntilNow)
     
         // return (shipmentsUntilNow.reverse())
-        return {data:this.shipments}
+        // return {data:this.shipments}
     }
     
-    async getShipmentById( shipmentId, walletPublicKey, token ) { 
+    async getShipmentByIdChain( shipmentId, walletPublicKey, token ) { 
         // const response = await axios.get("http://localhost:4010/shipment/" + shipmentId + "/" + walletPublicKey, 
         // {headers:{"x-access-token":token}})
         // .catch((error) => {
@@ -105,6 +112,17 @@ class ShipmentService {
         return {data:this.shipments[temp]}
     }
 
+    async getShipmentById( shipmentId, token ) { 
+        const response = await axios.get("http://localhost:4000/shipment/" + shipmentId , 
+        {headers:{"x-access-token":token}})
+        .catch((error) => {
+            return error
+        })
+        return response
+    
+    }
+
+
     async getStockByNode( nodeCode, token ) {
         var result = []
         for( let i = 0; i < this.shipments.length; i++ ) {
@@ -112,6 +130,7 @@ class ShipmentService {
                 result.push(this.shipments[i])
             }
         }
+        console.log(result)
         return {data:result}
     }
 
@@ -123,6 +142,53 @@ class ShipmentService {
             }
         }
         return {data:result.sort((a,b) => a.scannedTime - b.scannedTime)}
+    }
+
+    async shipmentIdExisted( shipmentId, token ) {
+        for ( let i = 0; i < this.shipments.length;i++) {
+            if ( this.shipments[i].uid == shipmentId) {
+                return {data:true}
+            }
+        }
+        return {data:false}
+    }
+
+    // need walletPublicKey
+    async createShipment( shipmentData , walletPublicKey, token ) {
+        var bcData = shipmentData
+        bcData["walletPublicKey"] = walletPublicKey
+        const response = await axios.post("http://localhost:4000/shipment/", bcData, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+
+        if (response ) {
+            var centData = shipmentData
+            centData["transactionHash"] = response.transactionHash
+            const res_central = await axios.post("http://localhost:4000/shipment/centralize/", centData, 
+            {headers:{"x-access-token":token}})
+            .catch( error => {
+                throw error
+            }) 
+            if (res_central) {
+                
+                var createScan = {
+                    uid: shipmentData.uid,
+                    currentNode: shipmentData.currentNode,
+                    scannedTime: shipmentData.scannedTime,
+                    status: shipmentData.status,
+                    transactionHash: response.transactionHash
+                }
+                const res_scan = await axios.post("http://localhost:4000/scan/", createScan, 
+                {headers:{"x-access-token":token}})
+                .catch( error => {
+                    throw error
+                }) 
+                return res_scan
+            }
+        }
+        throw "Not complete create shipment"
     }
 }
 
