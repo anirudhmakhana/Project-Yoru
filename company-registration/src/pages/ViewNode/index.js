@@ -15,6 +15,7 @@ import {
 import "../../assets/style/shipment.css"
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
+import GraphService from '../../services/GraphService';
 const google = window.google
 
 
@@ -48,6 +49,8 @@ export const ViewNodePage = () => {
             setNode(null)
             console.log(err)
         })
+
+        GraphService.getNodeStockByTime( nodeCode, [100,200,300,400,500], userData.token)
 
         ShipmentService.getStockByNode(nodeCode,userData.token)
         .then( res => {console.log(res)
