@@ -2,45 +2,89 @@ import React, { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom"
 import Button from 'react-bootstrap/Button'
 import NodeDataService from "../../services/NodeDataService";
-/* eslint-disable no-undef */
-/* global google */
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  InfoWindow,
+  Autocomplete,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
+import AsyncSelect  from 'react-select/async';
+import Dropdown from "react-bootstrap/Dropdown";
+
 import "../../assets/style/popup.css"
+
 const google = window.google
 export function NodeSelectPopup({ setOpenPopup }) {
     const navigate = useNavigate()
+    const [mapRef, setMapRef] = React.useState(/** @type google.maps.Map */(null));
     const [currentLocation, setCurrentLocation] = useState(null)
     const [currentNode, setCurrentNode] = useState(null)
-    const [allNodes, setAllNodes] = useState(null)
+    const [allNodes, setAllNodes] = useState([])
     const [status, setStatus] = useState(null)
+    const defaultNodeOption = [{label:"Select node...", value: ""}]
+    const [nodeOptions, setNodeOptions] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
+      libraries: ['places'],
+    })
+    const options={
+    zoomControl: false,
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false,
+    }
 
     useEffect(() => {
         NodeDataService.getNodeByCompany(userData.companyCode, userData.token)
         .then( res => {
-            setAllNodes(res.data)
-            if ( !navigator.geolocation ) {
-                setStatus("Geolocation is not supported.")
-            } else {
-                setStatus("Finding your nearest node...")
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    var curPos = {lat: pos.coords.latitude, lng: pos.coords.longitude}
-                    setCurrentLocation()
-                    setStatus(null)
-                    NodeDataService.getNearestNode(curPos, userData.companyCode, userData.token)
-                    .then( nearestNode => {
-                        setCurrentNode(nearestNode.data)
-                        console.log('Nearest node: ', nearestNode.data)
-                    })
-                }, () => {
-                    setStatus("Cannot find any nearest node")
-                })
-                
-            }
+          console.log('res.data', res.data)
+          var temp = res.data
+          setAllNodes(temp.sort((a,b) => a.nodeCode.localeCompare(b.nodeCode)))
+          // var temp = []
+          // res.data.forEach( (node, ind) => {
+          //   temp.push({label:res.data[ind].nodeCode, value:res.data[ind]})
+          // })
+          // console.log(temp)
+          // setNodeOptions(temp.sort((a,b) => a.localeCompare(b)))
+          if ( !navigator.geolocation ) {
+              setStatus("Geolocation is not supported.")
+              setCurrentNode(res.data[0])
+          } else {
+              setStatus("Finding your nearest node...")
+              navigator.geolocation.getCurrentPosition((pos) => {
+                  var curPos = {lat: pos.coords.latitude, lng: pos.coords.longitude}
+                  setCurrentLocation()
+                  setStatus(null)
+                  NodeDataService.getNearestNode(curPos, userData.companyCode, userData.token)
+                  .then( nearestNode => {
+                      setCurrentNode(nearestNode.data)
+                      console.log('Nearest node: ', nearestNode.data)
+                  })
+              }, () => {
+                  setStatus("Cannot find any nearest node")
+              })
+              
+          }
         })
         .catch( err => {
             setStatus("Cannot find any node of the company!")
+            console.log(err)
         })
     }, [])
+
+    const handleNodeDropdown = (e) => {
+      allNodes.forEach((node, ind) => {
+        if ( node.nodeCode == e) {
+          setStatus("")
+          setCurrentNode(allNodes[ind])
+          mapRef.panTo({ lat: node.lat, lng: node.lng })
+          console.log(node)
+        }
+      })
+    };
 
     return (
       <div className="popupBackground">
@@ -48,19 +92,77 @@ export function NodeSelectPopup({ setOpenPopup }) {
           <div className="title">
             <h1>Please choose your current location.</h1>
           </div>
+          <div style={{width:'650px', height:'50vh'}}>
+            {GoogleMap ? (currentNode && allNodes ? (
+                  <GoogleMap
+                    center={{ lat: currentNode.lat, lng: currentNode.lng }}
+                    zoom={15}
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    options={options}
+                    onLoad={map => setMapRef(map)}
+                    onClick={()=>{}}
+                  >
+                    {allNodes.map( node => <Marker
+                      key={`${node.lat}-${node.lng}`}
+                      position={{ lat: node.lat, lng: node.lng }}
+                      onClick={() => {
+                        console.log(node.lat + "-" + node.lng);
+                        setCurrentNode(node)
+                        mapRef.panTo({ lat: node.lat, lng: node.lng })
+                      }}
+                      map={mapRef}
+                    />)}
+                    
+                  </GoogleMap>
+            ): (
+                  <GoogleMap
+                    center={{ lat: 13.7563, lng: 100.5018}}
+                    zoom={15}
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    options={options}
+                    onLoad={map => setMapRef(map)}
+                    onClick={()=>{}}
+                  >
+                  </GoogleMap>
+            )) : null}
+            
+                  
+            </div>
+
           { currentNode ? 
           (<div className="body">
               <p>{status}</p>
-            <p>Node : {currentNode.nodeCode}<br/>
-            {currentNode.address}</p>
-          </div>)
-          : <div className="body">
-          <p>{status}</p>
-            </div>}
+              <p>Node : {currentNode.nodeCode}<br/>
+              {currentNode.address}</p>
+          </div>): 
+          <div className="body">
+            <p>{status}</p>
+          </div>}
+
+          <p>Not yours?</p>
+          
+          {/* { nodeOptions && <SearchDropdown style={"body"} options={nodeOptions} onChange={() => {console.log('test')}} defaultValue={defaultNodeOption}/>} */}
+          <Dropdown onSelect={handleNodeDropdown}>
+            {currentNode ? 
+              (<Dropdown.Toggle variant="primary" id="dropdown-basic">
+                {currentNode.nodeCode}
+              </Dropdown.Toggle>) : 
+              (<Dropdown.Toggle variant="primary" id="dropdown-basic">
+              Select node
+              </Dropdown.Toggle>)}
+
+            <Dropdown.Menu>
+              {allNodes.map((node) => (
+                <Dropdown.Item eventKey={node.nodeCode}>{node.nodeCode}</Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+          
           
           <div className="footer">
             <Button
               onClick={() => {
+                localStorage.clear()
                 setOpenPopup(false);
               }}
               id="cancelBtn"
@@ -70,8 +172,8 @@ export function NodeSelectPopup({ setOpenPopup }) {
             { currentNode ? (
                 <Button
             onClick={() => {
+              localStorage.setItem("currentNode", JSON.stringify(currentNode))
                 navigate("main/overview")
-                localStorage.setItem("currentNode", JSON.stringify(currentNode))
             }}>Continue</Button>
             ) : (<Button disabled>Continue</Button>)}
           </div>

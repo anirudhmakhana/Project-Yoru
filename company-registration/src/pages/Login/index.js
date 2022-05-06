@@ -2,13 +2,21 @@ import axios from "axios";
 import { el } from "date-fns/locale";
 import React, {useState} from "react";
 import { Alert } from "react-bootstrap";
+import {
+    useJsApiLoader,
+    GoogleMap,
+    Marker,
+    InfoWindow,
+    Autocomplete,
+    DirectionsRenderer,
+  } from "@react-google-maps/api";
 import {useNavigate} from "react-router-dom"
 import {NodeSelectPopup} from "../../components/node_select_popup"
 import NodeDataService from "../../services/NodeDataService";
 import StaffAccountService from "../../services/StaffAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
-    
+const google = window.google
 
 export const LoginPage = (props) => {
 
@@ -33,11 +41,13 @@ export const LoginPage = (props) => {
         }
         StaffAccountService.login(loginData)
         .then(res => {
+            console.log(res)
             NodeDataService.getNodeByCompany( res.data.companyCode, res.data.token)
             .then( res_node => {
-                setOpenPopup(true)
                 localStorage.setItem("userData", JSON.stringify(res.data))
                 localStorage.setItem("userType", "staff")
+                setOpenPopup(true)
+
             })
             .catch( err => {
                 localStorage.setItem("userData", JSON.stringify(res.data))

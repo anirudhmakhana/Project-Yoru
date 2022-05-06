@@ -182,7 +182,7 @@ export const CreateSHP = () => {
 				<h1>Create Shipment</h1>
 			</div>
 			<div style={{ width: "82vw", height: "50vh" }}>
-				{originNode && nodeStock ? (
+				{ GoogleMap ? (originNode && nodeStock ? (
 					<GoogleMap
 						center={{ lat: originNode.lat, lng: originNode.lng }}
 						zoom={15}
@@ -231,7 +231,9 @@ export const CreateSHP = () => {
 						onLoad={(map) => setMapRef(map)}
 						onClick={() => {}}
 					></GoogleMap>
-				)}
+				)):null
+				}
+				
 			</div>
 
 			<Dropdown onSelect={handleCompanyDropdown}>
