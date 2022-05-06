@@ -3,7 +3,8 @@ import { el } from "date-fns/locale";
 import React, {useState} from "react";
 import { Alert } from "react-bootstrap";
 import {useNavigate} from "react-router-dom"
-
+import {NodeSelectPopup} from "../../components/node_select_popup"
+import NodeDataService from "../../services/NodeDataService";
 import StaffAccountService from "../../services/StaffAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
@@ -14,6 +15,8 @@ export const LoginPage = (props) => {
     const [username, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
+    const [openPopup, setOpenPopup] = useState(false)
+
     const navigate = useNavigate()
 
 
@@ -28,13 +31,20 @@ export const LoginPage = (props) => {
             username: username,
             password: password
         }
-        await StaffAccountService.login(loginData)
+        StaffAccountService.login(loginData)
         .then(res => {
-            console.log(res)
-            setUserData(res.data)
-            localStorage.setItem("userData", JSON.stringify(res.data))
-            localStorage.setItem("userType", "staff")
-            navigate("main/overview")
+            NodeDataService.getNodeByCompany( res.data.companyCode, res.data.token)
+            .then( res_node => {
+                setOpenPopup(true)
+                localStorage.setItem("userData", JSON.stringify(res.data))
+                localStorage.setItem("userType", "staff")
+            })
+            .catch( err => {
+                localStorage.setItem("userData", JSON.stringify(res.data))
+                localStorage.setItem("userType", "staff")
+                navigate("main/overview")
+            })
+            
         })
         .catch( error => {
             console.log("Invalid username or password!")
@@ -69,7 +79,9 @@ export const LoginPage = (props) => {
                             <label className="inputLabel" for="password">Password</label>
                             <input type="password" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
                         </div>
-                        <input className="signinBtn" type="submit" value="Log In"></input>
+                        { openPopup ? 
+                        (<input className="signinBtn" type="submit" value="Log In" disabled></input>)
+                    :(<input className="signinBtn" type="submit" value="Log In"></input>)}
                         {/* <div className="buttonContainerRow">
                             <label>Don't have an account ?</label>
                             <a href="/register" className="signupBtn">Sign Up</a>
@@ -78,6 +90,8 @@ export const LoginPage = (props) => {
                     </form>
                 </div>
             </div>
+            { openPopup && 
+                        <NodeSelectPopup setOpenPopup={setOpenPopup} />}
         </div>
         
     );

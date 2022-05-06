@@ -1,0 +1,71 @@
+.popupBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(200, 200, 200);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popupContainer {
+    width: 700px;
+    height: 500px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+  }
+  
+  .popupContainer .title {
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 20px;
+  }
+  
+  .titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .titleCloseBtn button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .popupContainer .body {
+    flex: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .popupContainer .footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popupContainer .footer button {
+    width: 150px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    background-color: #3751FF;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+    p {
+    color: #9FA2B4;
+    margin-bottom: 20px;
+  }
+  #cancelBtn {
+    background-color: #9FA2B4;
+  }

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+const google = window.google = window.google ? window.google : {}
 class NodeDataService {
 
     constructor() {
@@ -17,7 +17,25 @@ class NodeDataService {
              lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"}
             ]
     }
-    
+    sphericalDistance(lat1, lon1, lat2, lon2 ) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        }
+        else {
+            var radlat1 = Math.PI * lat1/180;
+            var radlat2 = Math.PI * lat2/180;
+            var theta = lon1-lon2;
+            var radtheta = Math.PI * theta/180;
+            var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            if (dist > 1) {
+                dist = 1;
+            }
+            dist = Math.acos(dist);
+            dist = dist * 180/Math.PI;
+            dist = dist * 60 * 1.1515;
+            return dist * 1.609344 
+        }
+    }
 
     async getAllNode(token) { 
         const response = await axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
@@ -67,6 +85,33 @@ class NodeDataService {
         })
         response.data ={lat:response.data.lat, lng:response.data.lng}
         return response
+    }
+
+    async getNearestNode( coord, companyCode, token, google ) {
+        const response = await this.getNodeByCompany( companyCode, token)
+        .catch((error) => {
+            throw error
+        })
+        try {
+
+        var result = response.data[0]
+        // var minDist = google.maps.geometry.spherical.computeDistanceBetween( {lat: result.lat, lng:result.lng}, coord)
+        let minDist = this.sphericalDistance(coord.lat, coord.lng, result.lat, result.lng)
+
+            
+            response.data.forEach( (node, ind) => {
+                // let curDist =  google.maps.geometry.spherical.computeDistanceBetween( {lat: node.lat, lng:node.lng}, coord)
+                let curDist = this.sphericalDistance(coord.lat, coord.lng, node.lat, node.lng)
+                if ( curDist < minDist) {
+                    result = response.data[ind]
+                    minDist = curDist
+                }
+            }) 
+        }
+        catch (err) {         
+            throw err
+        }
+        return {data: result}
     }
     
 
