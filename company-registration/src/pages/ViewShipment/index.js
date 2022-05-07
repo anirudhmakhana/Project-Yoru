@@ -185,6 +185,15 @@ export const ViewShipmentPage = () => {
                                 <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
                             </div>
                         </InfoWindow>}
+                        <Marker 
+                        key={`${currentNode.lat}-${currentNode.lng}`}
+                        position={{lat:currentNode.lat, lng:currentNode.lng}}
+                        onClick={() => {
+                            setShowInfo(true)
+                        console.log(currentNode.lat+"-"+ currentNode.lgn)
+                        }}
+                        map={mapRef}
+                        />
                             {/*
                             <Marker
                                 key={`${shipment.lat}-${shipment.lng}`}
