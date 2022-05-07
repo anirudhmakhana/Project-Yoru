@@ -11,7 +11,10 @@ import {
     Autocomplete,
     DirectionsRenderer,
   } from "@react-google-maps/api";
+
 import "../../assets/style/shipment.css"
+import "../../assets/style/style.css"
+
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import CompanyService from '../../services/CompanyService';
@@ -209,134 +212,130 @@ export const UpdateSHP = () => {
     if ( shipment && currentNode ) {
         
         return (
-            <div id="shipment">
-                <div className="title-container">
+            <div className="content-main-container">
+                <div className="content-title-container">
                     <Button type="button" onClick={() => {
                         navigate(-1)
                     }}className="btn btn-dark"> Back</Button>                
                 </div>
-                
-                <div className="title-container">
-                    <h1>Shipment : {shipment.uid}</h1>
-                </div>
-                <div style={{width:'82vw', height:'50vh'}}>
-                  <GoogleMap
-                    center={{ lat: currentNode.lat, lng: currentNode.lng }}
-                    zoom={15}
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    options={options}
-                    onLoad={map => setMapRef(map)}
-                    onClick={()=>{}}
-                  >
-                  {directionsResponse ? (
-                    directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
-                  ): null}
-                   <InfoWindow
-                    position={{ lat: currentNode.lat, lng: currentNode.lng }}
-                    onCloseClick={() => {
-                    }}
-                    >
-                    <div>
-                        <h2>
-                        
-                    {shipment.status == "shipping" 
-                    ? (<span>🚚 {shipment.uid}</span>) :
-                     (<span>📦 {shipment.uid}</span>)}
-                           
-                        
-                        </h2>
-                        <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
-                        <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+                <div className="detailed-main-container">
+                    <div className="detailed-title-container">
+                        <h1>Shipment : {shipment.uid}</h1>
                     </div>
-                    </InfoWindow>
-                    {updateNode && updateNode != currentNode ? (
+                    <div style={{width:'100%', height:'50%'}}>
+                        <GoogleMap
+                            center={{ lat: currentNode.lat, lng: currentNode.lng }}
+                            zoom={15}
+                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            options={options}
+                            onLoad={map => setMapRef(map)}
+                            onClick={()=>{}}
+                        >
+                        {directionsResponse ? (
+                            directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
+                        ): null}
                         <InfoWindow
-                        position={{ lat: updateNode.lat, lng: updateNode.lng }}
-                        onCloseClick={() => {
-                        }}>
-                        <div>
-                            <h2>
-                            <span>📦 {updateNode.nodeCode}</span>
-                            </h2>
-                            <p style={{color:"#000000"}}>Company: {updateNode.companyCode}</p>
-                            <p style={{color:"#000000"}}>Address: {updateNode.address}</p>
-                            <p style={{color:"#000000"}}>Contact: {updateNode.phoneNumber}</p>
-                            <p style={{color:"#000000"}}>Stocking: {nodeStock.length} shipment(s)</p>
-        
-                        </div>
-                        </InfoWindow>
-                    ): null}
-                    {/*
-                    <Marker
-                        key={`${shipment.lat}-${shipment.lng}`}
-                        position={{lat:shipment.lat, lng:shipment.lng}}
-                        onClick={() => {
-                        console.log(shipment.lat+"-"+ shipment.lgn)
-                        }}
-                        map={mapRef}
-                    /> */}
-                  </GoogleMap>
-            
-                </div>
-                <div className="body-main">
-            <Dropdown onSelect={handleCompanyDropdown}>
-
-                {shipment.status != "shipping" ? (
-                <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.companyCode}</Dropdown.Toggle>)
-                 : (updateCompany ? ( <Dropdown.Toggle variant="primary" id="dropdown-basic" >{updateCompany}</Dropdown.Toggle>) 
-                    : (<Dropdown.Toggle variant="primary" id="dropdown-basic">Company</Dropdown.Toggle>))}
-                <Dropdown.Menu> 
-                {allCompanies.map( companyCode => <Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>)}
-                </Dropdown.Menu>
-            
-            
-            </Dropdown>
-
-            <Dropdown onSelect={handleNodeDropdown}>
-                {shipment.status != "shipping" ? (
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.nodeCode}</Dropdown.Toggle>)
-                    : (
-                    updateCompany ? 
-                    (updateNode ? (
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">{updateNode.nodeCode}</Dropdown.Toggle> ) : 
-                    (<Dropdown.Toggle variant="primary" id="dropdown-basic">Node</Dropdown.Toggle>))
-
-                 : (<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>Node</Dropdown.Toggle>))}
-            <Dropdown.Menu >
-                {companyNodes.map( node => {
-                    if (node.nodeCode != currentNode.nodeCode) 
-                    return <Dropdown.Item eventKey={node.nodeCode}>{node.nodeCode}</Dropdown.Item>})}
-            </Dropdown.Menu>
-            </Dropdown>
-
-            <Dropdown onSelect={handleStatusDropdown} >
-                {updateStatus ? (<Dropdown.Toggle variant="primary" id="dropdown-basic" >{updateStatus.toUpperCase()}</Dropdown.Toggle>) 
-                : (<Dropdown.Toggle variant="primary" id="dropdown-basic" >Status</Dropdown.Toggle>)}
-            <Dropdown.Menu >
-                {availableStatus.map( sts => {
-                    return sts == shipment.status ? (<></>) :
-                ( <Dropdown.Item eventKey={sts}>{sts.toUpperCase()}</Dropdown.Item>)
-                })}
-            </Dropdown.Menu>
-            </Dropdown>
-                    <p className="mt-5"> {shipment.uid} </p>
-                    <p>{shipment.description} </p>
-                    <p className="mb-5">Origin: {shipment.originNode}</p>
-                    <p className="mb-5">Current: {shipment.currentNode}</p>
-                    <p className="mb-5">Destination: {shipment.destinationNode}</p>
-                    <p className="mb-5">Status: {shipment.status}</p>
-                </div>
+                            position={{ lat: currentNode.lat, lng: currentNode.lng }}
+                            onCloseClick={() => {
+                            }}
+                            >
+                            <div>
+                                <h2>
+                                
+                            {shipment.status == "shipping" 
+                            ? (<span>🚚 {shipment.uid}</span>) :
+                            (<span>📦 {shipment.uid}</span>)}
+                                
+                                
+                                </h2>
+                                <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
+                                <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+                            </div>
+                            </InfoWindow>
+                            {updateNode && updateNode != currentNode ? (
+                                <InfoWindow
+                                position={{ lat: updateNode.lat, lng: updateNode.lng }}
+                                onCloseClick={() => {
+                                }}>
+                                <div>
+                                    <h2>
+                                    <span>📦 {updateNode.nodeCode}</span>
+                                    </h2>
+                                    <p style={{color:"#000000"}}>Company: {updateNode.companyCode}</p>
+                                    <p style={{color:"#000000"}}>Address: {updateNode.address}</p>
+                                    <p style={{color:"#000000"}}>Contact: {updateNode.phoneNumber}</p>
+                                    <p style={{color:"#000000"}}>Stocking: {nodeStock.length} shipment(s)</p>
                 
+                                </div>
+                                </InfoWindow>
+                            ): null}
+                            {/*
+                            <Marker
+                                key={`${shipment.lat}-${shipment.lng}`}
+                                position={{lat:shipment.lat, lng:shipment.lng}}
+                                onClick={() => {
+                                console.log(shipment.lat+"-"+ shipment.lgn)
+                                }}
+                                map={mapRef}
+                            /> */}
+                        </GoogleMap>
+                    </div>
+                    <div className="body-main">
+                        <Dropdown onSelect={handleCompanyDropdown}>
+
+                            {shipment.status != "shipping" ? (
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.companyCode}</Dropdown.Toggle>)
+                            : (updateCompany ? ( <Dropdown.Toggle variant="primary" id="dropdown-basic" >{updateCompany}</Dropdown.Toggle>) 
+                                : (<Dropdown.Toggle variant="primary" id="dropdown-basic">Company</Dropdown.Toggle>))}
+                            <Dropdown.Menu> 
+                            {allCompanies.map( companyCode => <Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>)}
+                            </Dropdown.Menu>
+                        
+                        </Dropdown>
+
+                        <Dropdown onSelect={handleNodeDropdown}>
+                            {shipment.status != "shipping" ? (
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>{currentNode.nodeCode}</Dropdown.Toggle>)
+                                : (
+                                updateCompany ? 
+                                (updateNode ? (
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic">{updateNode.nodeCode}</Dropdown.Toggle> ) : 
+                                (<Dropdown.Toggle variant="primary" id="dropdown-basic">Node</Dropdown.Toggle>))
+
+                            : (<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>Node</Dropdown.Toggle>))}
+                            <Dropdown.Menu >
+                                {companyNodes.map( node => {
+                                if (node.nodeCode != currentNode.nodeCode) 
+                                    return <Dropdown.Item eventKey={node.nodeCode}>{node.nodeCode}</Dropdown.Item>})}
+                            </Dropdown.Menu>
+                        </Dropdown>
+
+                        <Dropdown onSelect={handleStatusDropdown} >
+                            {updateStatus ? (<Dropdown.Toggle variant="primary" id="dropdown-basic" >{updateStatus.toUpperCase()}</Dropdown.Toggle>) 
+                            : (<Dropdown.Toggle variant="primary" id="dropdown-basic" >Status</Dropdown.Toggle>)}
+                            <Dropdown.Menu >
+                                {availableStatus.map( sts => {
+                                return sts == shipment.status ? (<></>) :
+                                ( <Dropdown.Item eventKey={sts}>{sts.toUpperCase()}</Dropdown.Item>)
+                                })}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <p className="mt-5"> {shipment.uid} </p>
+                        <p>{shipment.description} </p>
+                        <p className="mb-5">Origin: {shipment.originNode}</p>
+                        <p className="mb-5">Current: {shipment.currentNode}</p>
+                        <p className="mb-5">Destination: {shipment.destinationNode}</p>
+                        <p className="mb-5">Status: {shipment.status}</p>
+                    </div>
+                </div>
             </div>
         );
     } else {
-        return (<div id="shipment">
-                <div className="title-container">
-                    <h1>Node</h1>
-                    <h2>Cannot find any Node</h2>
-                </div>
-            
-                
-            </div>)
+        return (<div className="content-main-container">
+                    <div className="content-title-container">
+                        <h1>Node</h1>
+                        <h2>Cannot find any Node</h2>
+                    </div>
+                </div>)
     }
 }
