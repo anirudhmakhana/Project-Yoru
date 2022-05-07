@@ -27,25 +27,28 @@ export const NodeListPage = () => {
     }
 
     return (
-        <div id="shipment">
+        <div className="shipment">
             <div className="title-container">
                 <h1>Node</h1>
             </div>
-            <Table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Node</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Company</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+            <div className="viewShipment">
+                <Table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Node</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
 
-                    </tr>
-                </thead>
+                        </tr>
+                    </thead>
+                
+                        {userData && allNodes ? (dataTable()) : (<></>)}
+
+                </Table>
+            </div>
             
-                    {userData && allNodes ? (dataTable()) : (<></>)}
-
-            </Table>
         </div>
     );
 }
