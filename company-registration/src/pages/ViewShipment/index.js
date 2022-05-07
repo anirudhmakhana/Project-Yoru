@@ -115,7 +115,7 @@ export const ViewShipmentPage = () => {
         
     
     }
-    ,[shipment] );
+    ,[] );
     
     if ( shipment && currentNode ) {
         

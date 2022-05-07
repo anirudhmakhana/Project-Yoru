@@ -6,15 +6,16 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Alert } from 'react-bootstrap'
 import CompanyService from '../../services/CompanyService'
+import StringValidator from '../../utils/StringValidator'
 
 export function EditCompanyPage(props) {
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
     // const [companyCode, setCompanyCode] = useParams().companyCode
     const [companyName, setCompanyName] = useState('')
-    const [managerContact, setManagerContact] = useState('')
     const [publicKey, setPublicKey] = useState('')
     const [privateKey, setPrivateKey] = useState('')
+    const [warning, setWarning] = useState(null)
 
     useEffect(() => {
         
@@ -23,7 +24,6 @@ export function EditCompanyPage(props) {
         CompanyService.getCompanyByCode(companyCode, userData.token)
         .then( res => {
             setCompanyName(res.data.companyName)
-            setManagerContact(res.data.managerContact)
             setPublicKey(res.data.walletPublicKey)
             setPrivateKey(res.data.walletPrivateKey)
         })
@@ -37,10 +37,6 @@ export function EditCompanyPage(props) {
        setCompanyName( e.target.value )
     }
 
-    const handleChangeContact = (e) => {
-        setManagerContact(e.target.value)
-    }
-
     const handleChangePublicKey = (e) => {
         setPublicKey(e.target.value)
     }
@@ -52,29 +48,31 @@ export function EditCompanyPage(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(userData)
-        if (companyName.length < 1) {
-            alert("Please enter company name.")
+        var invalidName = StringValidator.validateCompanyName(companyName);
+        var invalidCode = StringValidator.validateCompanyCode(companyCode);
+        var invalidPublic = StringValidator.validateWalletPublicKey(publicKey);
+        var invalidPrivate =StringValidator.validateWalletPrivateKey(privateKey);
+        if (invalidName) {
+            setWarning(invalidName)
         }
-        else if (companyCode.length < 1) {
-            alert("Please enter company code.")
+        else if (invalidCode) {
+            setWarning(invalidCode)
         }
-        else if (managerContact.length < 1) {
-            alert("Please enter contact of the manager of the company.")
+        else if (invalidPublic) {
+            setWarning(invalidPublic)
         }
-        else if (publicKey.length < 1) {
-            alert("Please enter wallet public key for making transaction.")
-        }
-         else if (privateKey.length < 1) {
-            alert("Please enter wallet private key for making transaction.")
+         else if (invalidPrivate) {
+            setWarning(invalidPrivate)
         } else {
             const companyObject = { 
                 companyCode: companyCode, 
                 companyName: companyName, 
-                managerContact: managerContact, 
                 walletPublicKey: publicKey, 
                 walletPrivateKey: privateKey}
             CompanyService.updateCompany(companyCode, companyObject, userData.token)
-            .then(res => console.log(res.data))
+            .then(res => {
+                setWarning(null)
+                console.log(res.data)})
             .catch( error => {
                 console.log(error)
             }) 
@@ -96,8 +94,12 @@ export function EditCompanyPage(props) {
             <div className="startPageContainer">
             
 
-                <h2>Create Company</h2>
-                <p>Enter new company information below.</p>
+                <h2>Edit Company</h2>
+                <p>Update company information below.</p>
+                { warning &&
+                    <div className="alert alert-danger">
+                        {warning}
+                    </div>}
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyName">Company Name</label>
@@ -107,11 +109,6 @@ export function EditCompanyPage(props) {
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company Code</label>
                         <input type="text" id="companyCode" name="companyCode" placeholder={companyCode} value={""} disabled></input>
-                    </div>
-
-                    <div className="textInputContainerCol"> 
-                        <label className="inputLabel" for="contact">Manager Contact</label>
-                        <input type="text" id="contact" name="contact" placeholder="e.g. adam.b@smtech.com" onChange={handleChangeContact} value={managerContact}></input>
                     </div>
 
                     <div className="textInputContainerCol"> 
