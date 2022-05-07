@@ -16,6 +16,7 @@ import NodeDataService from "../../services/NodeDataService";
 import StaffAccountService from "../../services/StaffAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
+import { useEffect } from "react";
 const google = window.google
 
 export const LoginPage = (props) => {
@@ -26,6 +27,17 @@ export const LoginPage = (props) => {
     const [openPopup, setOpenPopup] = useState(false)
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if ( eval('('+localStorage.getItem("userData")+')') ) {
+            if ( eval('('+localStorage.getItem("currentNode")+')')) {
+                navigate('main/overview')
+            }
+            else {
+                setOpenPopup(true)
+            }
+        }
+    }, [])
 
 
     async function handleSubmit(e) {
@@ -69,6 +81,12 @@ export const LoginPage = (props) => {
     function handleChangePassword(e) {
         setPassword(e.target.value)
     }
+
+    function handlePopupConfirm(currentNode) {
+        localStorage.setItem("currentNode", JSON.stringify(currentNode))
+        setOpenPopup(false)
+        navigate("main/overview")
+    }
     
     return (
         <div className="backgroundLogin">
@@ -101,7 +119,7 @@ export const LoginPage = (props) => {
                 </div>
             </div>
             { openPopup && 
-                        <NodeSelectPopup setOpenPopup={setOpenPopup} />}
+                        <NodeSelectPopup setOpenPopup={setOpenPopup} handleConfirm={handlePopupConfirm} />}
         </div>
         
     );

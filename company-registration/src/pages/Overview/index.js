@@ -15,6 +15,13 @@ export const OverviewPage = (props) => {
     //     setUserData(props.userData)
     //     console.log(props.userData)
     //   }, [userData]);
+
+    function handlePopupConfirm(currentNode) {
+        localStorage.setItem("currentNode", JSON.stringify(currentNode))
+        setButtonPopup(false)
+    }
+    
+
     return (
         <div className="overview">
             <div className="title-container">
@@ -54,7 +61,7 @@ export const OverviewPage = (props) => {
                     <hr/>
                 </div>
             </div>
-            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} />}
+            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm}/>}
         </div>
     );
 }
