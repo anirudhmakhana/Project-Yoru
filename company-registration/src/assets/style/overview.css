@@ -68,3 +68,14 @@
 .chart-item p {
     margin-bottom: 0;
 }
+
+.node-select-button {
+    background: none;
+    border: none;
+}
+
+.node-select-button:hover {
+    color: #2b42d8;
+    transition: ease-in-out 0.2s;
+}
+

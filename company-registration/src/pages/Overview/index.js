@@ -26,7 +26,7 @@ export const OverviewPage = (props) => {
         <div className="overview">
             <div className="title-container">
                 <h1>Overview</h1>
-                <button onClick={() => setButtonPopup(true)}>Selected Node: </button>
+                <button onClick={() => setButtonPopup(true)} className="node-select-button">Selected Node: </button>
             </div>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
