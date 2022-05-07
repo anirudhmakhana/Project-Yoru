@@ -9,7 +9,6 @@
 
 .loginContainer div{
     display: flex;
-    flex: 1;
     justify-content: center;
     border: none;
 }
@@ -48,3 +47,4 @@ h3.h3-logo {
 .alert {
     display:inline-block;
 }
+
