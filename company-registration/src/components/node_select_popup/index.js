@@ -12,7 +12,7 @@ import {
 } from "@react-google-maps/api";
 import AsyncSelect  from 'react-select/async';
 import Dropdown from "react-bootstrap/Dropdown";
-
+import Map from "../map"
 import "../../assets/style/popup.css"
 
 const google = window.google
@@ -123,7 +123,9 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm }) {
                   >
                   </GoogleMap>
             )) : null}
-            
+            {/* <Map id="popupMap" options={options} setMapRef={setMapRef} center={{ lat: 13.7563, lng: 100.5018}}
+                    zoom={15}
+                    mapContainerStyle={{ width: '100%', height: '100%' }} ></Map> */}
                   
             </div>
 
