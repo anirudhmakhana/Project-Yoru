@@ -72,3 +72,12 @@
   #cancelBtn {
     background-color: #9FA2B4;
   }
+
+  .dropdown-menu {
+    overflow-y: scroll;
+  }
+
+  .map-container {
+    width: 650px;
+    height: 60vh;
+  }
