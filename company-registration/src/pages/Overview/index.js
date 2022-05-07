@@ -10,6 +10,7 @@ import { NodeSelectPopup } from "../../components/node_select_popup";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [nodeData, setNodeData] = useState(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
     const [buttonPopup, setButtonPopup] = useState(false);
     // useEffect(() => {
     //     setUserData(props.userData)
@@ -26,7 +27,7 @@ export const OverviewPage = (props) => {
         <div className="overview">
             <div className="title-container">
                 <h1>Overview</h1>
-                <button onClick={() => setButtonPopup(true)} className="node-select-button">Selected Node: </button>
+                <button onClick={() => setButtonPopup(true)} className="node-select-button">Selected Node: {nodeData}</button>
             </div>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
