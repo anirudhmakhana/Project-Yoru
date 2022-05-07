@@ -1,6 +1,6 @@
 import axios from "axios";
 import { el } from "date-fns/locale";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Alert } from "react-bootstrap";
 import {useNavigate} from "react-router-dom"
 
@@ -15,6 +15,14 @@ export const AdminLoginPage = (props) => {
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        console.log(localStorage)
+        
+        if ( eval('('+localStorage.getItem("userData")+')') && localStorage.getItem("userType") == "admin" ) {
+            navigate('main/company-list')
+        }
+    }, [])
 
     async function handleSubmit(e) {
         e.preventDefault()

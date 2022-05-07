@@ -29,7 +29,9 @@ export const LoginPage = (props) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if ( eval('('+localStorage.getItem("userData")+')') ) {
+        console.log(localStorage)
+        
+        if ( eval('('+localStorage.getItem("userData")+')') && localStorage.getItem("userType") == "staff" ) {
             if ( eval('('+localStorage.getItem("currentNode")+')')) {
                 navigate('main/overview')
             }
