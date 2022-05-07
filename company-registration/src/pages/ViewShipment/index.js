@@ -132,8 +132,8 @@ export const ViewShipmentPage = () => {
                     <div className="detailed-title-container">
                         <Button type="button" onClick={() => {
                             navigate(-1)
-                        }}className="backBtn">
-                            <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
+                        }}className="back-button">
+                            <FontAwesomeIcon icon={faAngleLeft}/>
                         </Button>
                         <div className="shipmentTitleContainer">
                             <h2>Shipment: {shipment.description}</h2>
