@@ -10,7 +10,7 @@ import StaffAccountService from "../../services/StaffAccountService";
 import StringValidator from "../../utils/StringValidator";
 import { Button } from "react-bootstrap";
 
-export const AddStaffPopup = ({setOpenPopup}) => {
+export const AddStaffPopup = ({setOpenPopup, updateTable}) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
     const [username, setUsername] = useState('')
@@ -91,6 +91,8 @@ export const AddStaffPopup = ({setOpenPopup}) => {
                 setConfirm("")
                 setContact("")
                 setFullName("")
+                updateTable()
+                setOpenPopup(false)
             })
             .catch( error => {
                 console.log(error.response.status)
