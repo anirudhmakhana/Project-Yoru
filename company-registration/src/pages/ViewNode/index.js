@@ -12,10 +12,16 @@ import {
     DirectionsRenderer,
     Polyline
   } from "@react-google-maps/api";
-import "../../assets/style/shipment.css"
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
+import "../../assets/style/style.css"
+
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import GraphService from '../../services/GraphService';
+
 const google = window.google
 
 
@@ -66,15 +72,18 @@ export const ViewNodePage = () => {
     if ( node ) {
         
         return (
-            <div id="shipment">
-                <div className="title-container">
-                    <Button type="button" onClick={() => {
-                        navigate(-1)
-                    }}className="btn btn-dark"> Back</Button>                
+            <div className="content-main-container">
+                <div className="content-title-container">
+                    <h1>Node</h1>            
                 </div>
                 
-                <div className="title-container">
-                    <h1>Node : {node.nodeCode}</h1>
+                <div className="detailed-title-container">
+                    <Button type="button" onClick={() => {
+                        navigate(-1)
+                    }}className="backBtn">
+                        <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
+                    </Button>
+                    <h3 className="content-header">Node : {node.nodeCode}</h3>
                 </div>
                 <div style={{width:'82vw', height:'50vh'}}>
                   <GoogleMap

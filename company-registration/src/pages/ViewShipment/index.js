@@ -12,6 +12,8 @@ import {
 } from "@react-google-maps/api";
 
 import "../../assets/style/shipment.css"
+import "../../assets/style/style.css"
+
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import CompanyService from '../../services/CompanyService';
@@ -120,12 +122,12 @@ export const ViewShipmentPage = () => {
     if ( shipment && currentNode ) {
         
         return (
-            <div className="shipment">
-                <div className="title-container">
+            <div className="shipment content-main-container">
+                <div className="content-title-container">
                     <h1>Shipment</h1>
                 </div>
-                <div className="viewShipment">
-                    <div className="title-container">
+                <div className="detailed-main-container">
+                    <div className="detailed-title-container">
                         <Button type="button" onClick={() => {
                             navigate(-1)
                         }}className="backBtn">
@@ -193,8 +195,8 @@ export const ViewShipmentPage = () => {
         );
     } else {
         return (
-            <div className="shipment">
-                <div className="title-container">
+            <div className="content-main-container">
+                <div className="content-title-container">
                     <h1>Node</h1>
                     <h2>Cannot find any Node</h2>
                 </div>

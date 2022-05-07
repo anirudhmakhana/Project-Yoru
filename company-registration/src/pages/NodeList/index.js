@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import Table from 'react-bootstrap/Table'
 
-import "../../assets/style/shipment.css"
+import "../../assets/style/style.css"
+
 import NodeDataService from '../../services/NodeDataService';
 import { NodeTable } from '../../components/node_table';
 
@@ -27,11 +28,11 @@ export const NodeListPage = () => {
     }
 
     return (
-        <div className="shipment">
-            <div className="title-container">
+        <div className="content-main-container">
+            <div className="content-title-container">
                 <h1>Node</h1>
             </div>
-            <div className="viewShipment">
+            <div className="content-table-container">
                 <Table className="table table-hover">
                     <thead>
                         <tr>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 import "../../assets/style/overview.css"
+import "../../assets/style/style.css"
 
 import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
@@ -41,10 +42,12 @@ export const OverviewPage = (props) => {
     }
 
     return (
-        <div className="overview">
-            <div className="title-container">
+        <div className="overview content-main-container">
+            <div className="content-title-container">
                 <h1>Overview</h1>
-                <button onClick={() => setButtonPopup(true)} className="node-select-button"><FontAwesomeIcon icon={faPen} className="select-node-icon"/>Selected Node: {currentNodeCode}</button>
+                <button onClick={() => setButtonPopup(true)} className="node-select-button">
+                    <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
+                </button>
             </div>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
