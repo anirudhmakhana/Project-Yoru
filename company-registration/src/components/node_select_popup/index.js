@@ -16,7 +16,7 @@ import Map from "../map"
 import "../../assets/style/popup.css"
 
 const google = window.google
-export function NodeSelectPopup({ setOpenPopup, handleConfirm }) {
+export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
     const navigate = useNavigate()
     const [mapRef, setMapRef] = React.useState(/** @type google.maps.Map */(null));
     const [currentLocation, setCurrentLocation] = useState(null)
@@ -162,8 +162,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm }) {
           <div className="footer">
             <Button
               onClick={() => {
-                localStorage.clear()
-                setOpenPopup(false);
+                handleCancel()
               }}
               id="cancelBtn"
             >

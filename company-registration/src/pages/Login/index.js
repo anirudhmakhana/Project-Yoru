@@ -87,6 +87,11 @@ export const LoginPage = (props) => {
         setOpenPopup(false)
         navigate("main/overview")
     }
+
+    function handlePopupCancel() {
+        localStorage.clear()
+        setOpenPopup(false);
+    }
     
     return (
         <div className="backgroundLogin">
@@ -119,7 +124,7 @@ export const LoginPage = (props) => {
                 </div>
             </div>
             { openPopup && 
-                        <NodeSelectPopup setOpenPopup={setOpenPopup} handleConfirm={handlePopupConfirm} />}
+                        <NodeSelectPopup setOpenPopup={setOpenPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
         </div>
         
     );
