@@ -10,7 +10,10 @@ import {
 	Autocomplete,
 	DirectionsRenderer,
 } from "@react-google-maps/api";
+
 import "../../assets/style/shipment.css";
+import "../../assets/style/style.css";
+
 import NodeDataService from "../../services/NodeDataService";
 import ShipmentService from "../../services/ShipmentService";
 import CompanyService from "../../services/CompanyService";
@@ -177,11 +180,12 @@ export const CreateSHP = () => {
 			});
 	};
 	return (
-		<div id="shipment">
-			<div className="title-container">
+		<div className="content-main-container">
+			<div className="content-title-container">
 				<h1>Create Shipment</h1>
 			</div>
-			<div style={{ width: "82vw", height: "50vh" }}>
+			<div className="detailed-main-container">
+				<div style={{ width: "100%", height: "50%" }}>
 				{ GoogleMap ? (originNode && nodeStock ? (
 					<GoogleMap
 						center={{ lat: originNode.lat, lng: originNode.lng }}
@@ -234,9 +238,9 @@ export const CreateSHP = () => {
 				)):null
 				}
 				
-			</div>
+				</div>
 
-			<Dropdown onSelect={handleCompanyDropdown}>
+				<Dropdown onSelect={handleCompanyDropdown}>
 				{originCompany ? (
 					<Dropdown.Toggle variant="primary" id="dropdown-basic">
 						{originCompany}
@@ -252,9 +256,9 @@ export const CreateSHP = () => {
 						<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
 					))}
 				</Dropdown.Menu>
-			</Dropdown>
+				</Dropdown>
 
-			<Dropdown onSelect={handleNodeDropdown}>
+				<Dropdown onSelect={handleNodeDropdown}>
 				{originCompany ? (
 					originNode ? (
 						<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -278,7 +282,9 @@ export const CreateSHP = () => {
 						</Dropdown.Item>
 					))}
 				</Dropdown.Menu>
-			</Dropdown>
+				</Dropdown>
+			</div>
+			
 		</div>
 	);
 
