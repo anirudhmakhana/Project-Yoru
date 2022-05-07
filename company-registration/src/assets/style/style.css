@@ -158,13 +158,25 @@ div.warning{
     margin-right: 0.5em;
 }
 
+.back-button {
+    display: flex;
+    color: black;
+    margin-right: 1%;
+    background: none;
+    border: none;
+}
+.back-button:hover {
+    background: none;
+    color: #2b42d8;
+}
+
 .detailed-title-container {
     display: flex;
     justify-content: flex-start;
     margin: 2vh 0 3vh 0;
 }
 
-.datailed-main-container {
+.detailed-main-container {
     background: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 16px;
@@ -188,6 +200,7 @@ div.warning{
 
 .content-header {
     color: #252733;
+    margin: 0;
 }
 
 .content-main-container {
