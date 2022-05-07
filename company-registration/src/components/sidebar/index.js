@@ -105,9 +105,7 @@ export const CustomSidebar = (props) => {
                 <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="shipment/view-shipment/:shipmentId" element={<ViewShipmentPage/>}/>
                 <Route path="scan" element={<ScanSHP/>}/>
-
                 <Route path="create" element={<CreateSHP/>}/>
-
                 {/* CHANGE TO scan/update/:shipmentId */}
                 <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
