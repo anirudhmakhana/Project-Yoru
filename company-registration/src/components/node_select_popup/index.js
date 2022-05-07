@@ -16,7 +16,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "../../assets/style/popup.css"
 
 const google = window.google
-export function NodeSelectPopup({ setOpenPopup }) {
+export function NodeSelectPopup({ setOpenPopup, handleConfirm }) {
     const navigate = useNavigate()
     const [mapRef, setMapRef] = React.useState(/** @type google.maps.Map */(null));
     const [currentLocation, setCurrentLocation] = useState(null)
@@ -43,16 +43,14 @@ export function NodeSelectPopup({ setOpenPopup }) {
           console.log('res.data', res.data)
           var temp = res.data
           setAllNodes(temp.sort((a,b) => a.nodeCode.localeCompare(b.nodeCode)))
-          // var temp = []
-          // res.data.forEach( (node, ind) => {
-          //   temp.push({label:res.data[ind].nodeCode, value:res.data[ind]})
-          // })
-          // console.log(temp)
-          // setNodeOptions(temp.sort((a,b) => a.localeCompare(b)))
+          var tempCurrentNode = eval('('+localStorage.getItem("currentNode")+')')
           if ( !navigator.geolocation ) {
               setStatus("Geolocation is not supported.")
               setCurrentNode(res.data[0])
-          } else {
+          } else if ( tempCurrentNode) {
+            setCurrentNode(tempCurrentNode)
+          }
+           else {
               setStatus("Finding your nearest node...")
               navigator.geolocation.getCurrentPosition((pos) => {
                   var curPos = {lat: pos.coords.latitude, lng: pos.coords.longitude}
@@ -93,7 +91,7 @@ export function NodeSelectPopup({ setOpenPopup }) {
             <h1>Please choose your current location.</h1>
           </div>
           <div style={{width:'650px', height:'50vh'}}>
-            {GoogleMap ? (currentNode && allNodes ? (
+            {GoogleMap && isLoaded? (currentNode && allNodes ? (
                   <GoogleMap
                     center={{ lat: currentNode.lat, lng: currentNode.lng }}
                     zoom={15}
@@ -142,12 +140,12 @@ export function NodeSelectPopup({ setOpenPopup }) {
           <p>Not yours?</p>
           
           {/* { nodeOptions && <SearchDropdown style={"body"} options={nodeOptions} onChange={() => {console.log('test')}} defaultValue={defaultNodeOption}/>} */}
-          <Dropdown onSelect={handleNodeDropdown}>
+          <Dropdown onSelect={handleNodeDropdown} >
             {currentNode ? 
-              (<Dropdown.Toggle variant="primary" id="dropdown-basic">
+              (<Dropdown.Toggle variant="primary" id="dropdown-basic" >
                 {currentNode.nodeCode}
               </Dropdown.Toggle>) : 
-              (<Dropdown.Toggle variant="primary" id="dropdown-basic">
+              (<Dropdown.Toggle variant="primary" id="dropdown-basic"disabled={status != null}>
               Select node
               </Dropdown.Toggle>)}
 
@@ -171,10 +169,7 @@ export function NodeSelectPopup({ setOpenPopup }) {
             </Button>
             { currentNode ? (
                 <Button
-            onClick={() => {
-              localStorage.setItem("currentNode", JSON.stringify(currentNode))
-                navigate("main/overview")
-            }}>Continue</Button>
+            onClick={() => {handleConfirm(currentNode)}}>Continue</Button>
             ) : (<Button disabled>Continue</Button>)}
           </div>
         </div>
