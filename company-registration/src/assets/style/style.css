@@ -106,6 +106,7 @@ label {
 label.inputLabel {
     font-weight: bold;
     opacity: 0.825;
+    color: #666666;
 }
 
 .mainPageWrapper {
@@ -125,6 +126,16 @@ label.inputLabel {
      height:50vh;
   }
   
-.dropdown-addstaff{
-    
+p.p-warning{
+    color: #FF3333;
+    font-weight: bold;
+}
+
+div.warning{
+    display: flex;
+    background-color: #FFCCCC;
+    flex: 1;
+    justify-content: center;
+    border-radius: 10px;
+    align-items: center;
 }

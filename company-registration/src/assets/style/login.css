@@ -34,6 +34,12 @@ p {
 
 div.logo {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     flex: 0;
+}
+
+h3.h3-logo {
+    color: #444444;
+    font-weight: bold;
+    font-size: 1.75rem;
 }

@@ -5,6 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import "../../assets/style/style.css"
 import StaffAccountService from "../../services/StaffAccountService";
+import StringValidator from "../../utils/StringValidator";
 
 export const AddStaffPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -15,7 +16,7 @@ export const AddStaffPage = (props) => {
     const [fullName, setFullName] = useState('')
     const [contact, setContact] = useState('')
     const [positionLevel, setPositionLevel] = useState('Staff')
-
+    const [warning, setWarning] = useState(null)
     // useEffect(() => {
         
     //     setUserData(props.userData)
@@ -47,22 +48,38 @@ export const AddStaffPage = (props) => {
         setPositionLevel(e)
       };
 
+    
+
     async function handleSubmit(e) {
         e.preventDefault()
-        if (username.length < 1 ) {
-            console.log('Please enter your username.')
-        } else if ( password.length < 5) {
-            console.log("Password should be at least 6 characters.")
+        
+        if ( fullName.length < 1) {
+            setWarning("Please enter your full name.")
         }
-        else if ( fullName.length < 1) {
-            console.log("Please enter your full name.")
+        else if ( !StringValidator.validateFullname(fullName) ) {
+            setWarning("Full name cannot contain special character and must contain first name and last name!")
         }
         else if ( contact.length < 1) {
-            console.log("Please enter your contact email.")
+            setWarning("Please enter your contact email.")
+            
+        }else if ( !StringValidator.validateEmail(contact)) {
+            console.log(contact)
+            setWarning("Invalid email format!")
+        }
+        else if (username.length < 5 || username.length > 18) {
+            setWarning('Username should between 5 to 18 characters long!')
+        } 
+        else if ( !StringValidator.validateUsername(username)) {
+            console.log(username)
+            setWarning("Username cannot contain special character, only '_' and '.' are allowed!")
+        }
+        else if ( password.length < 5) {
+            setWarning("Password should be at least 6 characters.")
         } else if (confirm != password)  {
             console.log("Passwords are not matching!")
             setConfirm("")
-        } else {
+        } 
+        else {
             const newAccount = {
                 username: username,
                 password: password,
@@ -80,10 +97,14 @@ export const AddStaffPage = (props) => {
                 setConfirm("")
                 setContact("")
                 setFullName("")
-                
+                setWarning(null)
             })
             .catch( error => {
-                console.log(error)
+                console.log(error.response.status)
+                if (error.response.status == 403) {
+                    setWarning("Username is already taken!")
+                    console.log(error)
+                }
             }) 
             
         }
@@ -95,9 +116,13 @@ export const AddStaffPage = (props) => {
         <div className="loginBackground">
             <div className="startPageContainer">
                 <div className="logo">
-                    <h3>Add Staff Account</h3>
+                    <h3 className="h3-logo">Add Staff Account</h3>
                 </div>
 
+                { warning &&
+                 <div className="alert alert-danger">
+                    {warning}
+                </div>}
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company</label>
