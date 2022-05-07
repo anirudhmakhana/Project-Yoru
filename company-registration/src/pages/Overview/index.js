@@ -13,24 +13,38 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const [nodeData, setNodeData] = useState(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
+    const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [buttonPopup, setButtonPopup] = useState(false);
     // useEffect(() => {
     //     setUserData(props.userData)
     //     console.log(props.userData)
     //   }, [userData]);
 
+    useState(() => {
+        var node = eval('('+localStorage.getItem("currentNode")+')')
+        if (node) {
+            setCurrentNodeCode(node.nodeCode)
+        } else {
+            setCurrentNodeCode('-')
+        }
+    }, [])
+
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
+        setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
         setButtonPopup(false)
     }
     
+    function handlePopupCancel() {
+        console.log(localStorage)
+        setButtonPopup(false)
+    }
 
     return (
         <div className="overview">
             <div className="title-container">
                 <h1>Overview</h1>
-                <button onClick={() => setButtonPopup(true)} className="node-select-button"><FontAwesomeIcon icon={faPen} className="select-node-icon"/>Selected Node: {nodeData}</button>
+                <button onClick={() => setButtonPopup(true)} className="node-select-button"><FontAwesomeIcon icon={faPen} className="select-node-icon"/>Selected Node: {currentNodeCode}</button>
             </div>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
@@ -65,7 +79,7 @@ export const OverviewPage = (props) => {
                     <hr/>
                 </div>
             </div>
-            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm}/>}
+            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel}/>}
         </div>
     );
 }

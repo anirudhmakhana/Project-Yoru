@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom'
 import axios from "axios";
+import Dropdown from "react-bootstrap/Dropdown";
 
 import "../../assets/style/style.css"
 import StaffAccountService from "../../services/StaffAccountService";
@@ -13,6 +14,7 @@ export const AddStaffPage = (props) => {
     const [confirm, setConfirm] = useState('')
     const [fullName, setFullName] = useState('')
     const [contact, setContact] = useState('')
+    const [positionLevel, setPositionLevel] = useState('Staff')
 
     // useEffect(() => {
         
@@ -41,6 +43,10 @@ export const AddStaffPage = (props) => {
         setFullName(e.target.value)
     }
 
+    const handleNodeDropdown = (e) => {
+        setPositionLevel(e)
+      };
+
     async function handleSubmit(e) {
         e.preventDefault()
         if (username.length < 1 ) {
@@ -62,7 +68,7 @@ export const AddStaffPage = (props) => {
                 password: password,
                 fullName: fullName,
                 email: contact,
-                positionLevel: "staff",
+                positionLevel: positionLevel.toLowerCase(),
                 companyCode: companyCode
             }
             console.log(newAccount)
@@ -97,6 +103,20 @@ export const AddStaffPage = (props) => {
                         <label className="inputLabel" for="companyCode">Company</label>
                         <input type="text" id="companyCode" name="companyCode" placeholder={companyCode} disabled></input>
                     </div>
+                    <div className="textInputContainerCol">
+                        <label className="inputLabel" for="companyCode">Position</label>
+                        <Dropdown onSelect={handleNodeDropdown} >
+                            <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                {positionLevel}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={"Staff"}>Staff</Dropdown.Item>
+                                <Dropdown.Item eventKey={"Manager"}>Manager</Dropdown.Item>
+
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
+                    
                     
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="fullname">Full Name</label>
