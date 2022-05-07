@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 import "../../assets/style/style.css"
+
 import StaffAccountService from "../../services/StaffAccountService";
 
 export const EditStaffPage = (props) => {
@@ -67,12 +68,11 @@ export const EditStaffPage = (props) => {
  
     return (
         
-        <div className="loginBackground">
-            <div className="startPageContainer">
-                <div className="logo">
-                    <h3>Add Staff Account</h3>
-                </div>
-
+        <div className="content-main-container">
+            <div className="content-title-container">
+                <h1>Edit Account</h1>
+            </div>
+            <div className="detailed-main-container">
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company</label>
@@ -91,7 +91,6 @@ export const EditStaffPage = (props) => {
                         <input type="text" id="contact" name="contact" placeholder="e.g. adam.eve@eden.com" value={contact} onChange={handleChangeContact}></input>
                     </div>
                     
-                
                     <input className="signinBtn" type="submit" value="Update"></input>
                     
                 </form>
