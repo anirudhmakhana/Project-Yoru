@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { StaffTable } from "../../components/staff_table"
 import StaffAccountService from '../../services/StaffAccountService';
 import CompanyService from '../../services/CompanyService';
-
+import { Button } from 'react-bootstrap';
 import "../../assets/style/companyList.css";
+import { AddStaffPopup } from '../../components/add_staff_popup';
 
 export function StaffListPage(props) {
     const { companyCode } = useParams()
@@ -14,6 +15,9 @@ export function StaffListPage(props) {
     const [staffs, setStaffs] = useState([])
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [companyName, setCompanyName] = useState(null)
+    const [showAddStaff, setShowAddStaff] = useState(false);
+    const [showEditComp, setShowEditComp] = useState(false);
+
     useEffect(() => {
         // setUserData(props.userData)
         console.log(localStorage.getItem("userData"))
@@ -42,9 +46,19 @@ export function StaffListPage(props) {
 
     return (
         <div id="shipment">
-            <div className="title-container">
+            <div className="content-title-container">
             {companyName ? (<h1  className="adminPageHeader">{companyName}</h1>)
             : (<h1  className="adminPageHeader">{companyCode}</h1>)}
+            <Button onClick={() => {
+                setShowEditComp(false)
+                setShowAddStaff(true)}} variant="dark">
+                    ADD STAFF
+            </Button>
+            <Button onClick={() => {
+                setShowAddStaff(false)
+                setShowEditComp(true)}} variant="dark">
+                    EDIT COMPANY
+            </Button>
             </div>
             
             
@@ -61,7 +75,7 @@ export function StaffListPage(props) {
                 </thead>
 
                 {userData ? (dataTable()) : (<></>)}
-
+                {showAddStaff && <AddStaffPopup setOpenPopup={setShowAddStaff}/>}
             </Table>
         </div>
         

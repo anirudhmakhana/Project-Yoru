@@ -81,11 +81,11 @@ export const ManagerSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
+                    {/* <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"register-staff/"+userData.companyCode} onClick={() => {setActiveItemIndex(6)}}>Register Staff</Link>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
-                        <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Staff List</Link>
+                        <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Company & Staff</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faBuilding}/>}>
                         <Link to={"edit-company/"+userData.companyCode} onClick={() => {setActiveItemIndex(8)}}>Edit Company</Link>

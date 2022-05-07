@@ -33,8 +33,9 @@ p {
 
 div.logo {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
     flex: 0;
+    justify-content: center;
 }
 
 h3.h3-logo {
