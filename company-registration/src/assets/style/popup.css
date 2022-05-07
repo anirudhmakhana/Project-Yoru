@@ -1,7 +1,7 @@
 .popupBackground {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(200, 200, 200);
+    background-color: rgba(200, 200, 200, 0.8);
     top: 0;
     left: 0;
     position: fixed;
@@ -26,7 +26,7 @@
     display: inline-block;
     text-align: center;
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 1em;
   }
   
   .titleCloseBtn {
