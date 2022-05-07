@@ -6,17 +6,20 @@ import "../../assets/style/overview.css"
 
 import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
+import { NodeSelectPopup } from "../../components/node_select_popup";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [buttonPopup, setButtonPopup] = useState(false);
     // useEffect(() => {
     //     setUserData(props.userData)
     //     console.log(props.userData)
     //   }, [userData]);
     return (
-        <div id="overview">
+        <div className="overview">
             <div className="title-container">
                 <h1>Overview</h1>
+                <button onClick={() => setButtonPopup(true)}>Selected Node: </button>
             </div>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
@@ -25,6 +28,7 @@ export const OverviewPage = (props) => {
                 <Card title="On hold" info="0"/>
             </div>
             <div className="body-main">
+                
                 <div className="chart-container">
                     <div className="chart-title-container">
                         <h3 className="chart-title">Today's shipping</h3>
@@ -37,19 +41,20 @@ export const OverviewPage = (props) => {
                 <div className="chart-info-right">
                     <hr/>
                     <div className="chart-item">
-                        <p>Hello</p>
+                        <p>Placeholder</p>
                     </div>
                     <hr/>
                     <div className="chart-item">
-                        <p>Hello 2</p>
+                        <p>Placeholder</p>
                     </div>
                     <hr/>
                     <div className="chart-item">
-                        <p>Hello 3</p>
+                        <p>Placeholder</p>
                     </div>
                     <hr/>
                 </div>
             </div>
+            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} />}
         </div>
     );
 }
