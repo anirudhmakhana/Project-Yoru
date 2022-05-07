@@ -79,3 +79,7 @@
     transition: ease-in-out 0.2s;
 }
 
+.select-node-icon {
+    margin-right: 0.5em;
+}
+
