@@ -104,6 +104,13 @@
     border: none;
 }
 
+.infoBtn {
+    height: 50%;
+    color: white;
+    margin-left: 2%;
+    background: #333333;
+}
+
 .backBtn:hover {
     color: #2b42d8;
     background: none;

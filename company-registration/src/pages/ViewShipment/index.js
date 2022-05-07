@@ -28,11 +28,12 @@ export const ViewShipmentPage = () => {
     const { shipmentId } = useParams()
     const navigate = useNavigate()
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
-    const [path, setPath] = useState([])
+    // const [path, setPath] = useState([])
     const [loading, setLoading] = useState(true)
     // const [currentMark, setCurrentMark] = useState(null)
     const [currentNode, setCurrentNode] = useState(null)
     const [directionsResponse, setDirectionsResponse] = useState(null)
+    const [showInfo, setShowInfo] = useState(true)
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
         libraries: ['places'],
@@ -71,7 +72,7 @@ export const ViewShipmentPage = () => {
     }
 
     useEffect(() => {
-
+        console.log(shipment)
         CompanyService.getCompanyByCode(userData.companyCode, userData.token)
         .then( result => {
             // ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
@@ -81,15 +82,18 @@ export const ViewShipmentPage = () => {
                 setShipment(res.data)
                 ShipmentService.getPathByShipmentId(shipmentId, userData.token)
                 .then( async res_path => {
-                    setPath(res_path.data)
+                    console.log(res_path.data)
+                    // setPath(res_path.data)
                     if (isLoaded ){ 
                         const results = await getDirection(res_path.data)
+                        console.log(results)
+
                         setDirectionsResponse(results)
                     }
                     
                 })
                 .catch( err => {
-                    setPath(null)
+                    // setPath(null)
                     console.log(err)
                 })
 
@@ -111,11 +115,9 @@ export const ViewShipmentPage = () => {
             setShipment(null)
             console.log(err_company)
         })
-        
-        
-    
+
     }
-    ,[] );
+    ,[isLoaded] );
     
     if ( shipment && currentNode ) {
         
@@ -135,6 +137,11 @@ export const ViewShipmentPage = () => {
                             <h2>Shipment: {shipment.description}</h2>
                             <h4>ID: {shipment.uid}</h4>
                         </div>
+                        <Button type="button" onClick={() => {
+                            setShowInfo(true)
+                        }} className="infoBtn">
+                            SHOW INFO
+                        </Button>
                     </div>
                     <div className="infoContainer">
                         {/* <p>{shipment.description}</p> */}
@@ -145,6 +152,7 @@ export const ViewShipmentPage = () => {
                     </div>
                     <div style={{width:'30vw', height:'50vh', textAlign: "left"}}>
                         <h2>Map</h2>
+                        
                         <GoogleMap
                             center={{ lat: currentNode.lat, lng: currentNode.lng }}
                             zoom={15}
@@ -156,9 +164,10 @@ export const ViewShipmentPage = () => {
                         {directionsResponse ? (
                             directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
                         ): null}
-                        <InfoWindow
+                        {showInfo && <InfoWindow
                             position={{ lat: currentNode.lat, lng: currentNode.lng }}
                             onCloseClick={() => {
+                                setShowInfo(false)
                             }}
                             >
                             <div>
@@ -173,7 +182,7 @@ export const ViewShipmentPage = () => {
                                 <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
                                 <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
                             </div>
-                            </InfoWindow>
+                        </InfoWindow>}
                             {/*
                             <Marker
                                 key={`${shipment.lat}-${shipment.lng}`}

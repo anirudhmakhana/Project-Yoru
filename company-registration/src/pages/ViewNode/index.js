@@ -27,6 +27,7 @@ export const ViewNodePage = () => {
     const [stock, setStock] = useState([])
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     // const [currentMark, setCurrentMark] = useState(null)
+    const [showInfo, setShowInfo] = useState(true)
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -86,24 +87,28 @@ export const ViewNodePage = () => {
                     onClick={()=>{}}
                   >
                   
-                  <InfoWindow
+                  { showInfo && <InfoWindow
                     position={{ lat: node.lat, lng: node.lng }}
                     onCloseClick={() => {
-                    }}
-                    >
+                        setShowInfo(false)
+                    }}>
                     <div>
                         <h2>
                         <span>
-                           { node.nodeCode}
+                           🏣 {node.nodeCode}
                         </span>
                         </h2>
+                        <p>Contact: {node.phoneNumber}</p>
+                        <p>Status: {node.status.toUpperCase()}</p>
                         <p>{node.lat} : {node.lng}</p>
                     </div>
                     </InfoWindow>
+                    }
                     <Marker
                         key={`${node.lat}-${node.lng}`}
                         position={{lat:node.lat, lng:node.lng}}
                         onClick={() => {
+                            setShowInfo(true)
                         console.log(node.lat+"-"+ node.lgn)
                         }}
                         map={mapRef}
