@@ -1,5 +1,6 @@
 #sideNavBar {
-    position: relative;
+    position: -webkit-sticky;
+    position: sticky;
     height: 100vh;
 }
 
