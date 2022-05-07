@@ -77,61 +77,63 @@ export const ViewNodePage = () => {
                 <div className="content-title-container">
                     <h1>Node</h1>            
                 </div>
-                
-                <div className="detailed-title-container">
-                    <Button type="button" onClick={() => {
-                        navigate(-1)
-                    }}className="backBtn">
-                        <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
-                    </Button>
-                    <h3 className="content-header">Node : {node.nodeCode}</h3>
-                </div>
-                <div style={{width:'82vw', height:'50vh'}}>
-                  <GoogleMap
-                    center={{ lat: node.lat, lng: node.lng }}
-                    zoom={15}
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    options={options}
-                    onLoad={map => setMapRef(map)}
-                    onClick={()=>{}}
-                  >
-                  
-                  { showInfo && <InfoWindow
-                    position={{ lat: node.lat, lng: node.lng }}
-                    onCloseClick={() => {
-                        setShowInfo(false)
-                    }}>
-                    <div>
-                        <h2>
-                        <span>
-                           🏣 {node.nodeCode}
-                        </span>
-                        </h2>
-                        <p>Contact: {node.phoneNumber}</p>
-                        <p>Status: {node.status.toUpperCase()}</p>
-                        <p>{node.lat} : {node.lng}</p>
+                <div className="detailed-main-container">
+                    <div className="detailed-title-container">
+                        <Button type="button" onClick={() => {
+                            navigate(-1)
+                        }}className="back-button">
+                            <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
+                        </Button>
+                        <h3 className="content-header">Node : {node.nodeCode}</h3>
                     </div>
-                    </InfoWindow>
-                    }
-                    <Marker
-                        key={`${node.lat}-${node.lng}`}
-                        position={{lat:node.lat, lng:node.lng}}
-                        onClick={() => {
-                            setShowInfo(true)
-                        console.log(node.lat+"-"+ node.lgn)
-                        }}
-                        map={mapRef}
-                    />
-                  </GoogleMap>
+                    <div style={{width:'100%', height:'50%'}}>
+                    <GoogleMap
+                        center={{ lat: node.lat, lng: node.lng }}
+                        zoom={15}
+                        mapContainerStyle={{ width: '100%', height: '100%' }}
+                        options={options}
+                        onLoad={map => setMapRef(map)}
+                        onClick={()=>{}}
+                    >
+                    
+                    { showInfo && <InfoWindow
+                        position={{ lat: node.lat, lng: node.lng }}
+                        onCloseClick={() => {
+                            setShowInfo(false)
+                        }}>
+                        <div>
+                            <h2>
+                            <span>
+                            🏣 {node.nodeCode}
+                            </span>
+                            </h2>
+                            <p>Contact: {node.phoneNumber}</p>
+                            <p>Status: {node.status.toUpperCase()}</p>
+                            <p>{node.lat} : {node.lng}</p>
+                        </div>
+                        </InfoWindow>
+                        }
+                        <Marker
+                            key={`${node.lat}-${node.lng}`}
+                            position={{lat:node.lat, lng:node.lng}}
+                            onClick={() => {
+                                setShowInfo(true)
+                            console.log(node.lat+"-"+ node.lgn)
+                            }}
+                            map={mapRef}
+                        />
+                    </GoogleMap>
+                    </div>
+                    <div className="body-main">
+                        <p className="mt-5"> {node.nodeCode} </p>
+                        <p>{node.address} </p>
+                        <p className="mb-5">Company: {node.companyCode}</p>
+                        <p className="mb-5">Contact: {node.phoneNumber}</p>
+                        <p className="mb-5">Status: {node.status}</p>
+                        <p className="mb-5">In-stock shipment: {stock.length}</p>
+                    </div>
                 </div>
-                <div className="body-main">
-                    <p className="mt-5"> {node.nodeCode} </p>
-                    <p>{node.address} </p>
-                    <p className="mb-5">Company: {node.companyCode}</p>
-                    <p className="mb-5">Contact: {node.phoneNumber}</p>
-                    <p className="mb-5">Status: {node.status}</p>
-                    <p className="mb-5">In-stock shipment: {stock.length}</p>
-                </div>
+                
                 
             </div>
         );
