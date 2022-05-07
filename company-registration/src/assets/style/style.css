@@ -9,6 +9,17 @@
     flex-direction: column;
 }
 
+.editCompanyContainer {
+    min-height: 55vh;
+    min-width: 700px;
+    width: 20vw;
+    border: solid 1px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 10px 2vw 10px 2vw ;
+    flex-direction: column;
+}
+
 form {
     width: 100%;
 }

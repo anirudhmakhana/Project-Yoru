@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 
 import "../../assets/style/style.css"
@@ -10,7 +10,7 @@ import { NodeTable } from '../../components/node_table';
 export const NodeListPage = () => {
     const [allNodes, setAllNodes] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-
+    const [showAddNode, setShowAddNode] = useState(false)
     useEffect(() => {
         NodeDataService.getAllNode(userData.token)
         .then( res => setAllNodes(res.data))
@@ -31,6 +31,9 @@ export const NodeListPage = () => {
         <div className="content-main-container">
             <div className="content-title-container">
                 <h1>Node</h1>
+                <Button onClick={() => {setShowAddNode(true)}} className="btn-dark" >
+                    ADD NODE
+                </Button>
             </div>
             <div className="content-table-container">
                 <Table className="table table-hover">

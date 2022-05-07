@@ -8,6 +8,7 @@ import CompanyService from '../../services/CompanyService';
 import { Button } from 'react-bootstrap';
 import "../../assets/style/companyList.css";
 import { AddStaffPopup } from '../../components/add_staff_popup';
+import { EditCompanyPopup } from '../../components/edit_company_popup';
 
 export function StaffListPage(props) {
     const { companyCode } = useParams()
@@ -76,6 +77,7 @@ export function StaffListPage(props) {
 
                 {userData ? (dataTable()) : (<></>)}
                 {showAddStaff && <AddStaffPopup setOpenPopup={setShowAddStaff} updateTable={updateData}/>}
+                {showEditComp && <EditCompanyPopup setOpenPopup={setShowEditComp}/>}
             </Table>
         </div>
         

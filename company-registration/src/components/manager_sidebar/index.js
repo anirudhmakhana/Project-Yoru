@@ -87,9 +87,9 @@ export const ManagerSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faAddressBook}/>}>
                         <Link to={"staff-list/"+userData.companyCode} onClick={() => {setActiveItemIndex(7)}}>Company & Staff</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faBuilding}/>}>
+                    {/* <MenuItem active={activeItemIndex === 8} icon={<FontAwesomeIcon icon={faBuilding}/>}>
                         <Link to={"edit-company/"+userData.companyCode} onClick={() => {setActiveItemIndex(8)}}>Edit Company</Link>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem active={activeItemIndex === 9} icon={<FontAwesomeIcon icon={faLockOpen}/>}>
                         <Link to={"/"} onClick={() => {
                             //TODO: clear local storage here
