@@ -1,20 +1,3 @@
-.overview {
-    width: 100%;
-    height: 100%;
-    padding: 0 1.5vw 0 1.5vw;
-}
-
-.overview h1 {
-    color: #252733;
-    font-size: 2em;
-    font-weight: bold;
-}
-
-.overview .title-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 2vh 0 2vh 0;
-}
 
 .overview .body-top {
     display: flex;
@@ -67,19 +50,5 @@
 
 .chart-item p {
     margin-bottom: 0;
-}
-
-.node-select-button {
-    background: none;
-    border: none;
-}
-
-.node-select-button:hover {
-    color: #2b42d8;
-    transition: ease-in-out 0.2s;
-}
-
-.select-node-icon {
-    margin-right: 0.5em;
 }
 

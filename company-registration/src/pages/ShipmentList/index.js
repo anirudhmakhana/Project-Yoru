@@ -5,6 +5,7 @@ import ShipmentService from "../../services/ShipmentService";
 import Table from 'react-bootstrap/Table';
 
 import "../../assets/style/shipment.css";
+import "../../assets/style/style.css"
 
 export const ShipmentListPage = () => {
     const [allShipments, setAllShipments] = useState(null)
@@ -26,12 +27,12 @@ export const ShipmentListPage = () => {
     }
 
     return (
-        <div className="shipment">
-            <div className="title-container">
+        <div className="shipment content-main-container">
+            <div className="content-title-container">
                 <h1>Shipment</h1>
             </div>
-            <div className="shipmentTableContainer">
-                <h3 className="tableTitle">All Shipments</h3>
+            <div className="content-table-container">
+                <h3 className="content-header">All Shipments</h3>
                 <br/>
                 <Table className="table table-hover">
                     <thead>
