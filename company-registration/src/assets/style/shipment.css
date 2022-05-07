@@ -40,13 +40,6 @@
     border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.backBtn {
-    color: black;
-    margin-right: 1%;
-    background: none;
-    border: none;
-}
-
 .infoBtn {
     height: 50%;
     color: white;
@@ -54,21 +47,6 @@
     background: #333333;
 }
 
-.backBtn:hover {
-    color: #2b42d8;
-    background: none;
-    border: none;
-}
-
 .alignTopIcon {
     vertical-align: top;
 }
-
-/* .viewShipment {
-    background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 16px;
-    height: 90%;
-    max-height: 90%;
-    padding: 2% 4% 2% 4%;
-} */
