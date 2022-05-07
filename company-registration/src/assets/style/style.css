@@ -131,6 +131,10 @@ p.p-warning{
     font-weight: bold;
 }
 
+p.information{
+    color: #444444;
+}
+
 div.warning{
     display: flex;
     background-color: #FFCCCC;

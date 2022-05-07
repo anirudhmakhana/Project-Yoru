@@ -38,7 +38,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
     }
 
     useEffect(() => {
-        NodeDataService.getNodeByCompany(userData.companyCode, userData.token)
+        NodeDataService.getActiveNodeByCompany(userData.companyCode, userData.token)
         .then( res => {
           console.log('res.data', res.data)
           var temp = res.data
@@ -62,7 +62,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
                       console.log('Nearest node: ', nearestNode.data)
                   })
               }, () => {
-                  setStatus("Cannot find any nearest node")
+                  setStatus("Cannot find any nearest active node.")
               })
               
           }
@@ -131,8 +131,8 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
 
           { currentNode ? 
           (<div className="body">
-              <p>{status}</p>
-              <p>Node : {currentNode.nodeCode}<br/>
+              <p className="information">{status}</p>
+              <p className="information">Node : {currentNode.nodeCode}<br/>
               {currentNode.address}</p>
           </div>): 
           <div className="body">

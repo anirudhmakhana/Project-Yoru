@@ -13,7 +13,8 @@ export const AdminLoginPage = (props) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [userData, setUserData] = useState(null) 
+    const [warning, setWarning] = useState(null)
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -27,26 +28,27 @@ export const AdminLoginPage = (props) => {
     async function handleSubmit(e) {
         e.preventDefault()
         if (email.length < 1 ) {
-            console.log('Please enter your email address.')
+            setWarning('Please enter your username.')
         } else if ( password.length < 1) {
-            console.log("Please enter your password.")
-        } 
-        const loginData = {
-            username: email,
-            password: password
+            setWarning("Please enter your password.")
+        } else {
+            const loginData = {
+                username: email,
+                password: password
+            }
+            AdminAccountService.login(loginData)
+            .then( res =>{
+                setWarning(null)
+                localStorage.setItem("userData", JSON.stringify(res.data))
+                localStorage.setItem("userType", "admin")
+                navigate("main/company-list")
+            })
+            .catch( error => {
+                setWarning("Invalid username or password!")
+            }) 
+    
         }
-        AdminAccountService.login(loginData)
-        .then( res =>{
-            console.log(res.data)
-            setUserData(res.data)
-            localStorage.setItem("userData", JSON.stringify(res.data))
-            localStorage.setItem("userType", "admin")
-            navigate("main/company-list")
-        })
-        .catch( error => {
-            console.log("Invalid username or password!")
-        }) 
-
+        
     }
     function handleChangeEmail(e) {
         setEmail(e.target.value)
@@ -65,6 +67,10 @@ export const AdminLoginPage = (props) => {
 
                 <h2>Log In to Project Yoru</h2>
                 <p>Enter your username and password below</p>
+                { warning &&
+                    <div className="alert alert-danger">
+                        {warning}
+                    </div>}
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="username">Username</label>

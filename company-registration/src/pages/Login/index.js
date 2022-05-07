@@ -25,6 +25,7 @@ export const LoginPage = (props) => {
     const [password, setPassword] = useState('')
     const [userData, setUserData] = useState(null) 
     const [openPopup, setOpenPopup] = useState(false)
+    const [warning, setWarning] = useState(null)
 
     const navigate = useNavigate()
 
@@ -45,35 +46,37 @@ export const LoginPage = (props) => {
     async function handleSubmit(e) {
         e.preventDefault()
         if (username.length < 1 ) {
-            console.log('Please enter your email address.')
+            setWarning('Please enter your username.')
         } else if ( password.length < 1) {
-            console.log("Please enter your password.")
+            setWarning("Please enter your password.")
         } 
-        const loginData = {
-            username: username,
-            password: password
+        else {
+            const loginData = {
+                username: username,
+                password: password
+            }
+            StaffAccountService.login(loginData)
+            .then(res => {
+                console.log(res)
+                setWarning(null)
+                NodeDataService.getActiveNodeByCompany( res.data.companyCode, res.data.token)
+                .then( res_node => {
+                    localStorage.setItem("userData", JSON.stringify(res.data))
+                    localStorage.setItem("userType", "staff")
+                    setOpenPopup(true)
+    
+                })
+                .catch( err => {
+                    localStorage.setItem("userData", JSON.stringify(res.data))
+                    localStorage.setItem("userType", "staff")
+                    navigate("main/overview")
+                })
+                
+            })
+            .catch( error => {
+                setWarning("Invalid username or password!")
+            }) 
         }
-        StaffAccountService.login(loginData)
-        .then(res => {
-            console.log(res)
-            NodeDataService.getNodeByCompany( res.data.companyCode, res.data.token)
-            .then( res_node => {
-                localStorage.setItem("userData", JSON.stringify(res.data))
-                localStorage.setItem("userType", "staff")
-                setOpenPopup(true)
-
-            })
-            .catch( err => {
-                localStorage.setItem("userData", JSON.stringify(res.data))
-                localStorage.setItem("userType", "staff")
-                navigate("main/overview")
-            })
-            
-        })
-        .catch( error => {
-            console.log("Invalid username or password!")
-        }) 
-        
 
     }
     function handleChangeUsername(e) {
@@ -105,6 +108,10 @@ export const LoginPage = (props) => {
 
                     <h2>Log In to Project Yoru</h2>
                     <p>Enter your username and password below</p>
+                    { warning &&
+                    <div className="alert alert-danger">
+                        {warning}
+                    </div>}
                     <form onSubmit={handleSubmit}>
                         <div className="textInputContainerCol">
                             <label className="inputLabel" for="username">Username</label>
