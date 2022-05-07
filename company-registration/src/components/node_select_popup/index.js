@@ -90,7 +90,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm }) {
           <div className="title">
             <h1>Please choose your current location.</h1>
           </div>
-          <div style={{width:'650px', height:'50vh'}}>
+          <div className="map-container">
             {GoogleMap && isLoaded? (currentNode && allNodes ? (
                   <GoogleMap
                     center={{ lat: currentNode.lat, lng: currentNode.lng }}
