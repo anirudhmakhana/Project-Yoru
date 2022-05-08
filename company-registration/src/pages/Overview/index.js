@@ -8,27 +8,21 @@ import "../../assets/style/style.css"
 import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { Titlebar } from "../../components/titlebar";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [buttonPopup, setButtonPopup] = useState(false);
-    // useEffect(() => {
-    //     setUserData(props.userData)
-    //     console.log(props.userData)
-    //   }, [userData]);
 
-    useState(() => {
-        var node = eval('('+localStorage.getItem("currentNode")+')')
-        if (node) {
-            setCurrentNodeCode(node.nodeCode)
-        } else {
-            setCurrentNodeCode('-')
-        }
-    }, [])
+    // useState(() => {
+    //     var node = eval('('+localStorage.getItem("currentNode")+')')
+    //     if (node) {
+    //         setCurrentNodeCode(node.nodeCode)
+    //     } else {
+    //         setCurrentNodeCode('-')
+    //     }
+    // }, [])
 
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
@@ -43,12 +37,13 @@ export const OverviewPage = (props) => {
 
     return (
         <div className="overview content-main-container">
-            <div className="content-title-container">
+            {/* <div className="content-title-container">
                 <h1>Overview</h1>
                 <button onClick={() => setButtonPopup(true)} className="node-select-button">
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
                 </button>
-            </div>
+            </div> */}
+            <Titlebar pageTitle="Overview" setButtonPopup={setButtonPopup}/>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
                 <Card title="Shipped" info="0"/>

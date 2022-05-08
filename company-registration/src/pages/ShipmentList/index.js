@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import { ShipmentTable } from "../../components/shipment_table";
+import { Titlebar } from '../../components/titlebar';
+
 import ShipmentService from "../../services/ShipmentService";
+
 import Table from 'react-bootstrap/Table';
 
 import "../../assets/style/shipment.css";
@@ -28,9 +31,7 @@ export const ShipmentListPage = () => {
 
     return (
         <div className="shipment content-main-container">
-            <div className="content-title-container">
-                <h1>Shipment</h1>
-            </div>
+            <Titlebar pageTitle="Shipment"/>
             <div className="content-table-container">
                 <h3 className="content-header">All Shipments</h3>
                 <br/>
