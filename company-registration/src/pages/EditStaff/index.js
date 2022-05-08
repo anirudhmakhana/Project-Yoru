@@ -72,7 +72,7 @@ export const EditStaffPage = (props) => {
             <div className="content-title-container">
                 <h1>Edit Account</h1>
             </div>
-            <div className="detailed-main-container">
+            <div className="detailed-main-container" style={{height: "fit-content"}}>
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company</label>
@@ -91,7 +91,9 @@ export const EditStaffPage = (props) => {
                         <input type="text" id="contact" name="contact" placeholder="e.g. adam.eve@eden.com" value={contact} onChange={handleChangeContact}></input>
                     </div>
                     
-                    <input className="signinBtn" type="submit" value="Update"></input>
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <input className="signinBtn" type="submit" value="Update" style={{width: "20%"}}></input>
+                    </div>
                     
                 </form>
             </div>
