@@ -43,7 +43,7 @@ export const FrequencyChart = () => {
     return (
         <>
            <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
-               <VictoryGroup color="#3751FF"
+               <VictoryGroup  color="#3751FF"
                 labels={({ datum }) => `shipped: ${datum.y}`}
                 labelComponent={
                     <VictoryTooltip
@@ -52,7 +52,7 @@ export const FrequencyChart = () => {
                 }
                 data={data1}>
                     {/* <VictoryAxis></VictoryAxis> */}
-                    <VictoryLine
+                    <VictoryLine  
                         interpolation="monotoneX"
                         scale={{x:"time"}}
                     />
@@ -64,13 +64,13 @@ export const FrequencyChart = () => {
                 labels={({ datum }) => `shipped: ${datum.y}`}
                 labelComponent={
                     <VictoryTooltip
-                        style={{ fontSize: 10 }}
+                        style={{ fontSize: 10, 'z-index': 1  }}
                     />
                 }
                 data={data2}>
                     <VictoryLine
                         interpolation="monotoneX"
-                        scale={{x:"time"}}
+                        scale={{x:"time"}} 
                     />
                     <VictoryScatter
                         size={({ active }) => active ? 4 : 2}

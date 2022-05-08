@@ -8,10 +8,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* z-index: 1; */
   }
   
   .popupContainer {
+    z-index: -1;
     width: 700px;
     height: 500px;
     border-radius: 12px;
@@ -23,6 +23,8 @@
   }
   
   .popupContainer .title {
+    z-index: -1;
+
     display: inline-block;
     text-align: center;
     margin-top: 10px;
@@ -41,6 +43,8 @@
   }
   
   .popupContainer .body {
+    z-index: -1;
+
     flex: 50%;
     display: flex;
     justify-content: center;

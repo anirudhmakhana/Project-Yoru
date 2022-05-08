@@ -14,7 +14,8 @@ class NodeDataService {
              lat:13.788017, lng:100.693971, phoneNumber:"021231212", status:"active"},
 
              {nodeCode:"BANG-RAK-HQ1", companyCode:"YORU", address:"476 Maha Phruttharam, Bang Rak, Bangkok 10500",
-             lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"}
+             lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"},
+
             ]
     }
     sphericalDistance(lat1, lon1, lat2, lon2 ) {

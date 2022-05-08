@@ -90,6 +90,8 @@ export const LoginPage = (props) => {
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
         setOpenPopup(false)
+        console.log(currentNode)
+
         navigate("main/overview")
     }
 

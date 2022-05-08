@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { ShipmentTable } from "../../components/shipment_table";
 import { Titlebar } from '../../components/titlebar';
+import { Button } from 'react-bootstrap';
 
 import ShipmentService from "../../services/ShipmentService";
 
@@ -13,6 +14,8 @@ import "../../assets/style/style.css"
 export const ShipmentListPage = () => {
     const [allShipments, setAllShipments] = useState(null)
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [pageSize, setPageSize] = useState(20)
+    const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
             ShipmentService.getAllShipments(userData.token)
@@ -24,7 +27,7 @@ export const ShipmentListPage = () => {
     ,[] );
 
     const dataTable = () => {
-        return allShipments.map((res, i) => {
+        return allShipments.slice((pageNumber-1)*pageSize, (pageNumber-1)*pageSize+pageSize).map((res, i) => {
             return <ShipmentTable userData={userData} obj={res} index={i+1} />
         })
     }
@@ -32,9 +35,22 @@ export const ShipmentListPage = () => {
     return (
         <div className="shipment content-main-container">
             <Titlebar pageTitle="Shipment"/>
+            
+            {userData && allShipments ? 
+            
             <div className="content-table-container">
+                
                 <h3 className="content-header">All Shipments</h3>
                 <br/>
+                <span>Page : <strong>{pageNumber}</strong></span>
+                { pageNumber == 1 ? null
+                : (<Button onClick={() => {setPageNumber(pageNumber-1)}} className="btn-dark" >
+                PREV
+                </Button>)}
+                {(pageNumber)*pageSize >= allShipments.length ? null :
+                (<Button onClick={() => {setPageNumber(pageNumber+1)}} className="btn-dark" >
+                    NEXT</Button>)
+                }
                 <Table className="table table-hover">
                     <thead>
                         <tr>
@@ -47,10 +63,11 @@ export const ShipmentListPage = () => {
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    {userData && allShipments ? (dataTable()) : (<></>)}
-
+                    {dataTable() }
+                    
                 </Table>
             </div>
+            : (<></>)}
             
         </div>
     );

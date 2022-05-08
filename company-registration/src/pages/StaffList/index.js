@@ -46,7 +46,7 @@ export function StaffListPage(props) {
     }
 
     return (
-        <div id="shipment">
+        <div className="content-main-container">
             <div className="content-title-container">
             {companyName ? (<h1  className="adminPageHeader">{companyName}</h1>)
             : (<h1  className="adminPageHeader">{companyCode}</h1>)}
@@ -62,7 +62,8 @@ export function StaffListPage(props) {
             </Button>
             </div>
             
-            
+            <div className="content-table-container">
+
             <Table className="table table-hover">
                 <thead>
                     <tr>
@@ -79,6 +80,7 @@ export function StaffListPage(props) {
                 {showAddStaff && <AddStaffPopup setOpenPopup={setShowAddStaff} updateTable={updateData}/>}
                 {showEditComp && <EditCompanyPopup setOpenPopup={setShowEditComp}/>}
             </Table>
+            </div>
         </div>
         
     )

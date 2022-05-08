@@ -77,7 +77,7 @@ export const OverviewPage = (props) => {
                     <hr/>
                 </div>
             </div>
-            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel}/>}
+            {/* { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel}/>} */}
         </div>
     );
 }
