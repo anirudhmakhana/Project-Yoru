@@ -13,6 +13,7 @@ import {
 
 import "../../assets/style/shipment.css";
 import "../../assets/style/style.css";
+import { Titlebar } from "../../components/titlebar";
 
 import NodeDataService from "../../services/NodeDataService";
 import ShipmentService from "../../services/ShipmentService";
@@ -181,9 +182,11 @@ export const CreateSHP = () => {
 	};
 	return (
 		<div className="content-main-container">
-			<div className="content-title-container">
+			{/* <div className="content-title-container">
 				<h1>Create Shipment</h1>
-			</div>
+			</div> */}
+			<Titlebar pageTitle="Create Shipment"/>
+
 			<div className="detailed-main-container">
 				<div style={{ width: "100%", height: "50%" }}>
 				{ GoogleMap ? (originNode && nodeStock ? (

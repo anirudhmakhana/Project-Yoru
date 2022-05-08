@@ -28,6 +28,7 @@ export const OverviewPage = (props) => {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
         setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
         setButtonPopup(false)
+
     }
     
     function handlePopupCancel() {
@@ -43,7 +44,7 @@ export const OverviewPage = (props) => {
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
                 </button>
             </div> */}
-            <Titlebar pageTitle="Overview" setButtonPopup={setButtonPopup}/>
+            <Titlebar pageTitle="Overview" setExternalPopup={setButtonPopup}/>
             <div className="body-top">
                 <Card title="In transit" info="0"/>
                 <Card title="Shipped" info="0"/>
@@ -77,7 +78,7 @@ export const OverviewPage = (props) => {
                     <hr/>
                 </div>
             </div>
-            {/* { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel}/>} */}
+            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
         </div>
     );
 }

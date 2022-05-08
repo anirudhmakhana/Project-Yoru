@@ -33,7 +33,7 @@ export class ShipmentTable extends Component {
         return (
             <tbody>
                 <tr>   
-                    <td className='td-key'>{this.props.obj.uid}</td>
+                    <td className='td-key'><strong>{this.props.obj.uid}</strong></td>
                     <td>{this.props.obj.description}</td>
                     <td>{this.state.company}</td>
                     <td>{this.props.obj.currentNode}</td>

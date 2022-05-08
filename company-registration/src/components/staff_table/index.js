@@ -34,8 +34,9 @@ export class StaffTable extends Component {
         return (
             <tbody>
              <tr>   
-             <th className='td-key'>{this.props.index}</th>
+             <td className='td-key'><strong>{this.props.index}</strong></td>
                 <td>{this.props.obj.fullName}</td>
+                <td>{this.props.obj.positionLevel.toUpperCase()}</td>
                 <td>{this.props.obj.username}</td>
                 <td>{this.props.obj.email}</td>
                 <td>
