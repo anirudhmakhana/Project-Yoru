@@ -84,7 +84,9 @@ export const ViewNodePage = () => {
                 console.log(typeof res_graph.data[0].y)
                 var adjustedDate = []
                 res_graph.data.forEach( data => {
-                    adjustedDate.push({x:data.getHours()+"", y:data.y})
+                    let dataDate = new Date(data.x)
+                    // dataDate.setHours(dataDate.getHours())
+                    adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
                 })
                 setHourGraphData(adjustedDate)
             })
