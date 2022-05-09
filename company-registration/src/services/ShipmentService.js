@@ -247,6 +247,16 @@ class ShipmentService {
         }
         throw "Not complete create shipment"
     }
+
+    async getScanByShipmentId( shipmentId, token) {
+        const response = await axios.get("http://localhost:4000/scan/shipment/"+ shipmentId, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        response.data = response.data.sort((a,b) => a.scannedTime - b.scannedTime)
+        return response
+    }
 }
 
 export default new ShipmentService()
