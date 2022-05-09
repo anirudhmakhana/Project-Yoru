@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import axios from 'axios';
+import Dropdown from "react-bootstrap/Dropdown";
 
 import "../../assets/style/overview.css"
 import "../../assets/style/style.css"
@@ -11,6 +12,10 @@ import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
+import DateUtils from "../../utils/DateUtils";
+
+// In this case, January = 0
+
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -19,6 +24,8 @@ export const OverviewPage = (props) => {
     const [dateGraphData, setDateGraphData] = useState(null)
     const [hourGraphData, setHourGraphData] = useState(null)
     const [currentDate, setCurrentDate] = useState( new Date() )
+    const [graphTimeRange, setGraphTimeRange] = useState("day")
+    const [xAxisLabel, setXAxisLabel] = useState("Hour")
     // useState(() => {
     //     var node = eval('('+localStorage.getItem("currentNode")+')')
     //     if (node) {
@@ -28,30 +35,78 @@ export const OverviewPage = (props) => {
     //     }
     // }, [])
 
+
+    const handleTimeRangeDropdown = (e) => {
+        setGraphTimeRange(e)
+        var temp = "Hour"
+        if (e == "week") {
+            temp = "Date"
+        } else if (e == "month") {
+            temp = "Day"
+        } else if (e == "year") {
+            temp = "Month"
+        }
+        setXAxisLabel(temp)
+      };
     useEffect(() => {
         var temp = new Date()
         var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
         var timeInterval = []
-        for ( let i = 0; i <= 6; i++ ) {
-            let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
-            timeInterval.push(temp.getTime())
+        if (graphTimeRange == "day") {
+            for ( let i = 0; i <= 23; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
+                timeInterval.push(temp.getTime())
+            }
         }
-
-        var hourInterval = []
-        for ( let i = 0; i <= 23; i++ ) {
-            let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
-            hourInterval.push(temp.getTime())
+        else if ( graphTimeRange == "week") {
+            for ( let i = 0; i <= 6; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
+                timeInterval.push(temp.getTime())
+            }
+            timeInterval = timeInterval.reverse()
         }
+        else if ( graphTimeRange == "month") {
+            let noOfDays = DateUtils.daysInMonth(curDate.getMonth(), curDate.getFullYear())
+            for ( let i = 0; i <= noOfDays - 1; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), noOfDays - i + 1) 
+                timeInterval.push(temp.getTime())
+            }
+            timeInterval = timeInterval.reverse()
+        }
+        else if ( graphTimeRange == "year") {
+            console.log(new Date(2020, 4).toDateString())
+            for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
+                let temp = new Date(curDate.getFullYear(), i) 
+                timeInterval.push(temp.getTime())
+            }
+        }
+                
         console.log(timeInterval)
         
-        GraphService.getAllStockByTime( timeInterval.reverse(), userData.token)
+        GraphService.getCompanyStockByTime( userData.companyCode, timeInterval, userData.token)
         .then(res_graph => {
             console.log(res_graph)
             var adjustedDate = []
             res_graph.data.forEach( data => {
                 let dataDate = new Date(data.x)
-                dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                if (graphTimeRange == "day") {
+                    let dataDate = new Date(data.x)
+                    adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
+                }
+                else if (  graphTimeRange == "week") {
+                    dataDate.setDate(dataDate.getDate() - 1)
+                    adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                }
+                else if ( graphTimeRange == "month" ) {
+                    dataDate.setDate(dataDate.getDate() - 1)
+                    adjustedDate.push({x:dataDate.getDate(), y:data.y})
+                }
+                else if ( graphTimeRange == "year") {
+                    let dataDate = new Date(data.x)
+                    console.log(dataDate.getMonth(), dataDate.toDateString())
+
+                    adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
+                }
             })
             setDateGraphData(adjustedDate)
         })
@@ -71,7 +126,7 @@ export const OverviewPage = (props) => {
             // })
         
         
-    }, [])
+    }, [graphTimeRange])
 
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
@@ -104,12 +159,23 @@ export const OverviewPage = (props) => {
                 
                 <div className="chart-container">
                     <div className="chart-title-container">
-                        <h3 className="chart-title">Last 7 days stocking</h3>
+                        <h3 className="chart-title">Stocking Shipments</h3>
+                        <Dropdown onSelect={handleTimeRangeDropdown} >
+                            <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                {graphTimeRange[0].toUpperCase() + graphTimeRange.slice(1).toLowerCase()}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={"day"}>Day</Dropdown.Item>
+                                <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
+                                <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
+                                <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                         <p>{new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
                         .toLocaleDateString()} - {currentDate.toLocaleDateString()}</p>
                     </div>
                     <div className="body-chart-container">
-                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicator={"Stock"}/>}
+                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel} indicatorY={"Stock"}/>}
                     </div>
                 </div>
                 <div className="chart-info-right">

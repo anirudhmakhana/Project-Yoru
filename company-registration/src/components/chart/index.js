@@ -39,12 +39,12 @@ const data2 = [
     { x: "11", y: 20 },
     ]
 
-export const FrequencyChart = ({chartDataPrim, chartDataSec, indicator}) => {
+export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicatorY}) => {
     return (
         <>
            <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
                <VictoryGroup  color="#3751FF"
-                labels={({ datum }) => `${indicator}: ${datum.y}`}
+                labels={({ datum }) => `${indicatorX}: ${datum.x}\n${indicatorY}: ${datum.y}`}
                 labelComponent={
                     <VictoryTooltip
                         style={{ fontSize: 10 }}
@@ -62,7 +62,7 @@ export const FrequencyChart = ({chartDataPrim, chartDataSec, indicator}) => {
                </VictoryGroup>
                { chartDataSec && 
                <VictoryGroup color="#DFE0EB"
-               labels={({ datum }) => `${indicator}: ${datum.y}`}
+               labels={({ datum }) => `${indicatorY}: ${datum.y}`}
                labelComponent={
                    <VictoryTooltip
                        style={{ fontSize: 10, 'z-index': 1  }}

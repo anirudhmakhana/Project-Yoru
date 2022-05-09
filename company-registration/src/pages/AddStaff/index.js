@@ -44,7 +44,7 @@ export const AddStaffPage = (props) => {
         setFullName(e.target.value)
     }
 
-    const handleNodeDropdown = (e) => {
+    const handlePositionDropdown = (e) => {
         setPositionLevel(e)
       };
 
@@ -120,7 +120,7 @@ export const AddStaffPage = (props) => {
                     </div>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Position</label>
-                        <Dropdown onSelect={handleNodeDropdown} >
+                        <Dropdown onSelect={handlePositionDropdown} >
                             <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
                                 {positionLevel}
                             </Dropdown.Toggle>

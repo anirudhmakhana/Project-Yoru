@@ -1,4 +1,5 @@
 import axios from "axios";
+import NodeDataService from "./NodeDataService";
 import ShipmentService from "./ShipmentService";
 
 class GraphService {
@@ -104,28 +105,34 @@ class GraphService {
         // return response
     }
 
-    async getAllStockByTime( timeInterval, token) {
-        
-        var stock = []
-        this.scannedData.forEach((v, i) => {
-            if ((v.status == "created" || v.status == "arrived" )){
-                stock.push(this.scannedData[i])
-            }
+    async getCompanyStockByTime( companyCode, timeInterval, token) {
+        const res = await NodeDataService.getNodeByCompany( companyCode, token)
+        .catch((error) => {
+            throw error
         })
-        var shipped = []
-        this.scannedData.forEach((v, i) => {
-            if ((v.status == "shipping")){
-                shipped.push(this.scannedData[i])
-            }
+        const nodes = res.data
+        var temp_res = {}
+        timeInterval.forEach(t => {
+            temp_res[t] = 0
         })
         var result = []
-        console.log(stock, shipped)
-        timeInterval.forEach( (t, index )=> {
-            let date = new Date(t)
-            console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
-            let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
-            result.push(temp)
+        await nodes.forEach( async node => {
+            var node_res = await this.getNodeStockByTime(node.nodeCode, timeInterval, token)
+            node_res.data.forEach( graph_data => {
+                // console.log(graph_data.x, graph_data.y)
+                temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
+            })
         })
+
+        timeInterval.forEach( t => {
+            console.log(temp_res[t])
+            result.push({x:t, y:temp_res[t]})
+        })
+        
+
+          
+
+        
         console.log(result)
         return {data:result}
         
