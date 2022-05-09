@@ -18,30 +18,43 @@ class GraphService {
              lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"}
             ]
         this.scannedData = [
-            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime:100, status:"created"},
-            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime:210, status:"shipping"},
+            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime: new Date(2022, 4, 6, 15, 40).getTime(), status:"created"},
+            {uid:"SHP001", scannedAt:"LKB-1003", scannedTime: new Date(2022, 4, 6, 23, 20).getTime(), status:"shipping"},
 
-            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:201, status:"created"},
-            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:220, status:"shipping"},
-            {uid:"SHP002", scannedAt:"RAM-52011", scannedTime:300, status:"arrived"},
+            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 6, 23, 12).getTime(), status:"created"},
+            {uid:"SHP002", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 7, 7, 20).getTime(), status:"shipping"},
+            {uid:"SHP002", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 7, 18, 20).getTime(), status:"arrived"},
             
-            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:10, status:"created"},
-            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:20, status:"shipping"},
-            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:40, status:"arrived"},
-            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:50, status:"shipping"},
-            {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:100, status:"completed"},
+            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:new Date(2022, 4, 3, 12, 20).getTime(), status:"created"},
+            {uid:"SHP003", scannedAt:"CNX-2040", scannedTime:new Date(2022, 4, 3, 13, 20).getTime(), status:"shipping"},
+            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 4, 18, 20).getTime(), status:"arrived"},
+            {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 5, 8, 20).getTime(), status:"shipping"},
+            {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 5, 9, 20).getTime(), status:"completed"},
 
-            {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:98, status:"created"},
-            {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:110, status:"shipping"},
-            {uid:"SHP004", scannedAt:"RAM-52011", scannedTime:150, status:"arrived"},
+            {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 2, 9, 20).getTime(), status:"created"},
+            {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 3, 12, 20).getTime(), status:"shipping"},
+            {uid:"SHP004", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 3, 13, 20).getTime(), status:"arrived"},
 
-            {uid:"SHP005", scannedAt:"RAM-52011", scannedTime:20, status:"created"},
-            {uid:"SHP005", scannedAt:"RAM-52011", scannedTime:40, status:"shipping"},
-            {uid:"SHP005", scannedAt:"LKB-1003", scannedTime:80, status:"arrived"},
+            {uid:"SHP005", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 3, 7, 20).getTime(), status:"created"},
+            {uid:"SHP005", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 5, 12, 20).getTime(), status:"shipping"},
+            {uid:"SHP005", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 5, 14, 20).getTime(), status:"arrived"},
 
-            {uid:"SHP006", scannedAt:"LKB-1003", scannedTime:100, status:"created"},
-            {uid:"SHP006", scannedAt:"LKB-1003", scannedTime:120, status:"shipping"},
-            {uid:"SHP006", scannedAt:"RAM-52011", scannedTime:300, status:"arrived"},
+            {uid:"SHP006", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 7, 15, 20).getTime(), status:"created"},
+            {uid:"SHP006", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 8, 7, 20).getTime(), status:"shipping"},
+            {uid:"SHP006", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 8, 10, 20).getTime(), status:"arrived"},
+
+            {uid:"SHP007", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 7, 20).getTime(), status:"created"},
+
+            {uid:"SHP008", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 9, 20).getTime(), status:"created"},
+
+            {uid:"SHP009", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 11, 20).getTime(), status:"created"},
+
+            {uid:"SHP010", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 11, 20).getTime(), status:"created"},
+
+            {uid:"SHP011", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 12, 20).getTime(), status:"created"},
+
+            {uid:"SHP012", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 20, 20).getTime(), status:"created"},
+
         ]
     }
 
@@ -70,9 +83,13 @@ class GraphService {
                 shipped.push(this.scannedData[i])
             }
         })
-        var result = {}
+        var result = []
+        console.log(stock, shipped)
         timeInterval.forEach( (t, index )=> {
-            result[t] = this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)
+            let date = new Date(t)
+            console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+            let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
+            result.push(temp)
         })
         console.log(result)
         return {data:result}

@@ -39,18 +39,18 @@ const data2 = [
     { x: "11", y: 20 },
     ]
 
-export const FrequencyChart = () => {
+export const FrequencyChart = ({chartDataPrim, chartDataSec, indicator}) => {
     return (
         <>
            <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
                <VictoryGroup  color="#3751FF"
-                labels={({ datum }) => `shipped: ${datum.y}`}
+                labels={({ datum }) => `${indicator}: ${datum.y}`}
                 labelComponent={
                     <VictoryTooltip
                         style={{ fontSize: 10 }}
                     />
                 }
-                data={data1}>
+                data={chartDataPrim ? chartDataPrim : data1}>
                     {/* <VictoryAxis></VictoryAxis> */}
                     <VictoryLine  
                         interpolation="monotoneX"
@@ -60,22 +60,25 @@ export const FrequencyChart = () => {
                         size={({ active }) => active ? 4 : 2}
                     /> 
                </VictoryGroup>
+               { chartDataSec && 
                <VictoryGroup color="#DFE0EB"
-                labels={({ datum }) => `shipped: ${datum.y}`}
-                labelComponent={
-                    <VictoryTooltip
-                        style={{ fontSize: 10, 'z-index': 1  }}
-                    />
-                }
-                data={data2}>
-                    <VictoryLine
-                        interpolation="monotoneX"
-                        scale={{x:"time"}} 
-                    />
-                    <VictoryScatter
-                        size={({ active }) => active ? 4 : 2}
-                    /> 
-               </VictoryGroup>
+               labels={({ datum }) => `${indicator}: ${datum.y}`}
+               labelComponent={
+                   <VictoryTooltip
+                       style={{ fontSize: 10, 'z-index': 1  }}
+                   />
+               }
+               data={chartDataSec && chartDataPrim ? chartDataSec : data2}>
+                   <VictoryLine
+                       interpolation="monotoneX"
+                       scale={{x:"time"}} 
+                   />
+                   <VictoryScatter
+                       size={({ active }) => active ? 4 : 2}
+                   /> 
+              </VictoryGroup>
+               }
+               
             </VictoryChart> 
         </>
     );

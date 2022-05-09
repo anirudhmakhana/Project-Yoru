@@ -266,3 +266,13 @@ div.warning{
     font-weight: bold;
     text-align:left;
 }
+
+.node-info {
+    width: 100%;
+    height: 40vh;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    display: flex;
+    flex-direction:row;
+}
