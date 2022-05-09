@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import "../../assets/style/overview.css"
 import "../../assets/style/style.css"
+import NodeDataService from '../../services/NodeDataService';
+import GraphService from '../../services/GraphService';
 
 import { Card } from "../../components/card";
 import { FrequencyChart } from "../../components/chart";
@@ -14,7 +16,9 @@ export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [buttonPopup, setButtonPopup] = useState(false);
-
+    const [dateGraphData, setDateGraphData] = useState(null)
+    const [hourGraphData, setHourGraphData] = useState(null)
+    const [currentDate, setCurrentDate] = useState( new Date() )
     // useState(() => {
     //     var node = eval('('+localStorage.getItem("currentNode")+')')
     //     if (node) {
@@ -23,6 +27,51 @@ export const OverviewPage = (props) => {
     //         setCurrentNodeCode('-')
     //     }
     // }, [])
+
+    useEffect(() => {
+        var temp = new Date()
+        var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
+        var timeInterval = []
+        for ( let i = 0; i <= 6; i++ ) {
+            let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
+            timeInterval.push(temp.getTime())
+        }
+
+        var hourInterval = []
+        for ( let i = 0; i <= 23; i++ ) {
+            let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
+            hourInterval.push(temp.getTime())
+        }
+        console.log(timeInterval)
+        
+        GraphService.getAllStockByTime( timeInterval.reverse(), userData.token)
+        .then(res_graph => {
+            console.log(res_graph)
+            var adjustedDate = []
+            res_graph.data.forEach( data => {
+                let dataDate = new Date(data.x)
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+            })
+            setDateGraphData(adjustedDate)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+            // GraphService.getNodeStockByTime( res.data.nodeCode, hourInterval, userData.token)
+            // .then(res_graph => {
+            //     console.log(typeof res_graph.data[0].y)
+            //     var adjustedDate = []
+            //     res_graph.data.forEach( data => {
+            //         let dataDate = new Date(data.x)
+            //         // dataDate.setHours(dataDate.getHours())
+            //         adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
+            //     })
+            //     setHourGraphData(adjustedDate)
+            // })
+        
+        
+    }, [])
 
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
@@ -55,11 +104,12 @@ export const OverviewPage = (props) => {
                 
                 <div className="chart-container">
                     <div className="chart-title-container">
-                        <h3 className="chart-title">Today's shipping</h3>
-                        <p>25 May 2022</p>
+                        <h3 className="chart-title">Last 7 days stocking</h3>
+                        <p>{new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
+                        .toLocaleDateString()} - {currentDate.toLocaleDateString()}</p>
                     </div>
                     <div className="body-chart-container">
-                        <FrequencyChart/>
+                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicator={"Stock"}/>}
                     </div>
                 </div>
                 <div className="chart-info-right">

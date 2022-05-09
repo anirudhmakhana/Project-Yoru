@@ -104,6 +104,41 @@ class GraphService {
         // return response
     }
 
+    async getAllStockByTime( timeInterval, token) {
+        
+        var stock = []
+        this.scannedData.forEach((v, i) => {
+            if ((v.status == "created" || v.status == "arrived" )){
+                stock.push(this.scannedData[i])
+            }
+        })
+        var shipped = []
+        this.scannedData.forEach((v, i) => {
+            if ((v.status == "shipping")){
+                shipped.push(this.scannedData[i])
+            }
+        })
+        var result = []
+        console.log(stock, shipped)
+        timeInterval.forEach( (t, index )=> {
+            let date = new Date(t)
+            console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+            let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
+            result.push(temp)
+        })
+        console.log(result)
+        return {data:result}
+        
+        // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
+        // .then( response => {
+
+        // })
+        // .catch((error) => {
+        //     throw error
+        // })
+        // return response
+    }
+
 }
 
 export default new GraphService()
