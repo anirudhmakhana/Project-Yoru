@@ -13,7 +13,8 @@ import { FrequencyChart } from "../../components/chart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
-
+import DatePicker from 'react-datepicker'
+import ShipmentService from "../../services/ShipmentService";
 // In this case, January = 0
 
 
@@ -26,6 +27,11 @@ export const OverviewPage = (props) => {
     const [currentDate, setCurrentDate] = useState( new Date() )
     const [graphTimeRange, setGraphTimeRange] = useState("day")
     const [xAxisLabel, setXAxisLabel] = useState("Hour")
+    const [completedCount, setCompletedCount] = useState(0)
+    const [stockCount, setStockCount] = useState(0)
+    const [incompleteCount, setIncompleteCount] = useState(0)
+    const [shippingCount, setShippingCount] = useState(0)
+
     // useState(() => {
     //     var node = eval('('+localStorage.getItem("currentNode")+')')
     //     if (node) {
@@ -49,6 +55,35 @@ export const OverviewPage = (props) => {
         setXAxisLabel(temp)
       };
     useEffect(() => {
+        ShipmentService.completedCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setCompletedCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.currentStockCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            console.log(res.data)
+            setStockCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.shippingCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setShippingCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.incompleteCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setIncompleteCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
         var temp = new Date()
         var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
         var timeInterval = []
@@ -150,10 +185,10 @@ export const OverviewPage = (props) => {
             </div> */}
             <Titlebar pageTitle="Overview" setExternalPopup={setButtonPopup}/>
             <div className="body-top">
-                <Card title="In transit" info="0"/>
-                <Card title="Shipped" info="0"/>
-                <Card title="Delayed" info="0"/>
-                <Card title="On hold" info="0"/>
+                <Card title="Incomplete" info={incompleteCount}/>
+                <Card title="Shipping" info={shippingCount}/>
+                <Card title="Completed" info={completedCount}/>
+                <Card title="In-Stock" info={stockCount}/>
             </div>
             <div className="body-main">
                 

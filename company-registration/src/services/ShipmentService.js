@@ -153,6 +153,63 @@ class ShipmentService {
         return {data:false}
     }
 
+    async completedCountByCompany( companyCode, token ) {
+        const response = await axios.get("http://localhost:4000/scan/status/completed/"+ companyCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
+    }
+
+
+    async createdCountByCompany( companyCode, token ) {
+        const response = await axios.get("http://localhost:4000/scan/status/created/"+ companyCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
+    }
+
+    async currentStockCountByCompany( companyCode, token ) {
+        const response = await axios.get("http://localhost:4000/shipment/stock/"+ companyCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
+    }
+
+    async shippingCountByCompany( companyCode, token ) {
+        const response = await axios.get("http://localhost:4000/shipment/status/shipping/"+ companyCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
+    }
+
+    async incompleteCountByCompany( companyCode, token ) {
+        const response = await axios.get("http://localhost:4000/shipment/incomplete/"+ companyCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
+    }
+
+
     // need walletPublicKey
     async createShipment( shipmentData , walletPublicKey, token ) {
         var bcData = shipmentData

@@ -85,14 +85,14 @@ class GraphService {
             }
         })
         var result = []
-        console.log(stock, shipped)
+        // console.log(stock, shipped)
         timeInterval.forEach( (t, index )=> {
             let date = new Date(t)
-            console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+            // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
             let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
             result.push(temp)
         })
-        console.log(result)
+        // console.log(result)
         return {data:result}
         
         // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
@@ -125,7 +125,7 @@ class GraphService {
         })
 
         timeInterval.forEach( t => {
-            console.log(temp_res[t])
+            // console.log(temp_res[t])
             result.push({x:t, y:temp_res[t]})
         })
         
@@ -133,7 +133,7 @@ class GraphService {
           
 
         
-        console.log(result)
+        // console.log(result)
         return {data:result}
         
         // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
