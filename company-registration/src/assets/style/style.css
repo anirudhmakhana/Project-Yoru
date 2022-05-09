@@ -146,8 +146,8 @@ label.inputLabel {
 
 .map {
     width:650px;
-     height:50vh;
-  }
+    height:50vh;
+}
   
 p.p-warning{
     color: #FF3333;
@@ -275,6 +275,34 @@ div.warning{
     border: 1px solid rgba(0, 0, 0, 0.125);
     display: flex;
     flex-direction:row;
+}
+
+.input-location-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.input-left-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 45%;
+    /* margin-left: auto; */
+    margin-right: auto;
+}
+
+.input-left-container .dropdown {
+    width: 100%;
+}
+
+.input-left-container .dropdown-toggle{
+    width: 100%;
+}
+
+.input-left-container .dropdown-menu.show {
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 
 

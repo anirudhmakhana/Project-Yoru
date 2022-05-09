@@ -11,8 +11,9 @@ import {
 	DirectionsRenderer,
 } from "@react-google-maps/api";
 
-import "../../assets/style/shipment.css";
+// import "../../assets/style/shipment.css";
 import "../../assets/style/style.css";
+
 import { Titlebar } from "../../components/titlebar";
 
 import NodeDataService from "../../services/NodeDataService";
@@ -182,110 +183,139 @@ export const CreateSHP = () => {
 	};
 	return (
 		<div className="content-main-container">
-			{/* <div className="content-title-container">
-				<h1>Create Shipment</h1>
-			</div> */}
 			<Titlebar pageTitle="Create Shipment"/>
 
-			<div className="detailed-main-container">
-				<div style={{ width: "100%", height: "50%" }}>
-				{ GoogleMap ? (originNode && nodeStock ? (
-					<GoogleMap
-						center={{ lat: originNode.lat, lng: originNode.lng }}
-						zoom={15}
-						mapContainerStyle={{ width: "100%", height: "100%" }}
-						options={options}
-						onLoad={(map) => setMapRef(map)}
-						onClick={() => {}}
-					>
-						<InfoWindow
-							position={{ lat: originNode.lat, lng: originNode.lng }}
-							onCloseClick={() => {}}
-						>
-							<div>
-								<h2>
-									<span>📦 {originNode.nodeCode}</span>
-								</h2>
-								<p style={{ color: "#000000" }}>
-									Company: {originNode.companyCode}
-								</p>
-								<p style={{ color: "#000000" }}>
-									Address: {originNode.address}
-								</p>
-								<p style={{ color: "#000000" }}>
-									Contact: {originNode.phoneNumber}
-								</p>
-								<p style={{ color: "#000000" }}>
-									Stocking: {nodeStock.length} shipment(s)
-								</p>
+			<div className="detailed-main-container" style={{overflowY: "auto"}}>
+				<form onSubmit={ () => {} }>
+                    
+
+					<div className="input-location-container">
+						<div className="input-left-container">
+							<div className="textInputContainerCol">
+								<label className="inputLabel" for="companyCode">Shipment Description</label>
+								<input type="text" id="companyCode" name="companyCode" placeholder="e.g. Fender Telecaster"></input>
 							</div>
-						</InfoWindow>
-						<Marker
-							key={`${originNode.lat}-${originNode.lng}`}
-							position={{ lat: originNode.lat, lng: originNode.lng }}
-							onClick={() => {
-								console.log(originNode.lat + "-" + originNode.lng);
-							}}
-							map={mapRef}
-						/>
-					</GoogleMap>
-				) : (
-					<GoogleMap
-						center={{ lat: 13.7563, lng: 100.5018 }}
-						zoom={15}
-						mapContainerStyle={{ width: "100%", height: "100%" }}
-						options={options}
-						onLoad={(map) => setMapRef(map)}
-						onClick={() => {}}
-					></GoogleMap>
-				)):null
-				}
+							<div className="textInputContainerCol">
+								<label className="inputLabel" for="username">Producer</label>
+								<input type="text" id="username" name="username" placeholder="e.g. Fender" onChange={ () => {} }></input>
+							</div>
+							<div className="textInputContainerCol">
+								<label className="inputLabel">Select Company</label>
+								<Dropdown onSelect={handleCompanyDropdown}>
+									{originCompany ? (
+										<Dropdown.Toggle variant="primary" id="dropdown-basic">
+											{originCompany}
+										</Dropdown.Toggle>
+									) : (
+										<Dropdown.Toggle variant="primary" id="dropdown-basic">
+											Company
+										</Dropdown.Toggle>
+									)}
+
+									<Dropdown.Menu>
+										{allCompanies.map((companyCode) => (
+											<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+										))}
+									</Dropdown.Menu>
+								</Dropdown>
+							</div>
+							<div className="textInputContainerCol">
+								<label className="inputLabel">Select Node</label>
+								<Dropdown onSelect={handleNodeDropdown}>
+								{originCompany ? (
+									originNode ? (
+										<Dropdown.Toggle variant="primary" id="dropdown-basic">
+											{originNode.nodeCode}
+										</Dropdown.Toggle>
+									) : (
+										<Dropdown.Toggle variant="primary" id="dropdown-basic">
+											Node
+										</Dropdown.Toggle>
+									)
+									) : (
+										<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>
+											Node
+										</Dropdown.Toggle>
+									)}
+
+								<Dropdown.Menu>
+									{companyNodes.map((node) => (
+										<Dropdown.Item eventKey={node.nodeCode}>
+											{node.nodeCode}
+										</Dropdown.Item>
+									))}
+								</Dropdown.Menu>
+								</Dropdown>
+							</div>
+							<div className="textInputContainerCol">
+								<label className="inputLabel">Scan RFID tag</label>
+								<input className="signinBtn" type="submit" value="Scan"></input>
+							</div>
+						</div>
+
+						<div style={{ width: "50%", height: "55vh" }}>
+							{ GoogleMap ? (originNode && nodeStock ? (
+									<GoogleMap
+										center={{ lat: originNode.lat, lng: originNode.lng }}
+										zoom={15}
+										mapContainerStyle={{ width: "100%", height: "100%" }}
+										options={options}
+										onLoad={(map) => setMapRef(map)}
+										onClick={() => {}}
+									>
+										<InfoWindow
+											position={{ lat: originNode.lat, lng: originNode.lng }}
+											onCloseClick={() => {}}
+										>
+											<div>
+												<h2>
+													<span>📦 {originNode.nodeCode}</span>
+												</h2>
+												<p style={{ color: "#000000" }}>
+													Company: {originNode.companyCode}
+												</p>
+												<p style={{ color: "#000000" }}>
+													Address: {originNode.address}
+												</p>
+												<p style={{ color: "#000000" }}>
+													Contact: {originNode.phoneNumber}
+												</p>
+												<p style={{ color: "#000000" }}>
+													Stocking: {nodeStock.length} shipment(s)
+												</p>
+											</div>
+										</InfoWindow>
+										<Marker
+											key={`${originNode.lat}-${originNode.lng}`}
+											position={{ lat: originNode.lat, lng: originNode.lng }}
+											onClick={() => {
+												console.log(originNode.lat + "-" + originNode.lng);
+											}}
+											map={mapRef}
+										/>
+									</GoogleMap>
+								) : (
+									<GoogleMap
+										center={{ lat: 13.7563, lng: 100.5018 }}
+										zoom={15}
+										mapContainerStyle={{ width: "100%", height: "100%" }}
+										options={options}
+										onLoad={(map) => setMapRef(map)}
+										onClick={() => {}}
+									></GoogleMap>
+								)):null
+							}
+						</div>
+					</div>
+                    
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
+                    </div>
+                </form>
 				
-				</div>
+				
 
-				<Dropdown onSelect={handleCompanyDropdown}>
-				{originCompany ? (
-					<Dropdown.Toggle variant="primary" id="dropdown-basic">
-						{originCompany}
-					</Dropdown.Toggle>
-				) : (
-					<Dropdown.Toggle variant="primary" id="dropdown-basic">
-						Company
-					</Dropdown.Toggle>
-				)}
-
-				<Dropdown.Menu>
-					{allCompanies.map((companyCode) => (
-						<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
-					))}
-				</Dropdown.Menu>
-				</Dropdown>
-
-				<Dropdown onSelect={handleNodeDropdown}>
-				{originCompany ? (
-					originNode ? (
-						<Dropdown.Toggle variant="primary" id="dropdown-basic">
-							{originNode.nodeCode}
-						</Dropdown.Toggle>
-					) : (
-						<Dropdown.Toggle variant="primary" id="dropdown-basic">
-							Node
-						</Dropdown.Toggle>
-					)
-				) : (
-					<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>
-						Node
-					</Dropdown.Toggle>
-				)}
-
-				<Dropdown.Menu>
-					{companyNodes.map((node) => (
-						<Dropdown.Item eventKey={node.nodeCode}>
-							{node.nodeCode}
-						</Dropdown.Item>
-					))}
-				</Dropdown.Menu>
-				</Dropdown>
+				
 			</div>
 			
 		</div>

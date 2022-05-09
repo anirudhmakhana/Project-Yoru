@@ -79,7 +79,7 @@
   }
 
   .dropdown-menu {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .map-container {
