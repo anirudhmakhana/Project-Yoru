@@ -71,6 +71,30 @@ class StringValidator {
             return "Passwords are not matching!"
         } 
     }
+
+    validateNodeCode = (nodeCode) => {
+        if ( nodeCode.length < 3 || nodeCode.length > 10) {
+            return "Node code should be between 3 to 10 characters long."
+        }
+        if (!String(nodeCode).match(/^[a-zA-Z0-9\- ]+$/ )) {
+            return "Node code can only contain english alphabeth, number, white-space and hyphen('-')."
+        }
+    }
+
+    validateAddress = (address) => {
+        if ( address.length < 1) {
+            return "Please enter node address and zipcode."
+        }
+    }
+
+    validatePhoneNumber = (phoneNumber) => {
+        if ( phoneNumber.length < 1) {
+            return "Please enter node contact number."
+        }
+        if (!String(phoneNumber).match(/^[0-9+]+$/ )) {
+            return "Phone number can only contain number and '+' sign."
+        }
+    }
 }
 
 export default new StringValidator()

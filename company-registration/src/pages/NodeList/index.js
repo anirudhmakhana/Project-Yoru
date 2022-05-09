@@ -6,6 +6,7 @@ import "../../assets/style/style.css"
 
 import NodeDataService from '../../services/NodeDataService';
 import { NodeTable } from '../../components/node_table';
+import { AddNodePopup } from '../../components/add_node_popup';
 
 export const NodeListPage = () => {
     const [allNodes, setAllNodes] = useState(null)
@@ -13,6 +14,7 @@ export const NodeListPage = () => {
     const [pageNumber, setPageNumber] = useState(1)
     const [showAddNode, setShowAddNode] = useState(false)
     const [pageSize, setPageSize] = useState(20)
+    
     useEffect(() => {
         NodeDataService.getAllNode(userData.token)
         .then( res => setAllNodes(res.data))
@@ -21,7 +23,7 @@ export const NodeListPage = () => {
             console.log(err)
         })
     }
-    ,[] );
+    ,[showAddNode] );
 
     const dataTable = () => {
         return allNodes.slice((pageNumber-1)*pageSize, (pageNumber-1)*pageSize+pageSize).map((res, i) => {
@@ -68,7 +70,7 @@ export const NodeListPage = () => {
                 
             </div>
             : null}
-            
+            {showAddNode && <AddNodePopup setOpenPopup={setShowAddNode}/>}
         </div>
     );
 }

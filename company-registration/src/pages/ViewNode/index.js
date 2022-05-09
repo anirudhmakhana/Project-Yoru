@@ -130,29 +130,10 @@ export const ViewNodePage = () => {
                         <h3 className="content-header">Node : {node.nodeCode}</h3>
                     </div>
                     
-                    <div className="node-info">
-                        <div className="body-main">
-                        <p className="mt-5"> {node.nodeCode} </p>
-                        <p>{node.address} </p>
-                        <p >Company: {node.companyCode}</p>
-                        <p >Contact: {node.phoneNumber}</p>
-                        <p >Status: {node.status}</p>
-                        <p className="mb-5">In-stock shipment: {stock.length}</p>
-                        </div>
-                        { dateGraphData && 
-                        <div style={{width:'30%', height:'100%'}}>
-                            <FrequencyChart chartDataPrim={dateGraphData} indicator={"Stock"}/>
-                        </div>
-                        }
-                        { hourGraphData && 
-                        <div style={{width:'30%', height:'100%'}}>
-                            <FrequencyChart chartDataPrim={hourGraphData} indicator={"Stock"}/>
-                        </div>
-                        }
-                    </div>
+                    
                     
 
-                    <div style={{width:'100%', height:'50%'}}>
+                    <div style={{width:'100%', height:'45%'}}>
                         <GoogleMap
                             center={{ lat: node.lat, lng: node.lng }}
                             zoom={15}
@@ -189,6 +170,26 @@ export const ViewNodePage = () => {
                                 map={mapRef}
                             />
                         </GoogleMap>
+                    </div>
+                    <div className="node-info">
+                        <div className="body-main">
+                        <p className="mt-5"> {node.nodeCode} </p>
+                        <p>{node.address} </p>
+                        <p >Company: {node.companyCode}</p>
+                        <p >Contact: {node.phoneNumber}</p>
+                        <p >Status: {node.status}</p>
+                        <p className="mb-5">In-stock shipment: {stock.length}</p>
+                        </div>
+                        { dateGraphData && 
+                        <div style={{width:'30%', height:'100%'}}>
+                            <FrequencyChart chartDataPrim={dateGraphData} indicatorX={"Date"} indicatorY={"Stock"}/>
+                        </div>
+                        }
+                        { hourGraphData && 
+                        <div style={{width:'30%', height:'100%'}}>
+                            <FrequencyChart chartDataPrim={hourGraphData} indicatorX={"Hour"} indicatorY={"Stock"}/>
+                        </div>
+                        }
                     </div>
                 </div>
                 

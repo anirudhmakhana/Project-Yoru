@@ -38,6 +38,15 @@ class NodeDataService {
         }
     }
 
+    async addNode( newData, token ) {
+        const response = await axios.post("http://localhost:4000/node/", newData, 
+        {headers:{"x-access-token":token}})
+            .catch( error => {
+                throw error
+            }) 
+        return response
+    }
+
     async getAllNode(token) { 
         const response = await axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
         .catch((error) => {
