@@ -230,7 +230,7 @@ export const CreateSHP = () => {
 		<div className="content-main-container">
 			<Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 
-			<div className="detailed-main-container" style={{overflowY: "auto"}}>
+			<div className="detailed-main-container" style={{overflowY: "auto", height: "fit-content"}}>
 				<form onSubmit={ () => {} }>
                     
 
@@ -310,7 +310,7 @@ export const CreateSHP = () => {
 							</div>
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Scan RFID tag</label>
-								<input className="signinBtn" type="submit" value="Scan"></input>
+								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}}></input>
 							</div>
 						</div>
 
@@ -397,13 +397,7 @@ export const CreateSHP = () => {
                         	<input className="cancelBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true} ></input>
                     	</div>
 					)}
-                    
-                    
                 </form>
-				
-				
-
-				
 			</div>
 			{ nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}

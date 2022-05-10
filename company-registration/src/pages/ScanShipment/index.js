@@ -45,7 +45,7 @@ export const ScanSHP = () => {
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [showDestInfo, setShowDestInfo] = useState(true)
 	const navigate = useNavigate();
-    
+
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -189,11 +189,11 @@ export const ScanSHP = () => {
     return (
         <div className="content-main-container">
             <Titlebar pageTitle="Update Shipment"/>
-           <div className="detailed-main-container">
+           <div className="detailed-main-container" style={{height: "fit-content"}}>
            <form onSubmit={ () => {} }>
                     
 
-					<div className="input-location-container">
+					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container">
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
 							
@@ -258,7 +258,7 @@ export const ScanSHP = () => {
 							</div>
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Scan RFID tag</label>
-								<input className="signinBtn" type="submit" value="Scan"></input>
+								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}}></input>
 							</div>
 						</div>
 
@@ -342,7 +342,7 @@ export const ScanSHP = () => {
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<input className="cancelBtn" type="submit" value="Update Shipment" style={{width: "20%"}} disabled={true} ></input>
+                        	<input className="signinBtn" type="submit" value="Update Shipment" style={{width: "20%"}} disabled={true} ></input>
                     	</div>
 					)}
                 </form>
