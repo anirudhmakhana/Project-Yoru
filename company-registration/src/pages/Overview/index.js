@@ -55,7 +55,7 @@ export const OverviewPage = (props) => {
         setGraphTimeRange(e)
     };
 
-    
+
 
     
     useEffect(() => {
@@ -92,6 +92,7 @@ export const OverviewPage = (props) => {
         var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
         var timeInterval = []
         var timeRange = null
+
         if (graphTimeRange == "day") {
             timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 1).getTime() - 
                         new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0).getTime()
@@ -226,8 +227,10 @@ export const OverviewPage = (props) => {
                                 <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-                        <p>{new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
-                        .toLocaleDateString()} - {currentDate.toLocaleDateString()}</p>
+                        <p>
+                            {new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
+                            .toLocaleDateString()} - {currentDate.toLocaleDateString()}
+                        </p>
                     </div>
                     <div className="body-chart-container">
                         { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel[graphTimeRange]} indicatorY={yAxisLabel[graphType]}/>}
