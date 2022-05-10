@@ -79,8 +79,8 @@ export function StaffListPage(props) {
                 </thead>
 
                 {userData ? (dataTable()) : (<></>)}
-                {showAddStaff && <AddStaffPopup setOpenPopup={setShowAddStaff} updateTable={updateData}/>}
-                {showEditComp && <EditCompanyPopup setOpenPopup={setShowEditComp}/>}
+                {showAddStaff && <AddStaffPopup setOpenPopup={setShowAddStaff} updateTable={updateData} companyCode={userData.companyCode}/>}
+                {showEditComp && <EditCompanyPopup setOpenPopup={setShowEditComp} companyCode={userData.companyCode}/>}
             </Table>
             </div>
         </div>

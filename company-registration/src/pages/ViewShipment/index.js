@@ -159,7 +159,7 @@ export const ViewShipmentPage = () => {
                     </div>
                     <div className="infoContainer">
                             {/* <p>{shipment.description}</p> */}
-                            <p>Status: {shipment.status}</p>
+                            <p>Status: {shipment.status.toUpperCase()}</p>
                             <p>Origin: {shipment.originNode}</p>
                             <p>Current Location: {shipment.currentNode}</p>
                             <p>Destination: {shipment.destinationNode}</p>
@@ -191,7 +191,8 @@ export const ViewShipmentPage = () => {
                                     
                                 {shipment.status == "shipping" 
                                 ? (<span>🚚 {shipment.uid}</span>) :
-                                (<span>📦 {shipment.uid}</span>)}
+                                ( shipment.status == "completed" ?
+                                <span>✅ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
                                     
                                     
                                     </h2>

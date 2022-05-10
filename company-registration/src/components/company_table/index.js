@@ -11,7 +11,12 @@ export class CompanyTable extends Component {
         super(props)
         console.log(this.props)
         this.state = {
-            users: []
+            users: [],
+            setEditCompPopup: this.props.setEditCompPopup,
+            setCompanyCode: this.props.setCompanyCode,
+            setViewStaffPopup: this.props.setViewStaffPopup,
+            setViewStaffUsername: this.props.setViewStaffUsername,
+            setAddStaffPopup: this.props.setAddStaffPopup
         }
         this.updateTable()
               
@@ -54,6 +59,21 @@ export class CompanyTable extends Component {
             console.log(error)
         })
     }
+    handleEditCompany = () => {
+        this.state.setCompanyCode(this.props.obj.companyCode)
+        this.state.setViewStaffPopup(false)
+        this.state.setAddStaffPopup(false)
+        this.state.setEditCompPopup(true)
+    }
+
+    handleAddStaff = () => {
+        console.log(this.state)
+        this.state.setCompanyCode(this.props.obj.companyCode)
+        this.state.setViewStaffPopup(false)
+        this.state.setEditCompPopup(false)
+        this.state.setAddStaffPopup(true)
+
+    }
 
     render() {
         return (
@@ -63,13 +83,9 @@ export class CompanyTable extends Component {
                 <td>{this.props.obj.companyName}</td>
                 <td>
                     
-                    <Link to={'edit-company/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="dark">EDIT</Button>
-                    </Link>
+                    <Button size="sm" variant="dark" onClick={this.handleEditCompany}>EDIT</Button>
                     &nbsp;&nbsp;
-                    <Link to={'add-staff/'+this.props.obj.companyCode}>
-                        <Button size="sm" variant="primary">ADD STAFF</Button>
-                    </Link>
+                        <Button size="sm" variant="primary" onClick={this.handleAddStaff}>ADD STAFF</Button>
                     &nbsp;&nbsp;
                     <Button size="sm" onClick={this.deleteCompany} variant="outline-danger"> DELETE</Button>
                 </td>
@@ -80,9 +96,12 @@ export class CompanyTable extends Component {
                                 <td>{item.fullName}</td>
                                 <td>
                                     &nbsp;&nbsp;
-                                    <Link to={'view-staff/'+item.username}>
-                                    <Button size="sm" variant="dark">VIEW</Button>
-                                    </Link>
+                                    <Button size="sm" variant="dark" onClick={() =>{
+                                        this.state.setViewStaffUsername(item.username)
+                                        this.state.setEditCompPopup(false)
+                                        this.state.setAddStaffPopup(false)
+                                        this.state.setViewStaffPopup(true)
+                                    }}>VIEW</Button>
                                     &nbsp;&nbsp;
                                     <Button size="sm" onClick={() => {
                                         this.deleteStaff(item)

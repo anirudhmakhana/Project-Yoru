@@ -8,9 +8,9 @@ import { Alert } from 'react-bootstrap'
 import CompanyService from '../../services/CompanyService'
 import StringValidator from '../../utils/StringValidator'
 
-export function EditCompanyPopup({setOpenPopup}) {
+export function EditCompanyPopup({setOpenPopup, companyCode, updateTable}) {
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const { companyCode } = useParams()
+    // const { companyCode } = useParams()
     // const [companyCode, setCompanyCode] = useParams().companyCode
     const [companyName, setCompanyName] = useState('')
     const [publicKey, setPublicKey] = useState('')
@@ -72,7 +72,11 @@ export function EditCompanyPopup({setOpenPopup}) {
             CompanyService.updateCompany(companyCode, companyObject, userData.token)
             .then(res => {
                 setWarning(null)
+                if ( updateTable) {
+                    updateTable()
+                }
                 setOpenPopup(false)
+
                 console.log(res.data)})
             .catch( error => {
                 console.log(error)

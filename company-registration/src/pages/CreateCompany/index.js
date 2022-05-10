@@ -85,11 +85,14 @@ export function CreateCompanyPage(props) {
     }
 
     return (
-        <div className="loginBackground">
-            <div className="startPageContainer">
+        <div className="content-main-container">
+            <div className='content-title-container'>
+                <h2>Create Company</h2>
+
+            </div>
+            <div className="detailed-main-container" style={{height: "fit-content"}}>
             
 
-                <h2>Create Company</h2>
                 <p>Enter new company information below.</p>
                 { warning &&
                     <div className="alert alert-danger">

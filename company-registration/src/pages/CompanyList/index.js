@@ -6,12 +6,21 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import { CreateCompanyPage } from '../CreateCompany'
 import { RegisterAdminPage } from '../RegisterAdmin'
+import { EditCompanyPopup } from '../../components/edit_company_popup';
+
 import "../../assets/style/companyList.css";
+import { ViewStaffPopup } from '../../components/view_staff_popup';
+import { AddStaffPopup } from '../../components/add_staff_popup';
 
 export function CompanyListPage(props) {
 
     const [companies, setCompanies] = useState([])
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [showEditComp, setShowEditComp] = useState(false);
+    const [showViewStaff, setShowViewStaff] = useState(false);
+    const [showAddStaff, setShowAddStaff] = useState(false);
+    const [viewStaffUsername, setViewStaffUsername] = useState(null)
+    const [companyCode, setCompanyCode] = useState(null)
     useEffect(() => {
         // setUserData(localStorage.getItem("userData"))
         console.log(userData)
@@ -35,13 +44,15 @@ export function CompanyListPage(props) {
 
     const dataTable = () => {
         return companies.map((res, i) => {
-            return <CompanyTable userData={userData} obj={res} key={i} refresh={updateData}/>
+            return <CompanyTable userData={userData} obj={res} key={i} refresh={updateData}
+            setEditCompPopup={setShowEditComp} setViewStaffPopup={setShowViewStaff} setViewStaffUsername={setViewStaffUsername} 
+             setCompanyCode={setCompanyCode} setAddStaffPopup={setShowAddStaff}/>
         })
     }
 
     return (
-        <div id="shipment">
-            <div className="title-container">
+        <div className="content-main-container">
+            <div className="content-title-container">
                 <h1  className="adminPageHeader">Companies</h1>
             </div>
             
@@ -59,6 +70,12 @@ export function CompanyListPage(props) {
                     {userData ? (dataTable()) : (<></>)}
 
             </Table>
+            {showEditComp && companyCode && <EditCompanyPopup setOpenPopup={setShowEditComp} companyCode={companyCode} updateTable={updateData}/>}
+            {showViewStaff && viewStaffUsername && <ViewStaffPopup setOpenPopup={setShowViewStaff} username={viewStaffUsername}/>}
+            {showAddStaff && companyCode && <AddStaffPopup setOpenPopup={setShowAddStaff} companyCode={companyCode} updateTable={() => {
+                window.location.reload(false);
+            }}/>}
+
             {/* <Routes>
                 <Route path="edit-company" element={<RegisterAdmin userData={props.userData}/>} />
                 <Route path="add-staff" element={<CreateCompany userData={props.userData}/>}/>

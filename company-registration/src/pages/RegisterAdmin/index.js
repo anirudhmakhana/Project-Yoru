@@ -53,11 +53,11 @@ export const RegisterAdminPage = (props) => {
     }
 
     return (
-        <div className="loginBackground">
-            <div className="startPageContainer">
-            
-
-                <h2>Create Account</h2>
+        <div className="content-main-container">
+            <div className='content-title-container'>
+                <h2>Create Admin Account</h2>
+            </div>
+            <div className="detailed-main-container" style={{height: "fit-content"}}>
                 <p>Enter new username and password below</p>
                 <form onSubmit={handleSubmit}>
                     <div className="textInputContainerCol">

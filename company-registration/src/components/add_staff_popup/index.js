@@ -10,9 +10,9 @@ import StaffAccountService from "../../services/StaffAccountService";
 import StringValidator from "../../utils/StringValidator";
 import { Button } from "react-bootstrap";
 
-export const AddStaffPopup = ({setOpenPopup, updateTable}) => {
+export const AddStaffPopup = ({setOpenPopup, updateTable, companyCode}) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const { companyCode } = useParams()
+    // const { companyCode } = useParams()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirm, setConfirm] = useState('')
@@ -91,11 +91,12 @@ export const AddStaffPopup = ({setOpenPopup, updateTable}) => {
                 setConfirm("")
                 setContact("")
                 setFullName("")
+                console.log(updateTable)
                 updateTable()
                 setOpenPopup(false)
             })
             .catch( error => {
-                console.log(error.response.status)
+
                 if (error.response.status == 403) {
                     setWarning("Username is already taken!")
                     console.log(error)

@@ -12,7 +12,6 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 
 import { useState } from "react";
 
-import TempViewShipment from "../view-shipment.component"
 import { CompanyListPage } from "../../pages/CompanyList";
 import { CreateCompanyPage } from "../../pages/CreateCompany"
 import { RegisterAdminPage } from "../../pages/RegisterAdmin"

@@ -27,7 +27,6 @@ import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddr
 
 import { useState } from "react";
 
-import TempViewShipment from "../view-shipment.component"
 import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
 import { ScanSHP } from "../../pages/ScanShipment";
