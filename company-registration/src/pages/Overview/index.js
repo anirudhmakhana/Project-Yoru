@@ -21,7 +21,7 @@ import { EditProfilePopup } from "../../components/edit_profile_popup";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const [currentNodeCode, setCurrentNodeCode] = useState(null)
+    // const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 
@@ -168,8 +168,11 @@ export const OverviewPage = (props) => {
 
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
-        setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
+        // setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
+        window.location.reload(false);
+
         setNodePopup(false)
+        
 
     }
     
@@ -245,7 +248,7 @@ export const OverviewPage = (props) => {
                 </div>
             </div>
             { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
-            { editProfPopup && <EditProfilePopup setOpenPopup={setNodePopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
+            { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
 
         </div>
     );

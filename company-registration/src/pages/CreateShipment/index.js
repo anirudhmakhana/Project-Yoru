@@ -15,6 +15,8 @@ import {
 import "../../assets/style/style.css";
 
 import { Titlebar } from "../../components/titlebar";
+import { NodeSelectPopup } from "../../components/node_select_popup";
+import { EditProfilePopup } from "../../components/edit_profile_popup";
 
 import NodeDataService from "../../services/NodeDataService";
 import ShipmentService from "../../services/ShipmentService";
@@ -27,16 +29,20 @@ export const CreateSHP = () => {
 	const [userData, setUserData] = useState(
 		eval("(" + localStorage.getItem("userData") + ")")
 	);
+	const [nodePopup, setNodePopup] = useState(false);
+    const [editProfPopup, setEditProfPopup] = useState(false);
 	const [shipmentId, setShipmentId] = useState("");
 	const [description, setDescription] = useState("");
-	const [originNode, setOriginNode] = useState(null);
+	const [destinationNode, setDestinationNode] = useState(null);
 	const [status, setStatus] = useState("created");
-	const [currentNode, setCurrentNode] = useState("");
-	const [destinationNode, setDestination] = useState(null);
+	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
+	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
+	// const [destinationNode, setDestination] = useState(null);
 	const [allCompanies, setAllCompanies] = useState([]);
 	const [companyNodes, setCompanyNodes] = useState([]);
-	const [originCompany, setOriginCompany] = useState(null);
-
+	const [destinationCompany, setDestinationCompany] = useState(null);
+    const [directionsResponse, setDirectionsResponse] = useState(null)
+	const [showDestInfo, setShowDestInfo] = useState(true)
 	const navigate = useNavigate();
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
@@ -55,33 +61,19 @@ export const CreateSHP = () => {
 		fullscreenControl: false,
 	};
 
-	async function getDirection(path) {
+	async function getDirection() {
 		const directionsService = new google.maps.DirectionsService();
 
-		var checkpoints = [];
-		for (let i = 0; i < path.length; i++) {
-			let res = await NodeDataService.getCoordinateByNode(
-				path[i].scannedAt,
-				userData.token
-			);
-			checkpoints.push(res.data);
-		}
-		console.log(checkpoints);
-		if (checkpoints.length >= 2) {
-			var results = [];
-			for (let i = 0; i < checkpoints.length - 1; i++) {
-				results.push(
-					await directionsService.route({
-						origin: checkpoints[i],
-						destination: checkpoints[i + 1],
-						// eslint-disable-next-line no-undef
-						travelMode: google.maps.TravelMode.DRIVING,
-					})
-				);
-			}
-			console.log(results);
-			return results;
-		}
+		var results = await directionsService.route({
+					origin: {lat:currentNode.lat, lng:currentNode.lng},
+					destination:{lat:destinationNode.lat, lng:destinationNode.lng},
+					// eslint-disable-next-line no-undef
+					travelMode: google.maps.TravelMode.DRIVING,
+		})
+			
+		console.log(results);
+		return results;
+		
 	}
 
 	useEffect(() => {
@@ -96,18 +88,19 @@ export const CreateSHP = () => {
 	}, []);
 
 	useEffect(() => {
-		if (originCompany) {
-			NodeDataService.getActiveNodeByCompany(originCompany, userData.token)
+		if (destinationCompany) {
+			NodeDataService.getActiveNodeByCompany(destinationCompany, userData.token)
 				.then((result) => {
 					console.log(result.data);
 					setCompanyNodes(result.data);
 				})
 				.catch((err_company) => {
 					setShipment(null);
+					setCompanyNodes([])
 					console.log(err_company);
 				});
 		}
-	}, [originCompany]);
+	}, [destinationCompany]);
 
 	// useEffect(() => {
 
@@ -151,12 +144,25 @@ export const CreateSHP = () => {
 
 	// }
 	// ,[originNode] );
+	useEffect( () => {
+		if ( currentNode && destinationNode && isLoaded) {
+			getDirection()
+			.then(
+				results => 
+				setDirectionsResponse(results)
+
+			)
+	
+		}
+	
+    }
+    ,[isLoaded, currentNode, destinationNode] );
 
 	const handleCompanyDropdown = (e) => {
 		console.log(e);
-		setOriginCompany(e);
-		console.log(originNode);
-		setOriginNode(null);
+		setDestinationCompany(e);
+		console.log(destinationNode);
+		setDestinationNode(null);
 		setNodeStock(null);
 	};
 
@@ -164,12 +170,14 @@ export const CreateSHP = () => {
 		console.log(e);
 		NodeDataService.getNodeByCode(e, userData.token)
 			.then((result) => {
-				setOriginNode(result.data);
+				setDestinationNode(result.data);
+				setShowDestInfo(true)
 				console.log(result.data);
 				ShipmentService.getStockByNode(result.data.nodeCode, userData.token)
 					.then((res_stock) => {
 						console.log(res_stock.data);
 						setNodeStock(res_stock.data);
+
 					})
 					.catch((err_stock) => {
 						setNodeStock(null);
@@ -177,13 +185,50 @@ export const CreateSHP = () => {
 					});
 			})
 			.catch((err) => {
-				setOriginNode(null);
+				setDestinationNode(null);
 				console.log(err);
 			});
 	};
+
+	function handleNodePopupConfirm(newCurrentNode) {
+        localStorage.setItem("currentNode", JSON.stringify(newCurrentNode))
+		// console.log(currentNode, newCurrentNode)
+
+		if (newCurrentNode.nodeCode == destinationNode.nodeCode) {
+			setDestinationNode(null)
+			setDirectionsResponse(null)
+			setShowDestInfo(false)
+		}
+		setCurrentNode(newCurrentNode)
+        setNodePopup(false)
+
+    }
+    
+    function handleNodePopupCancel() {
+        console.log(localStorage)
+        setNodePopup(false)
+    }
+
+    function handleEditProfConfirm(newProfile) {
+        localStorage.setItem("userData", JSON.stringify(newProfile))
+        setUserData(eval('('+localStorage.getItem("userData")+')'))
+        setEditProfPopup(false)
+
+    }
+    
+    function handleEditProfCancel() {
+        console.log(localStorage)
+        setEditProfPopup(false)
+    }
+
+	const handleChangeDescription = (e) => {
+        setDescription( e.target.value )
+     
+	}
+
 	return (
 		<div className="content-main-container">
-			<Titlebar pageTitle="Create Shipment"/>
+            <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup}/>
 
 			<div className="detailed-main-container" style={{overflowY: "auto"}}>
 				<form onSubmit={ () => {} }>
@@ -191,20 +236,22 @@ export const CreateSHP = () => {
 
 					<div className="input-location-container">
 						<div className="input-left-container">
+							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
 							<div className="textInputContainerCol">
-								<label className="inputLabel" for="companyCode">Shipment Description</label>
-								<input type="text" id="companyCode" name="companyCode" placeholder="e.g. Fender Telecaster"></input>
+								<label className="inputLabel" for="desciption">Shipment Description</label>
+								<input type="text" id="desciption" name="desciption" placeholder="e.g. Fender Telecaster" value={description}
+								onChange></input>
 							</div>
 							<div className="textInputContainerCol">
-								<label className="inputLabel" for="username">Producer</label>
-								<input type="text" id="username" name="username" placeholder="e.g. Fender" onChange={ () => {} }></input>
+								<label className="inputLabel" for="producer">Producer</label>
+								<input type="text" id="producer" name="producer" placeholder="e.g. Fender" value={producer} disabled></input>
 							</div>
 							<div className="textInputContainerCol">
-								<label className="inputLabel">Select Company</label>
+								<label className="inputLabel">Select Destination Company</label>
 								<Dropdown onSelect={handleCompanyDropdown}>
-									{originCompany ? (
+									{destinationCompany ? (
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											{originCompany}
+											{destinationCompany}
 										</Dropdown.Toggle>
 									) : (
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -220,14 +267,19 @@ export const CreateSHP = () => {
 								</Dropdown>
 							</div>
 							<div className="textInputContainerCol">
-								<label className="inputLabel">Select Node</label>
+								<label className="inputLabel">Select Destination Node</label>
 								<Dropdown onSelect={handleNodeDropdown}>
-								{originCompany ? (
-									originNode ? (
+								{destinationCompany  ? (
+									destinationNode ? (
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											{originNode.nodeCode}
+											{destinationNode.nodeCode}
 										</Dropdown.Toggle>
 									) : (
+										companyNodes.length < 1 ? 
+										<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>
+											No existed node
+										</Dropdown.Toggle>
+										:
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
 											Node
 										</Dropdown.Toggle>
@@ -239,11 +291,17 @@ export const CreateSHP = () => {
 									)}
 
 								<Dropdown.Menu>
-									{companyNodes.map((node) => (
-										<Dropdown.Item eventKey={node.nodeCode}>
+									{companyNodes.map((node) => {
+										if (node.companyCode != currentNode.companyCode ||
+											node.nodeCode != currentNode.nodeCode) {
+											return <Dropdown.Item eventKey={node.nodeCode}>
 											{node.nodeCode}
-										</Dropdown.Item>
-									))}
+											</Dropdown.Item>
+										}
+										
+									}
+										
+									)}
 								</Dropdown.Menu>
 								</Dropdown>
 							</div>
@@ -254,45 +312,64 @@ export const CreateSHP = () => {
 						</div>
 
 						<div style={{ width: "50%", height: "55vh" }}>
-							{ GoogleMap ? (originNode && nodeStock ? (
+							{ GoogleMap ? (currentNode ? (
 									<GoogleMap
-										center={{ lat: originNode.lat, lng: originNode.lng }}
+										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
 										mapContainerStyle={{ width: "100%", height: "100%" }}
 										options={options}
 										onLoad={(map) => setMapRef(map)}
 										onClick={() => {}}
 									>
-										<InfoWindow
-											position={{ lat: originNode.lat, lng: originNode.lng }}
-											onCloseClick={() => {}}
-										>
+										{destinationNode && showDestInfo && nodeStock && <InfoWindow
+											position={{ lat: destinationNode.lat, lng: destinationNode.lng }}
+											onCloseClick={() => {
+												setShowDestInfo(false)
+											}}>
 											<div>
 												<h2>
-													<span>📦 {originNode.nodeCode}</span>
+													<span>🏣  {destinationNode.nodeCode}</span>
 												</h2>
 												<p style={{ color: "#000000" }}>
-													Company: {originNode.companyCode}
+													Company: {destinationNode.companyCode}
 												</p>
 												<p style={{ color: "#000000" }}>
-													Address: {originNode.address}
+													Address: {destinationNode.address}
 												</p>
 												<p style={{ color: "#000000" }}>
-													Contact: {originNode.phoneNumber}
+													Contact: {destinationNode.phoneNumber}
 												</p>
 												<p style={{ color: "#000000" }}>
 													Stocking: {nodeStock.length} shipment(s)
 												</p>
 											</div>
-										</InfoWindow>
+										</InfoWindow>}
+										
+										{destinationNode && 
 										<Marker
-											key={`${originNode.lat}-${originNode.lng}`}
-											position={{ lat: originNode.lat, lng: originNode.lng }}
+											key={`${destinationNode.lat}-${destinationNode.lng}`}
+											position={{ lat: destinationNode.lat, lng: destinationNode.lng }}
 											onClick={() => {
-												console.log(originNode.lat + "-" + originNode.lng);
+												
+												console.log(destinationNode.lat + "-" + destinationNode.lng);
 											}}
 											map={mapRef}
 										/>
+										}
+										{currentNode && 
+										<Marker
+											key={`${currentNode.lat}-${currentNode.lng}`}
+											position={{ lat: currentNode.lat, lng: currentNode.lng }}
+											onClick={() => {
+												
+												console.log(currentNode.lat + "-" + currentNode.lng);
+											}}
+											map={mapRef}
+										/>
+										}
+										{directionsResponse ? (
+											<DirectionsRenderer directions={directionsResponse} />
+										): null}
 									</GoogleMap>
 								) : (
 									<GoogleMap
@@ -307,91 +384,29 @@ export const CreateSHP = () => {
 							}
 						</div>
 					</div>
-                    
-                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+
+					{ currentNode ? (
+						<div style={{display: "flex", justifyContent: "flex-end"}}>
                         <input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
                     </div>
+					) : (
+						<div style={{display: "flex", justifyContent: "flex-end"}}>
+
+                        	<input className="cancelBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true} ></input>
+                    	</div>
+					)}
+                    
+                    
                 </form>
 				
 				
 
 				
 			</div>
-			
+			{ nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
+            { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
 		</div>
 	);
 
-	// if ( shipment && currentNode ) {
 
-	//     return (
-	//         <div id="shipment">
-	//             <div className="title-container">
-	//                 <Button type="button" onClick={() => {
-	//                     navigate(-1)
-	//                 }}className="btn btn-dark"> Back</Button>
-	//             </div>
-
-	//             <div className="title-container">
-	//                 <h1>Shipment : {shipment.uid}</h1>
-	//             </div>
-	//             <div style={{width:'82vw', height:'50vh'}}>
-	//               <GoogleMap
-	//                 center={{ lat: currentNode.lat, lng: currentNode.lng }}
-	//                 zoom={15}
-	//                 mapContainerStyle={{ width: '100%', height: '100%' }}
-	//                 options={options}
-	//                 onLoad={map => setMapRef(map)}
-	//                 onClick={()=>{}}
-	//               >
-	//               {directionsResponse ? (
-	//                 directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
-	//               ): null}
-	//                <InfoWindow
-	//                 position={{ lat: currentNode.lat, lng: currentNode.lng }}
-	//                 onCloseClick={() => {
-	//                 }}
-	//                 >
-	//                 <div>
-	//                     <h2>
-
-	//                 {shipment.status == "shipping"
-	//                 ? (<span>🚚 {shipment.uid}</span>) :
-	//                  (<span>📦 {shipment.uid}</span>)}
-
-	//                     </h2>
-	//                     <p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
-	//                     <p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
-	//                 </div>
-	//                 </InfoWindow>
-	//                 {/*
-	//                 <Marker
-	//                     key={`${shipment.lat}-${shipment.lng}`}
-	//                     position={{lat:shipment.lat, lng:shipment.lng}}
-	//                     onClick={() => {
-	//                     console.log(shipment.lat+"-"+ shipment.lgn)
-	//                     }}
-	//                     map={mapRef}
-	//                 /> */}
-	//               </GoogleMap>
-	//             </div>
-	//             <div className="body-main">
-	//                 <p className="mt-5"> {shipment.uid} </p>
-	//                 <p>{shipment.description} </p>
-	//                 <p className="mb-5">Origin: {shipment.originNode}</p>
-	//                 <p className="mb-5">Current: {shipment.currentNode}</p>
-	//                 <p className="mb-5">Destination: {shipment.destinationNode}</p>
-	//                 <p className="mb-5">Status: {shipment.status}</p>
-	//             </div>
-
-	//         </div>
-	//     );
-	// } else {
-	//     return (<div id="shipment">
-	//             <div className="title-container">
-	//                 <h1>Node</h1>
-	//                 <h2>Cannot find any Node</h2>
-	//             </div>
-
-	//         </div>)
-	// }
 };
