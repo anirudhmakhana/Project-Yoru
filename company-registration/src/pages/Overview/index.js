@@ -15,15 +15,18 @@ import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
 import DatePicker from 'react-datepicker'
 import ShipmentService from "../../services/ShipmentService";
+import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
 
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
-    const [buttonPopup, setButtonPopup] = useState(false);
+    const [nodePopup, setNodePopup] = useState(false);
+    const [editProfPopup, setEditProfPopup] = useState(false);
+
     const [dateGraphData, setDateGraphData] = useState(null)
-    const [hourGraphData, setHourGraphData] = useState(null)
+    // const [hourGraphData, setHourGraphData] = useState(null)
     const [currentDate, setCurrentDate] = useState( new Date() )
     const [graphTimeRange, setGraphTimeRange] = useState("day")
     const [xAxisLabel, setXAxisLabel] = useState("Hour")
@@ -166,13 +169,25 @@ export const OverviewPage = (props) => {
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
         setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
-        setButtonPopup(false)
+        setNodePopup(false)
 
     }
     
     function handlePopupCancel() {
         console.log(localStorage)
-        setButtonPopup(false)
+        setNodePopup(false)
+    }
+
+    function handleEditProfConfirm(newProfile) {
+        localStorage.setItem("userData", JSON.stringify(newProfile))
+        setUserData(eval('('+localStorage.getItem("userData")+')'))
+        setEditProfPopup(false)
+
+    }
+    
+    function handleEditProfCancel() {
+        console.log(localStorage)
+        setEditProfPopup(false)
     }
 
     return (
@@ -183,7 +198,7 @@ export const OverviewPage = (props) => {
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
                 </button>
             </div> */}
-            <Titlebar pageTitle="Overview" setExternalPopup={setButtonPopup}/>
+            <Titlebar pageTitle="Overview" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup}/>
             <div className="body-top">
                 <Card title="Incomplete" info={incompleteCount}/>
                 <Card title="Shipping" info={shippingCount}/>
@@ -229,7 +244,9 @@ export const OverviewPage = (props) => {
                     <hr/>
                 </div>
             </div>
-            { buttonPopup && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
+            { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
+            { editProfPopup && <EditProfilePopup setOpenPopup={setNodePopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
+
         </div>
     );
 }

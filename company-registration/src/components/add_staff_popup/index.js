@@ -164,7 +164,6 @@ export const AddStaffPopup = ({setOpenPopup, updateTable, companyCode}) => {
                     <input className="signinBtn" type="submit" value="Register"></input>
                     <input className="cancelBtn" type="button" onClick={()=> {
                         setWarning(null)
-                        console.log("New account created!")
                         setUsername("")
                         setPassword("")
                         setConfirm("")

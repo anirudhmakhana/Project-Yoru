@@ -6,10 +6,13 @@ import { NodeSelectPopup } from "../../components/node_select_popup";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { EditProfilePopup } from "../edit_profile_popup";
 
-export const Titlebar = ({pageTitle, setExternalPopup}) => {
+export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup}) => {
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
-    const [buttonPopup, setButtonPopup] = useState(false);
+    const [nodePopup, setNodePopup] = useState(false);
+    const [profPopup, setProfPopup] = useState(false);
+
     useState(() => {
         var node = eval('('+localStorage.getItem("currentNode")+')')
         if (node) {
@@ -19,31 +22,56 @@ export const Titlebar = ({pageTitle, setExternalPopup}) => {
         }
     }, [])
 
-    function handlePopupConfirm(currentNode) {
+    function handleNodeConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
         setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
-        setButtonPopup(false)
+        setNodePopup(false)
     }
     
-    function handlePopupCancel() {
+    function handleNodeCancel() {
         console.log(localStorage)
-        setButtonPopup(false)
+        setNodePopup(false)
     }
+
+    function handleEditProfConfirm(newProfile) {
+        localStorage.setItem("userData", JSON.stringify(newProfile))
+        // setUserData(eval('('+localStorage.getItem("userData")+')'))
+        setProfPopup(false)
+
+    }
+    
+    function handleEditProfCancel() {
+        console.log(localStorage)
+        setProfPopup(false)
+    }
+
 
 
     return (
         <div className="content-title-container">
             <h1>{pageTitle}</h1>
-            { setExternalPopup ? (
-                <button onClick={() => setExternalPopup(true)} className="node-select-button">
+
+            { setExtNodePopup ? (
+                <button onClick={() => setExtNodePopup(true)} className="node-select-button">
                 <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
             </button>
             ) : 
-            <button onClick={() => setButtonPopup(true)} className="node-select-button">
+            <button onClick={() => setNodePopup(true)} className="node-select-button">
                 <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
             </button>}
             
-            { buttonPopup && setExternalPopup == undefined && <NodeSelectPopup setOpenPopup={setButtonPopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel}/>}
+            { setExtProfPopup ? (
+                <button onClick={() => setExtProfPopup(true)} className="node-select-button">
+                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
+            </button>
+            ) : 
+            <button onClick={() => setProfPopup(true)} className="node-select-button">
+                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
+            </button>}
+            
+            { nodePopup && setExtNodePopup == undefined && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodeConfirm} handleCancel={handleNodeCancel}/>}
+            { profPopup && setExtProfPopup == undefined && <EditProfilePopup setOpenPopup={setProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel}/>}
+
         </div>
     )
 }

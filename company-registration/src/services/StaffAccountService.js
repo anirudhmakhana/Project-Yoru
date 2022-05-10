@@ -28,6 +28,14 @@ class StaffAccountService {
         return response
     }
 
+    async checkPassword( loginData, token ) { 
+        const response = await axios.post("http://localhost:4000/staff/checkpassword", loginData,  {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        return response
+    }
+
     async updateStaff( username, newData, token ) {
         const response = await axios.put("http://localhost:4000/staff/update/"+ username, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
