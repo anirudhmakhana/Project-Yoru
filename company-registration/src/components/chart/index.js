@@ -3,41 +3,23 @@ import {
     VictoryLine, 
     VictoryChart, 
     VictoryTooltip, 
-    VictoryVoronoiContainer, 
+    VictoryZoomContainer, 
+    VictoryVoronoiContainer,
     VictoryGroup,
     VictoryScatter,
     VictoryAxis
 } from "victory";
 
 const data1 = [
-    { x: "0", y: 2 },
-    { x: "1", y: 3 },
-    { x: "2", y: 5 },
-    { x: "3", y: 4 },
-    { x: "4", y: 6 },
-    { x: "5", y: 10 },
-    { x: "6", y: 8 },
-    { x: "7", y: 12 },
-    { x: "8", y: 14 },
-    { x: "9", y: 18 },
-    { x: "10", y: 14 },
-    { x: "11", y: 20 },
-    ]
-
-const data2 = [
-    { x: "0", y: 5 },
-    { x: "1", y: 2 },
-    { x: "2", y: 6 },
-    { x: "3", y: 1 },
-    { x: "4", y: 20 },
-    { x: "5", y: 21 },
-    { x: "6", y: 22 },
-    { x: "7", y: 25 },
-    { x: "8", y: 26 },
-    { x: "9", y: 30 },
-    { x: "10", y: 24 },
-    { x: "11", y: 20 },
-    ]
+    { a: new Date(1982, 1, 1), b: 125 },
+    { a: new Date(1987, 1, 1), b: 257 },
+    { a: new Date(1993, 1, 1), b: 345 },
+    { a: new Date(1997, 1, 1), b: 515 },
+    { a: new Date(2001, 1, 1), b: 132 },
+    { a: new Date(2005, 1, 1), b: 305 },
+    { a: new Date(2011, 1, 1), b: 270 },
+    { a: new Date(2015, 1, 1), b: 470 }
+  ]
 
 export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicatorY}) => {
     return (
@@ -68,7 +50,7 @@ export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicat
                        style={{ fontSize: 10, 'z-index': 1  }}
                    />
                }
-               data={chartDataSec && chartDataPrim ? chartDataSec : data2}>
+               data={chartDataSec && chartDataPrim ? chartDataSec : data1}>
                    <VictoryLine
                        interpolation="monotoneX"
                        scale={{x:"time"}} 
