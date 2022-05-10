@@ -389,12 +389,11 @@ export const CreateSHP = () => {
 					</div>
 
 					{ currentNode ? (
-						<div style={{display: "flex", justifyContent: "flex-end"}}>
-                        <input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
-                    </div>
+						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
+                        	<input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
+                    	</div>
 					) : (
-						<div style={{display: "flex", justifyContent: "flex-end"}}>
-
+						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
                         	<input className="cancelBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true} ></input>
                     	</div>
 					)}
