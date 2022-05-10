@@ -1,11 +1,11 @@
 import React from "react";
 
+import { Titlebar } from "../../components/titlebar"
+
 export const ScanSHP = () => {
     return (
         <div className="content-main-container">
-            <div className="content-title-container">
-                <h1>Scan to link to update shipment page</h1>
-            </div>
+            <Titlebar pageTitle="Update Shipment"/>
            <div className="detailed-main-container">
                 
            </div>
