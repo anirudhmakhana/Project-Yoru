@@ -82,9 +82,9 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 5} icon={<FontAwesomeIcon icon={faLocationDot}/>}>
                         <Link to={"node"} onClick={() => {setActiveItemIndex(5)}}>Place & Location</Link>   {/* may change to location page later */}
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
+                    {/* <MenuItem active={activeItemIndex === 6} icon={<FontAwesomeIcon icon={faAddressCard}/>}>
                         <Link to={"edit-staff/"+userData.companyCode+"/"+userData.username} onClick={() => {setActiveItemIndex(6)}}>Edit Account</Link>
-                    </MenuItem>
+                    </MenuItem> */}
                     {/* <MenuItem active={activeItemIndex === 7} icon={<FontAwesomeIcon icon={faMap}/>}>
                         <Link to={"node"} onClick={() => {setActiveItemIndex(7)}}>Node List</Link>
                     </MenuItem> */}
@@ -109,7 +109,7 @@ export const CustomSidebar = (props) => {
                 <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="location" element={<LocationPage/>}/>
-                <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/>
+                {/* <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/> */}
                 <Route path="node" element={<NodeListPage/>}/>
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
                 
