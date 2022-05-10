@@ -9,11 +9,13 @@ import StaffAccountService from "../../services/StaffAccountService";
 export const EditStaffPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { companyCode } = useParams()
+
     const [username, setUsername] = useState(eval('('+localStorage.getItem("userData")+')').username)
     const [password, setPassword] = useState(eval('('+localStorage.getItem("userData")+')').password)
     const [fullName, setFullName] = useState(eval('('+localStorage.getItem("userData")+')').fullName)
     const [contact, setContact] = useState(eval('('+localStorage.getItem("userData")+')').email)
     const navigate = useNavigate()
+
 
     const handleChangeUsername = (e) => {
         setUsername( e.target.value )
@@ -91,9 +93,14 @@ export const EditStaffPage = (props) => {
                         <input type="text" id="contact" name="contact" placeholder="e.g. adam.eve@eden.com" value={contact} onChange={handleChangeContact}></input>
                     </div>
                     
+                    { props.backHandle && <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <input className="signinBtn" onClick={navigate(-1)} style={{width: "20%"}}> Back</input>
+                    </div>}
+
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <input className="signinBtn" type="submit" value="Update" style={{width: "20%"}}></input>
                     </div>
+                    
                     
                 </form>
             </div>

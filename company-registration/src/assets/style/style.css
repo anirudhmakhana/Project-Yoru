@@ -315,3 +315,9 @@ div.warning{
     display: flex;
     flex-direction:row;
 }
+
+.input-search-address {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}

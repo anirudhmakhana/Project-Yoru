@@ -11,6 +11,12 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
+
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from "react-places-autocomplete";
+
 import AsyncSelect  from 'react-select/async';
 import Dropdown from "react-bootstrap/Dropdown";
 import Map from "../map"
@@ -118,6 +124,14 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
         setPhoneNumber(e.target.value)
     }
 
+    async function handleSearchSelect(value) {
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+        setNodeRef(value);
+        setSelectPosition(latLng);
+        console.log(latLng)
+      };
+
     if (!isLoaded) {
         return <></>
     }
@@ -134,22 +148,34 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
                 </div>}
             {GoogleMap && isLoaded ? (
                 <div className="add-node-map-container">
-                    <div className = "add-node-search-bar">
+                    {/* <div className = "add-node-search-bar"> */}
                         
-                        <Autocomplete >
-                            <input type='text' placeholder='Location' value={nodeRef} onChange={handleSearch} />
-                        </Autocomplete>
-                        <Button
-                            onClick={() => {
-                                const placeService = new google.maps.places.PlacesService()
-                                console.log(selectPosition)
-                                // placeService.findPlaceFromQuery(google.maps.places.FindPlaceFromQueryRequest(['ALL'],nodeRef), (result) => console.log(result))
-                            }}
-                            id="searchBtn"
-                        >
-                            Search
-                        </Button>
-                    </div>
+                        <PlacesAutocomplete value={nodeRef} onChange={setNodeRef} onSelect={handleSearchSelect}>
+                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                            <div >
+
+                                <input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Address" })} />
+
+                                <div>
+                                {loading ? <div>Loading...</div> : null}
+
+                                {suggestions.map(suggestion => {
+                                    const style = {
+                                    backgroundColor: suggestion.active ? "#D4F0F7" : "#FFFFFF",
+                                    "text-align" :'left'
+                                    };
+
+                                    return (
+                                    <div {...getSuggestionItemProps(suggestion, { style })}>
+                                        {suggestion.description}
+                                    </div>
+                                    );
+                                })}
+                                </div>
+                            </div>
+                        )}
+                        </PlacesAutocomplete>
+                    {/* </div> */}
                     {
                         selectPosition ? (
                     <GoogleMap
