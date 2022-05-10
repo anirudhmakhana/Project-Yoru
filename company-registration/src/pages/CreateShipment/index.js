@@ -237,15 +237,18 @@ export const CreateSHP = () => {
 					<div className="input-location-container">
 						<div className="input-left-container">
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
+
+							<div className="textInputContainerCol">
+								<label className="inputLabel" for="producer">Producer</label>
+								<input type="text" id="producer" name="producer" placeholder="e.g. Fender" value={producer} disabled></input>
+							</div>
+							
 							<div className="textInputContainerCol">
 								<label className="inputLabel" for="desciption">Shipment Description</label>
 								<input type="text" id="desciption" name="desciption" placeholder="e.g. Fender Telecaster" value={description}
 								onChange></input>
 							</div>
-							<div className="textInputContainerCol">
-								<label className="inputLabel" for="producer">Producer</label>
-								<input type="text" id="producer" name="producer" placeholder="e.g. Fender" value={producer} disabled></input>
-							</div>
+							
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Select Destination Company</label>
 								<Dropdown onSelect={handleCompanyDropdown}>
