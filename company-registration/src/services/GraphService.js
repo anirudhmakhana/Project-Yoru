@@ -146,6 +146,88 @@ class GraphService {
         // return response
     }
 
+    // need to input extra start time before the actual time 
+    // e.g. last 7 days -> input 7 day time interval + 1 day before that 7 days
+    async getNodeShippedByTime( nodeCode, timeInterval, token) {
+    
+        var shipped = []
+        this.scannedData.forEach((v, i) => {
+            if (v.scannedAt == nodeCode && (v.status == "shipping")){
+                shipped.push(this.scannedData[i])
+            }
+        })
+        var result = []
+        // console.log(stock, shipped)
+        timeInterval.forEach( (t, index )=> {
+            if ( index != timeInterval.length -1 ) {
+                let tPlus1 = timeInterval[index+1]
+                let date = new Date(tPlus1)
+
+                // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+                let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(shipped, tPlus1) - this.getCountShipmentAtTime(shipped, t) }
+                result.push(temp)
+            }
+            
+        })
+        // console.log(result)
+        return {data:result}
+        
+        // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
+        // .then( response => {
+
+        // })
+        // .catch((error) => {
+        //     throw error
+        // })
+        // return response
+    }
+
+    // need to input extra start time before the actual time 
+    // e.g. last 7 days -> input 7 day time interval + 1 day before that 7 days
+    async getCompanyShippedByTime( companyCode, timeInterval, token) {
+        const res = await NodeDataService.getNodeByCompany( companyCode, token)
+        .catch((error) => {
+            throw error
+        })
+        const nodes = res.data
+        var temp_res = {}
+        let temp_time = timeInterval.slice(1)
+        console.log( "interval", timeInterval) 
+        console.log( "temp_time", temp_time)
+        temp_time.forEach(t => {
+            temp_res[t] = 0
+        })
+        var result = []
+        await nodes.forEach( async node => {
+            var node_res = await this.getNodeShippedByTime(node.nodeCode, timeInterval, token)
+            node_res.data.forEach( graph_data => {
+                // console.log(graph_data.x, graph_data.y)
+                temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
+            })
+        })
+
+        temp_time.forEach( t => {
+            // console.log(temp_res[t])
+            result.push({x:t, y:temp_res[t]})
+        })
+        
+
+          
+
+        
+        // console.log(result)
+        return {data:result}
+        
+        // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
+        // .then( response => {
+
+        // })
+        // .catch((error) => {
+        //     throw error
+        // })
+        // return response
+    }
+
 }
 
 export default new GraphService()

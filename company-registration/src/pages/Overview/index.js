@@ -29,7 +29,11 @@ export const OverviewPage = (props) => {
     // const [hourGraphData, setHourGraphData] = useState(null)
     const [currentDate, setCurrentDate] = useState( new Date() )
     const [graphTimeRange, setGraphTimeRange] = useState("day")
-    const [xAxisLabel, setXAxisLabel] = useState("Hour")
+    const [graphType, setGraphType] = useState("shipped")
+    const [graphName, setGraphName] = useState({shipped: "Shipments Shipping",stock:"Stocking Shipments"})
+    const [yAxisLabel, setYAxisLabel] = useState({shipped: "Shipped",stock:"Stock"})
+
+    const [xAxisLabel, setXAxisLabel] = useState({week:"Date", month:"Day", year:"Month", day:"Hour"})
     const [completedCount, setCompletedCount] = useState(0)
     const [stockCount, setStockCount] = useState(0)
     const [incompleteCount, setIncompleteCount] = useState(0)
@@ -43,20 +47,42 @@ export const OverviewPage = (props) => {
     //         setCurrentNodeCode('-')
     //     }
     // }, [])
-
+    const handleGraphType = (e) => {
+        setGraphType(e)        
+    };
 
     const handleTimeRangeDropdown = (e) => {
         setGraphTimeRange(e)
-        var temp = "Hour"
-        if (e == "week") {
-            temp = "Date"
-        } else if (e == "month") {
-            temp = "Day"
-        } else if (e == "year") {
-            temp = "Month"
-        }
-        setXAxisLabel(temp)
-      };
+    };
+
+    const adjustGraphTime = (graph_data) => {
+        var adjustedDate = []
+        graph_data.forEach( data => {
+            let dataDate = new Date(data.x)
+            if (graphTimeRange == "day") {
+                let dataDate = new Date(data.x)
+                adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
+            }
+            else if (  graphTimeRange == "week") {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+            }
+            else if ( graphTimeRange == "month" ) {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.getDate(), y:data.y})
+            }
+            else if ( graphTimeRange == "year") {
+                let dataDate = new Date(data.x)
+                console.log(dataDate.getMonth(), dataDate.toDateString())
+
+                adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
+            }
+        })
+        console.log("TEST", adjustedDate)
+        return adjustedDate
+    }
+
+    
     useEffect(() => {
         ShipmentService.completedCountByCompany(userData.companyCode, userData.token)
         .then( res => {
@@ -90,13 +116,18 @@ export const OverviewPage = (props) => {
         var temp = new Date()
         var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
         var timeInterval = []
+        var timeRange = null
         if (graphTimeRange == "day") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 1).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0).getTime()
             for ( let i = 0; i <= 23; i++ ) {
                 let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
                 timeInterval.push(temp.getTime())
             }
         }
         else if ( graphTimeRange == "week") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
             for ( let i = 0; i <= 6; i++ ) {
                 let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
                 timeInterval.push(temp.getTime())
@@ -104,14 +135,18 @@ export const OverviewPage = (props) => {
             timeInterval = timeInterval.reverse()
         }
         else if ( graphTimeRange == "month") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
             let noOfDays = DateUtils.daysInMonth(curDate.getMonth(), curDate.getFullYear())
             for ( let i = 0; i <= noOfDays - 1; i++ ) {
                 let temp = new Date(curDate.getFullYear(), curDate.getMonth(), noOfDays - i + 1) 
                 timeInterval.push(temp.getTime())
             }
-            timeInterval = timeInterval.reverse()
+            timeInterval = timeInterval.reverse().slice(0, curDate.getDate())
         }
         else if ( graphTimeRange == "year") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth() -1 ).getTime()
             console.log(new Date(2020, 4).toDateString())
             for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
                 let temp = new Date(curDate.getFullYear(), i) 
@@ -119,57 +154,36 @@ export const OverviewPage = (props) => {
             }
         }
                 
-        console.log(timeInterval)
-        
-        GraphService.getCompanyStockByTime( userData.companyCode, timeInterval, userData.token)
-        .then(res_graph => {
-            console.log(res_graph)
-            var adjustedDate = []
-            res_graph.data.forEach( data => {
-                let dataDate = new Date(data.x)
-                if (graphTimeRange == "day") {
-                    let dataDate = new Date(data.x)
-                    adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
-                }
-                else if (  graphTimeRange == "week") {
-                    dataDate.setDate(dataDate.getDate() - 1)
-                    adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
-                }
-                else if ( graphTimeRange == "month" ) {
-                    dataDate.setDate(dataDate.getDate() - 1)
-                    adjustedDate.push({x:dataDate.getDate(), y:data.y})
-                }
-                else if ( graphTimeRange == "year") {
-                    let dataDate = new Date(data.x)
-                    console.log(dataDate.getMonth(), dataDate.toDateString())
+        if (timeRange && graphType == "shipped") {
+            timeInterval.unshift(timeInterval[0] - timeRange)
+            // console.log('INTERVALLL',timeInterval)
 
-                    adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
-                }
+            GraphService.getCompanyShippedByTime( userData.companyCode, timeInterval, userData.token)
+            .then(res_graph => {
+                console.log(res_graph)
+                setDateGraphData(adjustGraphTime(res_graph.data))
             })
-            setDateGraphData(adjustedDate)
-        })
-        .catch( err => {
-            console.log(err)
-        })
-            // GraphService.getNodeStockByTime( res.data.nodeCode, hourInterval, userData.token)
-            // .then(res_graph => {
-            //     console.log(typeof res_graph.data[0].y)
-            //     var adjustedDate = []
-            //     res_graph.data.forEach( data => {
-            //         let dataDate = new Date(data.x)
-            //         // dataDate.setHours(dataDate.getHours())
-            //         adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
-            //     })
-            //     setHourGraphData(adjustedDate)
-            // })
+            .catch( err => {
+                console.log(err)
+            })
+        }
+        else if (graphType == "stock" ) {
+            // console.log('INTERVALLL',timeInterval)
+
+            GraphService.getCompanyStockByTime( userData.companyCode, timeInterval, userData.token)
+            .then(res_graph => {
+                console.log(res_graph)
+                setDateGraphData(adjustGraphTime(res_graph.data))
+            })
+            .catch( err => {
+                console.log(err)
+            })
+        }
         
-        
-    }, [graphTimeRange])
+    }, [graphType,graphTimeRange])
 
 
-    useEffect(()=>{
 
-    }, [currentNodeCode])
 
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
@@ -177,8 +191,6 @@ export const OverviewPage = (props) => {
         // window.location.reload(false);
 
         setNodePopup(false)
-        
-
     }
     
     function handlePopupCancel() {
@@ -217,7 +229,17 @@ export const OverviewPage = (props) => {
                 
                 <div className="chart-container">
                     <div className="chart-title-container">
-                        <h3 className="chart-title">Stocking Shipments</h3>
+                        {/* <h3 className="chart-title">Stocking Shipments</h3> */}
+                        <Dropdown onSelect={handleGraphType} >
+                            <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                {graphName[graphType]}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey={"shipped"}>{graphName.shipped}</Dropdown.Item>
+                                <Dropdown.Item eventKey={"stock"}>{graphName.stock}</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                         <Dropdown onSelect={handleTimeRangeDropdown} >
                             <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
                                 {graphTimeRange[0].toUpperCase() + graphTimeRange.slice(1).toLowerCase()}
@@ -233,7 +255,7 @@ export const OverviewPage = (props) => {
                         .toLocaleDateString()} - {currentDate.toLocaleDateString()}</p>
                     </div>
                     <div className="body-chart-container">
-                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel} indicatorY={"Stock"}/>}
+                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel[graphTimeRange]} indicatorY={yAxisLabel[graphType]}/>}
                     </div>
                 </div>
                 <div className="chart-info-right">
