@@ -217,6 +217,7 @@ div.warning{
     border-radius: 16px;
     height: 90%;
     padding: 2% 4% 2% 4%;
+    overflow: auto;
 }
 
 .content-title-container {
