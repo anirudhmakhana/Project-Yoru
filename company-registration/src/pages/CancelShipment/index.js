@@ -2,12 +2,12 @@ import React from "react";
 
 import "../../assets/style/style.css"
 
+import { Titlebar } from "../../components/titlebar";
+
 export const CancelSHP = () => {
     return (
         <div className="content-main-container">
-            <div className="content-title-container">
-                <h1>Cancel Shipment</h1>
-            </div>
+            <Titlebar pageTitle="Cancel Shipment"/>
             <div className="detailed-main-container">
 
             </div>
