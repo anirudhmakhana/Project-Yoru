@@ -51,23 +51,26 @@ export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCo
         <div className="content-title-container">
             <h1>{pageTitle}</h1>
 
-            { setExtNodePopup && extNodeCode ? (
-                <button onClick={() => setExtNodePopup(true)} className="node-select-button">
-                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {extNodeCode}
-            </button>
-            ) : 
-            <button onClick={() => setNodePopup(true)} className="node-select-button">
-                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
-            </button>}
+            <div>
+                { setExtNodePopup && extNodeCode ? (
+                    <button onClick={() => setExtNodePopup(true)} className="node-select-button">
+                        <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {extNodeCode}
+                    </button>
+                ) : 
+                <button onClick={() => setNodePopup(true)} className="node-select-button">
+                    <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
+                </button>}
+                
+                { setExtProfPopup ? (
+                    <button onClick={() => setExtProfPopup(true)} className="node-select-button">
+                        <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
+                    </button>
+                ) : 
+                <button onClick={() => setProfPopup(true)} className="node-select-button">
+                    <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
+                </button>}
+            </div>
             
-            { setExtProfPopup ? (
-                <button onClick={() => setExtProfPopup(true)} className="node-select-button">
-                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
-            </button>
-            ) : 
-            <button onClick={() => setProfPopup(true)} className="node-select-button">
-                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
-            </button>}
             
             { nodePopup && setExtNodePopup == undefined && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodeConfirm} handleCancel={handleNodeCancel}/>}
             { profPopup && setExtProfPopup == undefined && <EditProfilePopup setOpenPopup={setProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel}/>}
