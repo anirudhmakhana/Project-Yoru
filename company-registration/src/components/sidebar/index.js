@@ -6,14 +6,7 @@ import { ShipmentListPage } from "../../pages/ShipmentList";
 import { CreateSHP } from "../../pages/CreateShipment";
 import { UpdateSHP } from "../../pages/UpdateShipment";
 import { CancelSHP } from "../../pages/CancelShipment";
-import { LocationPage } from "../../pages/Location";
 
-
-import { RegisterPage} from "../../pages/Register"
-import { AddStaffPage } from "../../pages/AddStaff";
-import { StaffListPage } from "../../pages/StaffList";
-import { ViewStaffPage } from "../../pages/ViewStaff"
-import { EditStaffPage } from "../../pages/EditStaff";
 import { ViewShipmentPage } from "../../pages/ViewShipment";
 
 import { useEffect } from "react"
@@ -108,17 +101,9 @@ export const CustomSidebar = (props) => {
                 {/* CHANGE TO scan/update/:shipmentId */}
                 <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
-                <Route path="location" element={<LocationPage/>}/>
-                {/* <Route path="edit-staff/:companyCode/:username" element={<EditStaffPage/>}/> */}
                 <Route path="node" element={<NodeListPage/>}/>
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
                 
-                {/* <Route path="register-staff/:companyCode" element={<AddStaffPage />}/> 
-                <Route path="staff-list/:companyCode" element={<StaffListPage />}/> 
-                <Route path="staff-list/:companyCode/view-staff/:username" element={<ViewStaffPage/>}/> */}
-
-                {/* Need to improve pages style and may change to other register page */}
-
             </Routes>
         </>
         

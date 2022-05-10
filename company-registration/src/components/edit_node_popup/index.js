@@ -24,12 +24,12 @@ import "../../assets/style/popup.css"
 import StringValidator from "../../utils/StringValidator";
 
 const google = window.google
-export function AddNodePopup({ setOpenPopup, updateTable }) {
+export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
     const navigate = useNavigate()
     const [nodeRef, setNodeRef] = useState('')
     const [selectPosition, setSelectPosition] = useState(null)
     const [mapRef, setMapRef] = React.useState(/** @type google.maps.Map */(null));
-    const [nodeCode, setNodeCode] = useState('')
+    const [nodeCode, setNodeCode] = useState(initNodeCode)
     const [address, setAddress] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [status, setStatus] = useState("active")
@@ -49,7 +49,15 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
 
     useEffect(() => {
         setCompanyCode(userData.companyCode)
+        NodeDataService.getNodeByCode(nodeCode, userData.token)
+        .then( res => {
+            setSelectPosition({lat:res.data.lat, lng:res.data.lng})
+            setAddress(res.data.address)
+            setPhoneNumber(res.data.phoneNumber)
+            
+        })
     }, [])
+
 
     function handleConfirm(currentNode) {
         var invalidCode = StringValidator.validateNodeCode(nodeCode);
@@ -81,10 +89,9 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
             }
             console.log(newNode)
             
-            NodeDataService.addNode(newNode, userData.token)
+            NodeDataService.updateNode(initNodeCode, newNode, userData.token)
             .then( res =>{
                 setWarning(null)
-                console.log("New node created!")
                 setNodeCode("")
                 setSelectPosition(null)
                 setAddress("")
@@ -243,7 +250,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
               id="cancelBtn"
             >Cancel</Button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Button onClick={handleConfirm}>Add Node</Button>
+            <Button onClick={handleConfirm}>Update Node</Button>
             
           </div>
         </div>

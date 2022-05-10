@@ -3,7 +3,6 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
 import { ShipmentListPage } from "../../pages/ShipmentList";
-import { RegisterPage} from "../../pages/Register"
 import { AddStaffPage } from "../../pages/AddStaff";
 import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
@@ -60,6 +59,7 @@ export const ManagerSidebar = (props) => {
                     <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
                         <p>Project Yoru</p>
                     </Link>
+
                 </SidebarHeader>
                 <Menu iconShape="square">
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>

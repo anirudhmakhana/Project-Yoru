@@ -45,9 +45,7 @@ export class StaffTable extends Component {
                     </Link>
                     &nbsp;&nbsp; */}
                     {this.props.obj.username == this.props.userData.username ?(
-                        <Link to={'edit-staff/'+this.props.userData.username} params={{backHandle: true}}>
-                        <Button size="sm" variant="dark">EDIT</Button>
-                        </Link>
+                       null
                     ): (
                     <Button size="sm" onClick={() => {
                         this.deleteStaff(this.props.obj)

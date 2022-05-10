@@ -40,7 +40,9 @@ export const AdminSidebar = (props) => {
                 <SidebarHeader className="sidebarHeaderContainer">
                     <Link to={"company-list"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
                         <p>Project Yoru</p>
+
                     </Link>
+
                 </SidebarHeader>
                 <Menu iconShape="square">
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faInstitution}/>}>

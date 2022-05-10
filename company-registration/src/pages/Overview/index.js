@@ -21,7 +21,7 @@ import { EditProfilePopup } from "../../components/edit_profile_popup";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const [currentNodeCode, setCurrentNodeCode] = useState(null)
+    const [currentNodeCode, setCurrentNodeCode] = useState(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
     const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 
@@ -59,6 +59,7 @@ export const OverviewPage = (props) => {
 
     
     useEffect(() => {
+        
         ShipmentService.completedCountByCompany(userData.companyCode, userData.token)
         .then( res => {
             setCompletedCount(res.data)
