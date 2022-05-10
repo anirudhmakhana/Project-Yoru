@@ -194,7 +194,7 @@ export const CreateSHP = () => {
         localStorage.setItem("currentNode", JSON.stringify(newCurrentNode))
 		// console.log(currentNode, newCurrentNode)
 
-		if (newCurrentNode.nodeCode == destinationNode.nodeCode) {
+		if (destinationNode && newCurrentNode.nodeCode == destinationNode.nodeCode) {
 			setDestinationNode(null)
 			setDirectionsResponse(null)
 			setShowDestInfo(false)
@@ -228,7 +228,7 @@ export const CreateSHP = () => {
 
 	return (
 		<div className="content-main-container">
-            <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup}/>
+			<Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 
 			<div className="detailed-main-container" style={{overflowY: "auto"}}>
 				<form onSubmit={ () => {} }>
@@ -242,7 +242,7 @@ export const CreateSHP = () => {
 								<label className="inputLabel" for="producer">Producer</label>
 								<input type="text" id="producer" name="producer" placeholder="e.g. Fender" value={producer} disabled></input>
 							</div>
-							
+
 							<div className="textInputContainerCol">
 								<label className="inputLabel" for="desciption">Shipment Description</label>
 								<input type="text" id="desciption" name="desciption" placeholder="e.g. Fender Telecaster" value={description}

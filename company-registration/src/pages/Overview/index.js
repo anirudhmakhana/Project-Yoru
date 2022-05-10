@@ -21,7 +21,7 @@ import { EditProfilePopup } from "../../components/edit_profile_popup";
 
 export const OverviewPage = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    // const [currentNodeCode, setCurrentNodeCode] = useState(null)
+    const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 
@@ -166,10 +166,15 @@ export const OverviewPage = (props) => {
         
     }, [graphTimeRange])
 
+
+    useEffect(()=>{
+
+    }, [currentNodeCode])
+
     function handlePopupConfirm(currentNode) {
         localStorage.setItem("currentNode", JSON.stringify(currentNode))
-        // setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
-        window.location.reload(false);
+        setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
+        // window.location.reload(false);
 
         setNodePopup(false)
         
@@ -201,7 +206,7 @@ export const OverviewPage = (props) => {
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
                 </button>
             </div> */}
-            <Titlebar pageTitle="Overview" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup}/>
+            <Titlebar pageTitle="Overview" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNodeCode}/>
             <div className="body-top">
                 <Card title="Incomplete" info={incompleteCount}/>
                 <Card title="Shipping" info={shippingCount}/>

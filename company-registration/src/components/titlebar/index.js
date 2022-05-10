@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { EditProfilePopup } from "../edit_profile_popup";
 
-export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup}) => {
+export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCode}) => {
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [nodePopup, setNodePopup] = useState(false);
     const [profPopup, setProfPopup] = useState(false);
@@ -51,9 +51,9 @@ export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup}) => {
         <div className="content-title-container">
             <h1>{pageTitle}</h1>
 
-            { setExtNodePopup ? (
+            { setExtNodePopup && extNodeCode ? (
                 <button onClick={() => setExtNodePopup(true)} className="node-select-button">
-                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
+                <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {extNodeCode}
             </button>
             ) : 
             <button onClick={() => setNodePopup(true)} className="node-select-button">
