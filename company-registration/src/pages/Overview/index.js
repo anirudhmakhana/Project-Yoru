@@ -55,32 +55,7 @@ export const OverviewPage = (props) => {
         setGraphTimeRange(e)
     };
 
-    const adjustGraphTime = (graph_data) => {
-        var adjustedDate = []
-        graph_data.forEach( data => {
-            let dataDate = new Date(data.x)
-            if (graphTimeRange == "day") {
-                let dataDate = new Date(data.x)
-                adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
-            }
-            else if (  graphTimeRange == "week") {
-                dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
-            }
-            else if ( graphTimeRange == "month" ) {
-                dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.getDate(), y:data.y})
-            }
-            else if ( graphTimeRange == "year") {
-                let dataDate = new Date(data.x)
-                console.log(dataDate.getMonth(), dataDate.toDateString())
-
-                adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
-            }
-        })
-        console.log("TEST", adjustedDate)
-        return adjustedDate
-    }
+    
 
     
     useEffect(() => {
@@ -161,7 +136,7 @@ export const OverviewPage = (props) => {
             GraphService.getCompanyShippedByTime( userData.companyCode, timeInterval, userData.token)
             .then(res_graph => {
                 console.log(res_graph)
-                setDateGraphData(adjustGraphTime(res_graph.data))
+                setDateGraphData(GraphService.adjustGraphTime(res_graph.data, graphTimeRange))
             })
             .catch( err => {
                 console.log(err)
@@ -173,7 +148,7 @@ export const OverviewPage = (props) => {
             GraphService.getCompanyStockByTime( userData.companyCode, timeInterval, userData.token)
             .then(res_graph => {
                 console.log(res_graph)
-                setDateGraphData(adjustGraphTime(res_graph.data))
+                setDateGraphData(GraphService.adjustGraphTime(res_graph.data, graphTimeRange))
             })
             .catch( err => {
                 console.log(err)

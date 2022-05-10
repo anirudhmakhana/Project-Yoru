@@ -1,7 +1,7 @@
 import axios from "axios";
 import NodeDataService from "./NodeDataService";
 import ShipmentService from "./ShipmentService";
-
+import DateUtils from "../utils/DateUtils";
 class GraphService {
 
     constructor() {
@@ -228,6 +228,32 @@ class GraphService {
         // return response
     }
 
+    adjustGraphTime(graph_data, graphTimeRange) {
+        var adjustedDate = []
+        graph_data.forEach( data => {
+            let dataDate = new Date(data.x)
+            if (graphTimeRange == "day") {
+                let dataDate = new Date(data.x)
+                adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
+            }
+            else if (  graphTimeRange == "week") {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+            }
+            else if ( graphTimeRange == "month" ) {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.getDate(), y:data.y})
+            }
+            else if ( graphTimeRange == "year") {
+                let dataDate = new Date(data.x)
+                console.log(dataDate.getMonth(), dataDate.toDateString())
+
+                adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
+            }
+        })
+        console.log("TEST", adjustedDate)
+        return adjustedDate
+    }
 }
 
 export default new GraphService()
