@@ -41,8 +41,8 @@ export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicat
                     <VictoryScatter
                         size={({ active }) => active ? 4 : 2}
                     /> 
-                    <VictoryAxis crossAxis tickFormat={(x) => new Date(x).getFullYear()}/>
-                    <VictoryAxis dependentAxis crossAxis tickFormat={(t) => `${Math.round(t)}`}/>
+                    <VictoryAxis crossAxis tickFormat={(x) => new Date(x).getMonth()}/>
+                    <VictoryAxis dependentAxis crossAxis tickFormat={(y) => `${Math.round(y)}`}/>
                 </VictoryGroup>
                 { chartDataSec && 
                 <VictoryGroup color="#DFE0EB"
