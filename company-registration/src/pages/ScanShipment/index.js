@@ -43,9 +43,7 @@ export const ScanSHP = () => {
 	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
 	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
 	// const [destinationNode, setDestination] = useState(null);
-	const [destinationCompany, setDestinationCompany] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
-	const [showDestInfo, setShowDestInfo] = useState(true)
 	const navigate = useNavigate();
 	const [warning, setWarning] = useState(null)
     const [showInfo, setShowInfo] = useState(true)
@@ -54,6 +52,7 @@ export const ScanSHP = () => {
 	const [userCompany, setUserCompany] = useState(null)
 	const [updateInfo, setUpdateInfo] = useState(null)
 	const [newStatus, setNewStatus] = useState(null)
+	const [shipmentCurNode, setShipmentCurNode] = useState(null)
 
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
@@ -113,6 +112,10 @@ export const ScanSHP = () => {
 			ShipmentService.getShipmentById(shipmentId ,userData.token)
 			.then( res => {console.log(res.data)
 				setShipment(res.data)
+				NodeDataService.getNodeByCode(res.data.currentNode, userData.token)
+				.then( res_node => {
+					setShipmentCurNode(res_node.data)
+				})
 				ShipmentService.getPathByShipmentId(shipmentId, userData.token)
 				.then( async res_path => {
 					console.log(res_path.data)
@@ -124,10 +127,6 @@ export const ScanSHP = () => {
 						setDirectionsResponse(results)
 					}
 					
-				})
-				.catch( err => {
-					// setPath(null)
-					console.log(err)
 				})
 			})
 			.catch( err_shipment => {
@@ -241,8 +240,8 @@ export const ScanSHP = () => {
 													if (res_shipment.data.status == "created" || res_shipment.data.status == "arrived" ) {
 														newState = "shipping"
 													} else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
-														newState = "complete"
-													} else if (res_shipment.data.status == "cancel") {
+														newState = "completed"
+													} else if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
 														newState = null
 													}
 													setNewStatus(newState)
@@ -256,7 +255,7 @@ export const ScanSHP = () => {
 														setUpdateInfo(null)
 														setShipmentId(null)
 														setShipment(null)
-														setWarning("Cancelled shipment cannot be updated!")
+														setWarning("Cancelled or completed shipment cannot be updated!")
 														setShowScanPopup(false)
 													}
 												} else {
@@ -318,8 +317,8 @@ export const ScanSHP = () => {
 								{directionsResponse ? (
 									directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
 								): null}
-								{showInfo && <InfoWindow
-									position={{ lat: currentNode.lat, lng: currentNode.lng }}
+								{showInfo && shipment && shipmentCurNode && <InfoWindow
+									position={{ lat:shipmentCurNode.lat, lng: shipmentCurNode.lng }}
 									onCloseClick={() => {
 										setShowInfo(false)
 									}}
@@ -354,6 +353,15 @@ export const ScanSHP = () => {
                                 options={options}
                                 onLoad={map => setMapRef(map)}
                                 onClick={()=>{}}>
+								<Marker 
+								key={`${currentNode.lat}-${currentNode.lng}`}
+								position={{lat:currentNode.lat, lng:currentNode.lng}}
+								onClick={() => {
+									setShowInfo(true)
+								console.log(currentNode.lat+"-"+ currentNode.lgn)
+								}}
+								map={mapRef}
+								/>
                             	</GoogleMap>}
 						</div>
 					</div>
