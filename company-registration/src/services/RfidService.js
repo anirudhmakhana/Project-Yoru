@@ -12,6 +12,7 @@ class RfidService {
         .catch((error) => {
             throw error
         })
+
         return response
     }
 

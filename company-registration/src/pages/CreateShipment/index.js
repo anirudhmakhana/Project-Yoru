@@ -24,6 +24,7 @@ import CompanyService from "../../services/CompanyService";
 import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 import RfidService from "../../services/RfidService";
 import StringValidator from "../../utils/StringValidator";
+import { ScanPopup } from "../../components/scan_popup";
 const google = window.google;
 
 export const CreateSHP = () => {
@@ -52,6 +53,8 @@ export const CreateSHP = () => {
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
+	const [showScanPopup, setShowScanPopup] = useState(false)
+
 	const [nodeStock, setNodeStock] = useState(null);
 	// const [currentMark, setCurrentMark] = useState(null)
 	const { isLoaded } = useJsApiLoader({
@@ -115,48 +118,6 @@ export const CreateSHP = () => {
 		}
 	}, [destinationCompany]);
 
-	// useEffect(() => {
-
-	//     CompanyService.getCompanyByCode(userData.companyCode, userData.token)
-	//     .then( result => {
-	//         ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
-	//         .then( res => {console.log(res.data)
-	//             setShipment(res.data)
-	//             ShipmentService.getPathByShipmentId(shipmentId, userData.token)
-	//             .then( async res_path => {
-	//                 setPath(res_path.data)
-	//                 if (isLoaded ){
-	//                     const results = await getDirection(res_path.data)
-	//                     setDirectionsResponse(results)
-	//                 }
-
-	//             })
-	//             .catch( err => {
-	//                 setPath(null)
-	//                 console.log(err)
-	//             })
-
-	//             NodeDataService.getCoordinateByNode(res.data.currentNode, userData.token)
-	//             .then( res_current => {
-	//                 setCurrentNode(res_current.data)
-	//             })
-	//             .catch( err => {
-	//                 setCurrentNode(null)
-	//                 console.log(err)
-	//             })
-	//         })
-	//         .catch( err_shipment => {
-	//             setShipment(null)
-	//             console.log(err_shipment)
-	//         })
-	//     })
-	//     .catch( err_company => {
-	//         setShipment(null)
-	//         console.log(err_company)
-	//     })
-
-	// }
-	// ,[originNode] );
 	useEffect( () => {
 		if ( currentNode && destinationNode && isLoaded) {
 			getDirection()
@@ -360,9 +321,37 @@ export const CreateSHP = () => {
 								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
 								<Button className="signinBtn" onClick={() => {
+									setShowScanPopup(true)
 									RfidService.makeScan()
 									.then ( res => {
-										setShipmentId(res.data.data.uid)
+										console.log(res)
+										if (res.data.statusCode == 200) {
+
+											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+											.then( res_shipment => {
+												if ( res_shipment.data ) {
+													setShipmentId(null)
+
+													setWarning("Shipment already created!")
+													setShowScanPopup(false)
+												}
+												else {
+													setShipmentId(res.data.data.uid)
+													setWarning(null)
+													setShowScanPopup(false)
+												}
+											})
+										}
+										else if (res.data.statusCode == 300) {
+											setShipmentId(null)
+
+											setWarning("Scanning timeout! Please try again.")
+											setShowScanPopup(false)
+											
+										}
+									})
+									.catch( err => {
+										console.log(err)
 									})
 								}} style={{width: "70%"}}>Scan</Button>
 							</div>
@@ -453,6 +442,7 @@ export const CreateSHP = () => {
 					)}
                 </form>
 			</div>
+			{ showScanPopup && <ScanPopup setOpenPopup={setShowScanPopup}/>}
 			{ nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
 		</div>

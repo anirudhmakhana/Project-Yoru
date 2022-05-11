@@ -25,6 +25,7 @@ import CompanyService from "../../services/CompanyService";
 import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 
 import RfidService from "../../services/RfidService";
+import { ScanPopup } from "../../components/scan_popup";
 
 const google = window.google;
 
@@ -50,6 +51,7 @@ export const ScanSHP = () => {
 	const navigate = useNavigate();
 	const [warning, setWarning] = useState(null)
     const [showInfo, setShowInfo] = useState(true)
+	const [showScanPopup, setShowScanPopup] = useState(false)
 
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
@@ -284,16 +286,43 @@ export const ScanSHP = () => {
 								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
 								<Button className="signinBtn" style={{width: "70%"}} onClick={() => {
+									setShowScanPopup(true)
 									RfidService.makeScan()
 									.then ( res => {
-										setShipmentId(res.data.data.uid)
-										ShipmentService.getShipmentById( res.data.data.uid, userData.token)
-										.then( res_shipment => {
-											setShipment(res_shipment.data)
-										})
+										if (res.data.statusCode == 200) {
+											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+											.then( res_shipment => {
+												if (res_shipment.data) {
+													setShipmentId(res.data.data.uid)
+													setShipment(res_shipment.data)
+													setWarning(null)
+													setShowScanPopup(false)
+												} else {
+													setShipmentId(null)
+													setShipment(null)
+													setWarning("Shipment not found!")
+													setShowScanPopup(false)
+												}
+											})
+											.catch(err => {
+												setShipmentId(null)
+												setShipment(null)
+												setWarning("Shipment not found!")
+												setShowScanPopup(false)
+												
+											})
+										}
+										else if (res.data.statusCode == 300) {
+											setShipmentId(null)
+											setShipment(null)
+											setWarning("Scanning timeout! Please try again.")
+											setShowScanPopup(false)
+											
+										}
 									})
 									.catch(error => {
-										setWarning("Shipment not found!")
+										console.log(error)
+										
 									})
 								}} >Scan</Button>
 							</div>
@@ -361,6 +390,7 @@ export const ScanSHP = () => {
 					)}
                 </form>
             </div>
+			{ showScanPopup && <ScanPopup setOpenPopup={setShowScanPopup}/>}
             { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
         </div>
