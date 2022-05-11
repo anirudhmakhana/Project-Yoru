@@ -23,6 +23,7 @@ import ShipmentService from "../../services/ShipmentService";
 import CompanyService from "../../services/CompanyService";
 import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 import RfidService from "../../services/RfidService";
+import StringValidator from "../../utils/StringValidator";
 const google = window.google;
 
 export const CreateSHP = () => {
@@ -30,6 +31,9 @@ export const CreateSHP = () => {
 	const [userData, setUserData] = useState(
 		eval("(" + localStorage.getItem("userData") + ")")
 	);
+	const [userCompany, setUserCompany] = useState(null)
+
+	const [warning, setWarning] = useState(null)
 	const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 	const [shipmentId, setShipmentId] = useState(null);
@@ -86,6 +90,14 @@ export const CreateSHP = () => {
 				setShipment(null);
 				console.log(err_company);
 			});
+		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
+		.then((result) => {
+			setUserCompany(result.data);
+		})
+		.catch((err_company) => {
+			setShipment(null);
+			console.log(err_company);
+		});
 	}, []);
 
 	useEffect(() => {
@@ -222,9 +234,41 @@ export const CreateSHP = () => {
         setEditProfPopup(false)
     }
 
-	const handleChangeDescription = (e) => {
+	function handleChangeDescription(e) {
         setDescription( e.target.value )
 	}
+
+	function handleCreateShipment() {
+		var invalidDescription = StringValidator.validateShipmentDescription(description);
+		if (invalidDescription) {
+			setWarning(invalidDescription)
+		}
+		else {
+			var shipmentData = { uid: shipmentId,
+				description: description, 
+				originNode: currentNode.nodeCode,
+				currentNode: currentNode.nodeCode,
+				destinationNode: destinationNode.nodeCode,
+				companyCode: userData.companyCode,
+				status:status,
+				scannedTime:new Date().getTime() }
+			ShipmentService.createShipment(shipmentData, userCompany.walletPublicKey, userData.token )
+			.then(res => {
+				console.log("Shipment created")
+				setWarning(null)
+				setDescription('')
+				setDestinationNode(null)
+				setDestinationCompany(null)
+				setShipmentId(null)
+			})
+			.catch( err => {
+				console.log(err)
+				
+			})
+		}
+
+	}
+
 
 	return (
 		<div className="content-main-container">
@@ -238,6 +282,10 @@ export const CreateSHP = () => {
 						<div className="input-left-container">
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
 
+							{ warning &&
+							<div className="alert alert-danger">
+								{warning}
+							</div>}
 							<div className="textInputContainerCol">
 								<label className="inputLabel" for="producer">Producer</label>
 								<input type="text" id="producer" name="producer" placeholder="e.g. Fender" value={producer} disabled></input>
@@ -394,13 +442,13 @@ export const CreateSHP = () => {
 						</div>
 					</div>
 
-					{ currentNode && shipmentId ? (
+					{ userCompany && destinationNode && currentNode && shipmentId ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
+                        	<Button className="signinBtn" style={{width: "20%"}} onClick={handleCreateShipment}>Create Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<input className="cancelBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true} ></input>
+                        	<Button className="cancelBtn" style={{width: "20%"}}  disabled>Create Shipment</Button>
                     	</div>
 					)}
                 </form>

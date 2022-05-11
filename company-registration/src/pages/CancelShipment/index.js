@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 
 import "../../assets/style/style.css"
 
@@ -14,17 +15,16 @@ export const CancelSHP = () => {
             <Titlebar pageTitle="Cancel Shipment"/>
             <div className="detailed-main-container" style={{width: "min-content"}}>
                 <div className="textInputContainerCol">
-                    <label className="inputLabel">Shiment ID: {shipmentId}</label>
+                    <label className="inputLabel">Shipment ID: {shipmentId}</label>
                     <label className="inputLabel">Scan RFID tag</label>
-                    <input className="signinBtn" type="submit" value="Scan" style={{minWidth: "30vw"}} onClick={() => {
+                    <Button className="signinBtn" style={{minWidth: "30vw"}} onClick={() => {
                             RfidService.makeScan()
                             .then ( res => {
                                 setShipmentId(res.data.data.uid)
                             })
-                        }}>
-                    </input>
+                        }}>Scan</Button>
 
-                    <input className="signinBtn" type="submit" value="Cancel" style={{marginTop: "10%", backgroundColor: "red"}}></input>
+                    <Button className="signinBtn" style={{marginTop: "10%", backgroundColor: "red"}}>Cancel</Button>
                 </div>
             </div>
         </div>
