@@ -87,49 +87,40 @@ export const ViewShipmentPage = () => {
 
     useEffect(() => {
         console.log(shipment)
-        CompanyService.getCompanyByCode(userData.companyCode, userData.token)
-        .then( result => {
-            // ShipmentService.getShipmentById(shipmentId,result.data.walletPublicKey ,userData.token)
-            ShipmentService.getShipmentById(shipmentId ,userData.token)
+        
+        ShipmentService.getShipmentById(shipmentId ,userData.token)
+        .then( res => {console.log(res.data)
+            setShipment(res.data)
+            ShipmentService.getPathByShipmentId(shipmentId, userData.token)
+            .then( async res_path => {
+                console.log(res_path.data)
+                // setPath(res_path.data)
+                if (isLoaded ){ 
+                    const results = await getDirection(res_path.data)
+                    console.log(results)
 
-            .then( res => {console.log(res.data)
-                setShipment(res.data)
-                ShipmentService.getPathByShipmentId(shipmentId, userData.token)
-                .then( async res_path => {
-                    console.log(res_path.data)
-                    // setPath(res_path.data)
-                    if (isLoaded ){ 
-                        const results = await getDirection(res_path.data)
-                        console.log(results)
-
-                        setDirectionsResponse(results)
-                    }
-                    
-                })
-                .catch( err => {
-                    // setPath(null)
-                    console.log(err)
-                })
-
-                NodeDataService.getCoordinateByNode(res.data.currentNode, userData.token)
-                .then( res_current => {
-                    setCurrentNode(res_current.data)
-                })
-                .catch( err => {
-                    setCurrentNode(null)
-                    console.log(err)
-                })
+                    setDirectionsResponse(results)
+                }
+                
             })
-            .catch( err_shipment => {
-                setShipment(null)
-                console.log(err_shipment)
+            .catch( err => {
+                // setPath(null)
+                console.log(err)
+            })
+
+            NodeDataService.getCoordinateByNode(res.data.currentNode, userData.token)
+            .then( res_current => {
+                setCurrentNode(res_current.data)
+            })
+            .catch( err => {
+                setCurrentNode(null)
+                console.log(err)
             })
         })
-        .catch( err_company => {
+        .catch( err_shipment => {
             setShipment(null)
-            console.log(err_company)
+            console.log(err_shipment)
         })
-
     }
     ,[isLoaded] );
     

@@ -48,6 +48,8 @@ export const ScanSHP = () => {
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [showDestInfo, setShowDestInfo] = useState(true)
 	const navigate = useNavigate();
+	const [warning, setWarning] = useState(null)
+    const [showInfo, setShowInfo] = useState(true)
 
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
@@ -66,20 +68,30 @@ export const ScanSHP = () => {
 		fullscreenControl: false,
 	};
 
-	async function getDirection() {
-		const directionsService = new google.maps.DirectionsService();
-
-		var results = await directionsService.route({
-					origin: {lat:currentNode.lat, lng:currentNode.lng},
-					destination:{lat:destinationNode.lat, lng:destinationNode.lng},
-					// eslint-disable-next-line no-undef
-					travelMode: google.maps.TravelMode.DRIVING,
-		})
-			
-		console.log(results);
-		return results;
-		
-	}
+	async function getDirection(path) {
+        console.log(google)
+        const directionsService = new google.maps.DirectionsService()
+        
+        var checkpoints = []
+        for ( let i = 0; i < path.length; i++ ){
+            let res = await NodeDataService.getCoordinateByNode(path[i].scannedAt, userData.token)
+            checkpoints.push( res.data )
+        }
+        console.log(checkpoints)
+        if ( checkpoints.length >= 2) {
+            var results=[]
+            for (let i = 0; i < checkpoints.length - 1; i++ ) {
+                results.push( await directionsService.route({
+                    origin: checkpoints[i],
+                    destination: checkpoints[i+1],
+                    // eslint-disable-next-line no-undef
+                    travelMode: google.maps.TravelMode.DRIVING,
+                }))
+            }
+            console.log(results)
+            return results
+        }
+    }
 
 	useEffect(() => {
 		CompanyService.getAllCompanyCode(userData.token)
@@ -92,34 +104,45 @@ export const ScanSHP = () => {
 			});
 	}, []);
 
-	useEffect(() => {
-		if (destinationCompany) {
-			NodeDataService.getActiveNodeByCompany(destinationCompany, userData.token)
-				.then((result) => {
-					console.log(result.data);
-					setCompanyNodes(result.data);
-				})
-				.catch((err_company) => {
-					setShipment(null);
-					setCompanyNodes([])
-					console.log(err_company);
-				});
-		}
-	}, [destinationCompany]);
-
     useEffect( () => {
-		if ( currentNode && destinationNode && isLoaded) {
-			getDirection()
-			.then(
-				results => 
-				setDirectionsResponse(results)
-
-			)
+		if (shipmentId) {
+			ShipmentService.getShipmentById(shipmentId ,userData.token)
+			.then( res => {console.log(res.data)
+				setShipment(res.data)
+				ShipmentService.getPathByShipmentId(shipmentId, userData.token)
+				.then( async res_path => {
+					console.log(res_path.data)
+					// setPath(res_path.data)
+					if (isLoaded ){ 
+						const results = await getDirection(res_path.data)
+						console.log(results)
 	
+						setDirectionsResponse(results)
+					}
+					
+				})
+				.catch( err => {
+					// setPath(null)
+					console.log(err)
+				})
+	
+				NodeDataService.getCoordinateByNode(res.data.currentNode, userData.token)
+				.then( res_current => {
+					setCurrentNode(res_current.data)
+				})
+				.catch( err => {
+					setCurrentNode(null)
+					console.log(err)
+				})
+			})
+			.catch( err_shipment => {
+				setShipment(null)
+				console.log(err_shipment)
+			})
 		}
-	
+
     }
-    ,[isLoaded, currentNode, destinationNode] );
+    ,[isLoaded, shipmentId] );
 
 	const handleCompanyDropdown = (e) => {
 		console.log(e);
@@ -156,7 +179,6 @@ export const ScanSHP = () => {
 	function handleNodePopupConfirm(newCurrentNode) {
         localStorage.setItem("currentNode", JSON.stringify(newCurrentNode))
 		// console.log(currentNode, newCurrentNode)
-
 		if (destinationNode && newCurrentNode.nodeCode == destinationNode.nodeCode) {
 			setDestinationNode(null)
 			setDirectionsResponse(null)
@@ -184,11 +206,6 @@ export const ScanSHP = () => {
         setEditProfPopup(false)
     }
 
-	const handleChangeDescription = (e) => {
-        setDescription( e.target.value )
-     
-	}
-
     return (
         <div className="content-main-container">
             <Titlebar pageTitle="Update Shipment"/>
@@ -200,6 +217,10 @@ export const ScanSHP = () => {
 						<div className="input-left-container">
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
 							
+							{ warning &&
+							<div className="alert alert-danger">
+								{warning}
+							</div>}
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Select Destination Company</label>
 								<Dropdown onSelect={handleCompanyDropdown}>
@@ -266,82 +287,66 @@ export const ScanSHP = () => {
 									RfidService.makeScan()
 									.then ( res => {
 										setShipmentId(res.data.data.uid)
+										ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+										.then( res_shipment => {
+											setShipment(res_shipment.data)
+										})
+									})
+									.catch(error => {
+										setWarning("Shipment not found!")
 									})
 								}} >Scan</Button>
 							</div>
 						</div>
 
 						<div style={{ width: "50%", height: "55vh" }}>
-							{ GoogleMap ? (currentNode ? (
-									<GoogleMap
-										center={{ lat: currentNode.lat, lng: currentNode.lng }}
-										zoom={15}
-										mapContainerStyle={{ width: "100%", height: "100%" }}
-										options={options}
-										onLoad={(map) => setMapRef(map)}
-										onClick={() => {}}
+							{ shipment ? <GoogleMap
+									center={{ lat: currentNode.lat, lng: currentNode.lng }}
+									zoom={15}
+									mapContainerStyle={{ width: '100%', height: '100%' }}
+									options={options}
+									onLoad={map => setMapRef(map)}
+									onClick={()=>{}}>
+								{directionsResponse ? (
+									directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
+								): null}
+								{showInfo && <InfoWindow
+									position={{ lat: currentNode.lat, lng: currentNode.lng }}
+									onCloseClick={() => {
+										setShowInfo(false)
+									}}
 									>
-										{destinationNode && showDestInfo && nodeStock && <InfoWindow
-											position={{ lat: destinationNode.lat, lng: destinationNode.lng }}
-											onCloseClick={() => {
-												setShowDestInfo(false)
-											}}>
-											<div>
-												<h2>
-													<span>🏣  {destinationNode.nodeCode}</span>
-												</h2>
-												<p style={{ color: "#000000" }}>
-													Company: {destinationNode.companyCode}
-												</p>
-												<p style={{ color: "#000000" }}>
-													Address: {destinationNode.address}
-												</p>
-												<p style={{ color: "#000000" }}>
-													Contact: {destinationNode.phoneNumber}
-												</p>
-												<p style={{ color: "#000000" }}>
-													Stocking: {nodeStock.length} shipment(s)
-												</p>
-											</div>
-										</InfoWindow>}
+									<div>
+										<h2>
+									{shipment.status == "shipping" 
+									? (<span>🚚 {shipment.uid}</span>) :
+									( shipment.status == "completed" ?
+									<span>✅ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
 										
-										{destinationNode && 
-										<Marker
-											key={`${destinationNode.lat}-${destinationNode.lng}`}
-											position={{ lat: destinationNode.lat, lng: destinationNode.lng }}
-											onClick={() => {
-												
-												console.log(destinationNode.lat + "-" + destinationNode.lng);
-											}}
-											map={mapRef}
-										/>
-										}
-										{currentNode && 
-										<Marker
-											key={`${currentNode.lat}-${currentNode.lng}`}
-											position={{ lat: currentNode.lat, lng: currentNode.lng }}
-											onClick={() => {
-												
-												console.log(currentNode.lat + "-" + currentNode.lng);
-											}}
-											map={mapRef}
-										/>
-										}
-										{directionsResponse ? (
-											<DirectionsRenderer directions={directionsResponse} />
-										): null}
-									</GoogleMap>
-								) : (
-									<GoogleMap
-										center={{ lat: 13.7563, lng: 100.5018 }}
-										zoom={15}
-										mapContainerStyle={{ width: "100%", height: "100%" }}
-										options={options}
-										onLoad={(map) => setMapRef(map)}
-										onClick={() => {}}
-									></GoogleMap>
-								)):null
-							}
+										
+										</h2>
+										<p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
+										<p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+									</div>
+								</InfoWindow>}
+								<Marker 
+								key={`${currentNode.lat}-${currentNode.lng}`}
+								position={{lat:currentNode.lat, lng:currentNode.lng}}
+								onClick={() => {
+									setShowInfo(true)
+								console.log(currentNode.lat+"-"+ currentNode.lgn)
+								}}
+								map={mapRef}
+								/>
+								</GoogleMap>
+								: <GoogleMap
+                                center={{ lat: currentNode.lat, lng: currentNode.lng }}
+                                zoom={15}
+                                mapContainerStyle={{ width: '100%', height: '100%' }}
+                                options={options}
+                                onLoad={map => setMapRef(map)}
+                                onClick={()=>{}}>
+                            	</GoogleMap>}
 						</div>
 					</div>
 
