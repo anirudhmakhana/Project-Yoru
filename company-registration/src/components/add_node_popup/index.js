@@ -51,7 +51,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
         setCompanyCode(userData.companyCode)
     }, [])
 
-    function handleConfirm(currentNode) {
+    function handleConfirm() {
         var invalidCode = StringValidator.validateNodeCode(nodeCode);
         var invalidAddress = StringValidator.validateAddress(address);
         var invalidPhone = StringValidator.validatePhoneNumber(phoneNumber);

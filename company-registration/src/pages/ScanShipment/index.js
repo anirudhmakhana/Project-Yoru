@@ -262,12 +262,12 @@ export const ScanSHP = () => {
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}} onClick={() => {
+								<Button className="signinBtn" style={{width: "70%"}} onClick={() => {
 									RfidService.makeScan()
 									.then ( res => {
 										setShipmentId(res.data.data.uid)
 									})
-								}} ></input>
+								}} >Scan</Button>
 							</div>
 						</div>
 

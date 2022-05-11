@@ -95,6 +95,12 @@ class StringValidator {
             return "Phone number can only contain number and '+' sign."
         }
     }
+
+    validateShipmentDescription = (description) => {
+        if ( description.length < 1) {
+            return "Please enter shipment description."
+        }
+    }
 }
 
 export default new StringValidator()

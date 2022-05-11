@@ -229,38 +229,33 @@ class ShipmentService {
     async createShipment( shipmentData , walletPublicKey, token ) {
         var bcData = shipmentData
         bcData["walletPublicKey"] = walletPublicKey
-        const response = await axios.post("http://localhost:4000/shipment/", bcData, 
+        axios.post("http://localhost:4000/shipment/", bcData, 
         {headers:{"x-access-token":token}})
-        .catch( error => {
-            throw error
-        }) 
-
-        if (response ) {
+        .then( response => {
+            console.log("Create centralize")
+            console.log('response', response)
             var centData = shipmentData
-            centData["transactionHash"] = response.transactionHash
-            const res_central = await axios.post("http://localhost:4000/shipment/centralize/", centData, 
+            centData["transactionHash"] = response.data.transactionHash
+            axios.post("http://localhost:4000/shipment/centralize/", centData, 
             {headers:{"x-access-token":token}})
-            .catch( error => {
-                throw error
-            }) 
-            if (res_central) {
-                
+            .then( res_central => {
                 var createScan = {
                     uid: shipmentData.uid,
                     currentNode: shipmentData.currentNode,
                     scannedTime: shipmentData.scannedTime,
                     status: shipmentData.status,
-                    transactionHash: response.transactionHash
+                    transactionHash: response.data.transactionHash
                 }
-                const res_scan = await axios.post("http://localhost:4000/scan/", createScan, 
+                axios.post("http://localhost:4000/scan/", createScan, 
                 {headers:{"x-access-token":token}})
-                .catch( error => {
-                    throw error
-                }) 
-                return res_scan
-            }
-        }
-        throw "Not complete create shipment"
+                .then (res_scan =>  {
+                    console.log(res_scan)
+                })    
+            })
+        })
+        .catch( error => {
+            throw error
+        }) 
     }
 
     
