@@ -22,6 +22,7 @@ import NodeDataService from "../../services/NodeDataService";
 import ShipmentService from "../../services/ShipmentService";
 import CompanyService from "../../services/CompanyService";
 import { getOverlayDirection } from "react-bootstrap/esm/helpers";
+import RfidService from "../../services/RfidService";
 const google = window.google;
 
 export const CreateSHP = () => {
@@ -31,7 +32,7 @@ export const CreateSHP = () => {
 	);
 	const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
-	const [shipmentId, setShipmentId] = useState("");
+	const [shipmentId, setShipmentId] = useState(null);
 	const [description, setDescription] = useState("");
 	const [destinationNode, setDestinationNode] = useState(null);
 	const [status, setStatus] = useState("created");
@@ -309,8 +310,14 @@ export const CreateSHP = () => {
 								</Dropdown>
 							</div>
 							<div className="textInputContainerCol">
+								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}}></input>
+								<Button className="signinBtn" onClick={() => {
+									RfidService.makeScan()
+									.then ( res => {
+										setShipmentId(res.data.data.uid)
+									})
+								}}style={{width: "70%"}}>Scan</Button>
 							</div>
 						</div>
 
@@ -388,7 +395,7 @@ export const CreateSHP = () => {
 						</div>
 					</div>
 
-					{ currentNode ? (
+					{ currentNode && shipmentId ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
                         	<input className="signinBtn" type="submit" value="Create Shipment" style={{width: "20%"}} disabled={true}></input>
                     	</div>

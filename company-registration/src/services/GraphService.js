@@ -57,8 +57,14 @@ class GraphService {
             {uid:"SHP012", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 9, 20, 20).getTime(), status:"created"},
 
         ]
+
+        this.graphTimeRange = ['day', 'week','month', 'year']
+        this.xAxisLabel = {week:"Date", month:"Day", year:"Month", day:"Hour"}
+        this.yAxisLabel = {shipped: "Shipped",stock:"Stock"}
+        this.graphName = {shipped: "Shipments Shipping",stock:"Stocking Shipments"}
     }
 
+    
     getCountShipmentAtTime( shipments, time ){
         var count = 0
         shipments.forEach( s => {

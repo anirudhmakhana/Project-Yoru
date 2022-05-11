@@ -222,10 +222,13 @@ export const OverviewPage = (props) => {
                                 {graphTimeRange[0].toUpperCase() + graphTimeRange.slice(1).toLowerCase()}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item eventKey={"day"}>Day</Dropdown.Item>
+                                {GraphService.graphTimeRange.map( g => 
+                                    <Dropdown.Item eventKey={g}>{g[0].toUpperCase()+g.slice(1).toLowerCase()}</Dropdown.Item>
+                                    )}
+                                {/* <Dropdown.Item eventKey={"day"}>Day</Dropdown.Item>
                                 <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
                                 <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
-                                <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item>
+                                <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
                             </Dropdown.Menu>
                         </Dropdown>
                         <p>
