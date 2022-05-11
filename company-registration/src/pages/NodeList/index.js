@@ -17,7 +17,13 @@ export const NodeListPage = () => {
     const [pageSize, setPageSize] = useState(20)
     const [editNode, setEditNode] = useState(null)
     const [showEditNode, setShowEditNode] = useState(false)
+
     useEffect(() => {
+        updateTable()
+    }
+    ,[showAddNode, showEditNode] );
+
+    const updateTable = () => {
         NodeDataService.getAllNode(userData.token)
         .then( res => setAllNodes(res.data))
         .catch( err => {
@@ -25,11 +31,11 @@ export const NodeListPage = () => {
             console.log(err)
         })
     }
-    ,[showAddNode, showEditNode] );
 
     const dataTable = () => {
         return allNodes.slice((pageNumber-1)*pageSize, (pageNumber-1)*pageSize+pageSize).map((res, i) => {
-            return <NodeTable userData={userData} obj={res} index={i+1} setEditNodePopup={setShowEditNode} setEditNode={setEditNode}/>
+            return <NodeTable userData={userData} obj={res} index={i+1} setEditNodePopup={setShowEditNode} setEditNode={setEditNode}
+            updateTable={updateTable}/>
         })
     }
 

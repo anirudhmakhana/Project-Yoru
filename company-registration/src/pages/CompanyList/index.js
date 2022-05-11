@@ -11,6 +11,7 @@ import { EditCompanyPopup } from '../../components/edit_company_popup';
 import "../../assets/style/companyList.css";
 import { ViewStaffPopup } from '../../components/view_staff_popup';
 import { AddStaffPopup } from '../../components/add_staff_popup';
+import CompanyService from '../../services/CompanyService';
 
 export function CompanyListPage(props) {
 
@@ -30,8 +31,7 @@ export function CompanyListPage(props) {
       }, [userData]);
     
     const updateData = () => {
-
-        axios.get('http://localhost:4000/company',{headers:{"x-access-token":userData.token}})
+        CompanyService.getAllCompany( userData.token)
         .then( res => {
             setCompanies(res.data)
             // console.log(res.data)

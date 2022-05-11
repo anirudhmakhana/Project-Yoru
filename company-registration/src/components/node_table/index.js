@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import StaffAccountService from '../../services/StaffAccountService'
+import NodeDataService from '../../services/NodeDataService'
 
 export class NodeTable extends Component {
 
@@ -10,7 +11,6 @@ export class NodeTable extends Component {
         super(props)
         console.log(this.props)  
         this.state = {
-            users: [],
             setEditNodePopup: this.props.setEditNodePopup,
             setEditNode: this.props.setEditNode,
         }
@@ -34,11 +34,33 @@ export class NodeTable extends Component {
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
                     &nbsp;&nbsp;
-
                     <Button size="sm" variant="dark" onClick={() =>{
                         this.state.setEditNode(this.props.obj.nodeCode)
                         this.state.setEditNodePopup(true)
                     }}>EDIT</Button>
+                    &nbsp;&nbsp;
+                    { this.props.obj.status.toLowerCase() == "active" ? 
+                    <Button size="sm" variant="outline-danger" onClick={() =>{
+                        this.props.obj.status = "inactive"
+                        NodeDataService.updateNodeStatus( this.props.obj.nodeCode, {
+                            nodeCode: this.props.obj.nodeCode,
+                            status:"inactive"
+                        }, this.props.userData.token)
+                        .then( res => {
+                            this.props.updateTable()
+                        })
+                    }}>INACTIVE</Button>
+                    : <Button size="sm" variant="outline-success" onClick={() =>{
+                        this.props.obj.status = "active"
+                        NodeDataService.updateNodeStatus( this.props.obj.nodeCode, {
+                            nodeCode: this.props.obj.nodeCode,
+                            status:"active"
+                        }, this.props.userData.token)
+                        .then( res => {
+                            this.props.updateTable()
+                        })
+
+                    }}>ACTIVE</Button>}
                 </td>       
 
             </tr>
