@@ -42,7 +42,7 @@ export const ShipmentListPage = () => {
                 
                 <h3 className="content-header">All Shipments</h3>
                 <br/>
-                <span>Page : <strong>{pageNumber}</strong></span>
+
                 { pageNumber == 1 ? null
                 : (<Button onClick={() => {setPageNumber(pageNumber-1)}} className="btn-dark" >
                 PREV
@@ -66,6 +66,9 @@ export const ShipmentListPage = () => {
                     {dataTable() }
                     
                 </Table>
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                    <span>Page : <strong>{pageNumber}</strong></span>
+                </div>
             </div>
             : (<></>)}
             
