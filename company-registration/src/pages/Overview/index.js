@@ -207,30 +207,32 @@ export const OverviewPage = (props) => {
                 <div className="chart-container">
                     <div className="chart-title-container">
                         {/* <h3 className="chart-title">Stocking Shipments</h3> */}
-                        <Dropdown onSelect={handleGraphType} >
-                            <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
-                                {graphName[graphType]}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item eventKey={"shipped"}>{graphName.shipped}</Dropdown.Item>
-                                <Dropdown.Item eventKey={"stock"}>{graphName.stock}</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <div style={{display: "flex", "flex-direction":"row"}}>
+                            <Dropdown onSelect={handleGraphType} style={{marginRight: "2%"}}>
+                                <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                    {graphName[graphType]}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item eventKey={"shipped"}>{graphName.shipped}</Dropdown.Item>
+                                    <Dropdown.Item eventKey={"stock"}>{graphName.stock}</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
 
-                        <Dropdown onSelect={handleTimeRangeDropdown} >
-                            <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
-                                {graphTimeRange[0].toUpperCase() + graphTimeRange.slice(1).toLowerCase()}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {GraphService.graphTimeRange.map( g => 
-                                    <Dropdown.Item eventKey={g}>{g[0].toUpperCase()+g.slice(1).toLowerCase()}</Dropdown.Item>
-                                    )}
-                                {/* <Dropdown.Item eventKey={"day"}>Day</Dropdown.Item>
-                                <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
-                                <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
-                                <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
-                            </Dropdown.Menu>
-                        </Dropdown>
+                            <Dropdown onSelect={handleTimeRangeDropdown} >
+                                <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                    {graphTimeRange[0].toUpperCase() + graphTimeRange.slice(1).toLowerCase()}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {GraphService.graphTimeRange.map( g => 
+                                        <Dropdown.Item eventKey={g}>{g[0].toUpperCase()+g.slice(1).toLowerCase()}</Dropdown.Item>
+                                        )}
+                                    {/* <Dropdown.Item eventKey={"day"}>Day</Dropdown.Item>
+                                    <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
+                                    <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
+                                    <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
                         <p>
                             {new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
                             .toLocaleDateString()} - {currentDate.toLocaleDateString()}

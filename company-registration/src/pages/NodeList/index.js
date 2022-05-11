@@ -50,7 +50,6 @@ export const NodeListPage = () => {
             
             {userData && allNodes ?
             <div className="content-table-container">
-                <span>Page : <strong>{pageNumber}</strong></span>
                 { pageNumber == 1 ? null
                 : (<Button onClick={() => {setPageNumber(pageNumber-1)}} className="btn-dark" >
                 PREV
@@ -75,7 +74,9 @@ export const NodeListPage = () => {
                     {dataTable()} 
 
                 </Table>
-                
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                    <span>Page : <strong>{pageNumber}</strong></span>
+                </div>
             </div>
             : null}
             {showAddNode && <AddNodePopup setOpenPopup={setShowAddNode}/>}

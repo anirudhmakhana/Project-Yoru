@@ -181,7 +181,7 @@ export const ViewNodePage = () => {
         return (
             <div className="content-main-container">
                 <div className="content-title-container">
-                    <h1>Node</h1>            
+                    <h1>Node</h1>
                 </div>
                 <div className="detailed-main-container">
                     <div className="detailed-title-container">
