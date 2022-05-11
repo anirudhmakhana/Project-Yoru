@@ -258,6 +258,38 @@ class ShipmentService {
         }) 
     }
 
+    async updateShipment( shipmentData , walletPublicKey, token ) {
+        var bcData = shipmentData
+        bcData["walletPublicKey"] = walletPublicKey
+        axios.put("http://localhost:4000/shipment/update/", bcData, 
+        {headers:{"x-access-token":token}})
+        .then( response => {
+            console.log("Update centralize")
+            console.log('response', response)
+            var centData = shipmentData
+            centData["transactionHash"] = response.data.transactionHash
+            axios.put("http://localhost:4000/shipment/centralize/update/", centData, 
+            {headers:{"x-access-token":token}})
+            .then( res_central => {
+                var createScan = {
+                    uid: shipmentData.uid,
+                    currentNode: shipmentData.currentNode,
+                    scannedTime: shipmentData.scannedTime,
+                    status: shipmentData.status,
+                    transactionHash: response.data.transactionHash
+                }
+                axios.post("http://localhost:4000/scan/", createScan, 
+                {headers:{"x-access-token":token}})
+                .then (res_scan =>  {
+                    console.log(res_scan)
+                })    
+            })
+        })
+        .catch( error => {
+            throw error
+        }) 
+    }
+
     
 }
 

@@ -43,8 +43,6 @@ export const ScanSHP = () => {
 	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
 	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
 	// const [destinationNode, setDestination] = useState(null);
-	const [allCompanies, setAllCompanies] = useState([]);
-	const [companyNodes, setCompanyNodes] = useState([]);
 	const [destinationCompany, setDestinationCompany] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [showDestInfo, setShowDestInfo] = useState(true)
@@ -52,6 +50,10 @@ export const ScanSHP = () => {
 	const [warning, setWarning] = useState(null)
     const [showInfo, setShowInfo] = useState(true)
 	const [showScanPopup, setShowScanPopup] = useState(false)
+	const [allScans, setAllScans] = useState([])
+	const [userCompany, setUserCompany] = useState(null)
+	const [updateInfo, setUpdateInfo] = useState(null)
+	const [newStatus, setNewStatus] = useState(null)
 
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
@@ -96,14 +98,14 @@ export const ScanSHP = () => {
     }
 
 	useEffect(() => {
-		CompanyService.getAllCompanyCode(userData.token)
-			.then((result) => {
-				setAllCompanies(result.data);
-			})
-			.catch((err_company) => {
-				setShipment(null);
-				console.log(err_company);
-			});
+		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
+		.then((result) => {
+			setUserCompany(result.data);
+		})
+		.catch((err_company) => {
+			setShipment(null);
+			console.log(err_company);
+		});
 	}, []);
 
     useEffect( () => {
@@ -127,15 +129,6 @@ export const ScanSHP = () => {
 					// setPath(null)
 					console.log(err)
 				})
-	
-				NodeDataService.getCoordinateByNode(res.data.currentNode, userData.token)
-				.then( res_current => {
-					setCurrentNode(res_current.data)
-				})
-				.catch( err => {
-					setCurrentNode(null)
-					console.log(err)
-				})
 			})
 			.catch( err_shipment => {
 				setShipment(null)
@@ -146,46 +139,23 @@ export const ScanSHP = () => {
     }
     ,[isLoaded, shipmentId] );
 
-	const handleCompanyDropdown = (e) => {
-		console.log(e);
-		setDestinationCompany(e);
-		console.log(destinationNode);
-		setDestinationNode(null);
-		setNodeStock(null);
-	};
-
-	const handleNodeDropdown = (e) => {
-		console.log(e);
-		NodeDataService.getNodeByCode(e, userData.token)
-			.then((result) => {
-				setDestinationNode(result.data);
-				setShowDestInfo(true)
-				console.log(result.data);
-				ShipmentService.getStockByNode(result.data.nodeCode, userData.token)
-					.then((res_stock) => {
-						console.log(res_stock.data);
-						setNodeStock(res_stock.data);
-
-					})
-					.catch((err_stock) => {
-						setNodeStock(null);
-						console.log(err_stock);
-					});
+	useEffect(() => {
+		if (shipmentId) {
+			ShipmentService.getScanByShipmentId(shipmentId, userData.token)
+			.then( res => {
+				console.log(res.data)
+				setAllScans(res.data)
 			})
-			.catch((err) => {
-				setDestinationNode(null);
-				console.log(err);
-			});
-	};
+			.catch(err => {
+				console.log(err)
+			})
+		}
+        
+    }, [shipmentId])
 
 	function handleNodePopupConfirm(newCurrentNode) {
         localStorage.setItem("currentNode", JSON.stringify(newCurrentNode))
 		// console.log(currentNode, newCurrentNode)
-		if (destinationNode && newCurrentNode.nodeCode == destinationNode.nodeCode) {
-			setDestinationNode(null)
-			setDirectionsResponse(null)
-			setShowDestInfo(false)
-		}
 		setCurrentNode(newCurrentNode)
         setNodePopup(false)
 
@@ -208,9 +178,35 @@ export const ScanSHP = () => {
         setEditProfPopup(false)
     }
 
+	function handleUpdateShipment() {
+		var shipmentData = { uid: shipment.uid,
+			description: shipment.description, 
+			originNode: shipment.originNode,
+			currentNode: currentNode.nodeCode,
+			destinationNode: shipment.destinationNode,
+			companyCode: shipment.companyCode,
+			status:newStatus,
+			scannedTime:new Date().getTime() }
+		ShipmentService.updateShipment(shipmentData, userCompany.walletPublicKey, userData.token )
+		.then(res => {
+			console.log("Shipment updated")
+			setWarning(null)
+			setUpdateInfo(null)
+			setShipment(null)
+			setShipmentId(null)
+			setAllScans([])
+		})
+		.catch( err => {
+			console.log(err)
+			
+		})
+		
+
+	}
+
     return (
         <div className="content-main-container">
-            <Titlebar pageTitle="Update Shipment"/>
+			<Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
            <div className="detailed-main-container" style={{height: "fit-content"}}>
            <form onSubmit={ () => {} }>
                     
@@ -223,65 +219,10 @@ export const ScanSHP = () => {
 							<div className="alert alert-danger">
 								{warning}
 							</div>}
-							<div className="textInputContainerCol">
-								<label className="inputLabel">Select Destination Company</label>
-								<Dropdown onSelect={handleCompanyDropdown}>
-									{destinationCompany ? (
-										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											{destinationCompany}
-										</Dropdown.Toggle>
-									) : (
-										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											Company
-										</Dropdown.Toggle>
-									)}
-
-									<Dropdown.Menu>
-										{allCompanies.map((companyCode) => (
-											<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
-										))}
-									</Dropdown.Menu>
-								</Dropdown>
-							</div>
-							<div className="textInputContainerCol">
-								<label className="inputLabel">Select Destination Node</label>
-								<Dropdown onSelect={handleNodeDropdown}>
-								{destinationCompany  ? (
-									destinationNode ? (
-										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											{destinationNode.nodeCode}
-										</Dropdown.Toggle>
-									) : (
-										companyNodes.length < 1 ? 
-										<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>
-											No existed node
-										</Dropdown.Toggle>
-										:
-										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											Node
-										</Dropdown.Toggle>
-									)
-									) : (
-										<Dropdown.Toggle variant="primary" id="dropdown-basic" disabled>
-											Node
-										</Dropdown.Toggle>
-									)}
-
-								<Dropdown.Menu>
-									{companyNodes.map((node) => {
-										if (node.companyCode != currentNode.companyCode ||
-											node.nodeCode != currentNode.nodeCode) {
-											return <Dropdown.Item eventKey={node.nodeCode}>
-											{node.nodeCode}
-											</Dropdown.Item>
-										}
-										
-									}
-										
-									)}
-								</Dropdown.Menu>
-								</Dropdown>
-							</div>
+							{ updateInfo &&
+							<div className="alert alert-primary">
+								{updateInfo}
+							</div>}
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
@@ -292,12 +233,34 @@ export const ScanSHP = () => {
 										if (res.data.statusCode == 200) {
 											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
 											.then( res_shipment => {
+												console.log(currentNode)
 												if (res_shipment.data) {
 													setShipmentId(res.data.data.uid)
 													setShipment(res_shipment.data)
-													setWarning(null)
-													setShowScanPopup(false)
+													var newState = "arrived"
+													if (res_shipment.data.status == "created" || res_shipment.data.status == "arrived" ) {
+														newState = "shipping"
+													} else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
+														newState = "complete"
+													} else if (res_shipment.data.status == "cancel") {
+														newState = null
+													}
+													setNewStatus(newState)
+													if (newState) {
+														
+														setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
+														setWarning(null)
+														setShowScanPopup(false)
+													}
+													else {
+														setUpdateInfo(null)
+														setShipmentId(null)
+														setShipment(null)
+														setWarning("Cancelled shipment cannot be updated!")
+														setShowScanPopup(false)
+													}
 												} else {
+													setUpdateInfo(null)
 													setShipmentId(null)
 													setShipment(null)
 													setWarning("Shipment not found!")
@@ -326,7 +289,23 @@ export const ScanSHP = () => {
 									})
 								}} >Scan</Button>
 							</div>
+							{ allScans.reverse().map( scan => {
+                            return(
+                            <div className="scanContainer">
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+                                <br/>
+                            </div>
+                            ) 
+                            
+							})}
 						</div>
+						<div className='infoContainer'>
+
+                        
+                        </div>
 
 						<div style={{ width: "50%", height: "55vh" }}>
 							{ shipment ? <GoogleMap
@@ -379,13 +358,13 @@ export const ScanSHP = () => {
 						</div>
 					</div>
 
-					{ currentNode ? (
+					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<input className="signinBtn" type="submit" value="Update Shipment" style={{width: "20%"}} disabled={true}></input>
+                        	<Button className="signinBtn" style={{width: "20%"}} onClick={handleUpdateShipment}>Update Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<input className="signinBtn" type="submit" value="Update Shipment" style={{width: "20%"}} disabled={true} ></input>
+                        	<Button className="cancelBtn" style={{width: "20%"}}  disabled>Update Shipment</Button>
                     	</div>
 					)}
                 </form>

@@ -8,12 +8,12 @@ class RfidService {
 
 
     async makeScan() { 
-        const response = await axios.get(this.scanUrl)
-        .catch((error) => {
-            throw error
-        })
+        // const response = await axios.get(this.scanUrl)
+        // .catch((error) => {
+        //     throw error
+        // })
 
-        return response
+        return {data:{statusCode:200, data:{uid:'2A1E50B4'}}}
     }
 
 }

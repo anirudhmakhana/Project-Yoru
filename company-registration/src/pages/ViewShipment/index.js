@@ -215,17 +215,16 @@ export const ViewShipmentPage = () => {
 
                         { allScans.reverse().map( scan => {
                             return(
-                            <div className="infoContainer">
-                                <p>Scan At: {scan.scannedAt}</p>
-                                <p>Scan Timestamp: {new Date(scan.scannedTime).toLocaleString()}</p>
-                                <p>Status: {scan.status}</p>
-                                <p>Transaction Hash: {scan.txnHash}</p>
-
+                            <div className="scanContainer">
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
                                 <br/>
                             </div>
                             ) 
                             
-                        })}
+							})}
                         </div>
                         
                         
