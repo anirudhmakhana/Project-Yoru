@@ -364,11 +364,11 @@ export const CancelSHP = () => {
 
 					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel</Button>
+                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<Button className="cancelBtn" style={{width: "20%", backgroundColor:"pink"}}  disabled>Cancel</Button>
+                        	<Button className="cancelBtn" style={{width: "20%", backgroundColor:"pink"}}  disabled>Cancel Shipment</Button>
                     	</div>
 					)}
                 </form>
