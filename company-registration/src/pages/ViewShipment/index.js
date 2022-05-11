@@ -148,14 +148,18 @@ export const ViewShipmentPage = () => {
                             SHOW INFO
                         </Button>
                     </div>
-                    <div className="infoContainer">
+                    <div className="container-row mb-4 mt-4">
+                        <div className="infoContainer" style={{width: "40%"}}>
                             {/* <p>{shipment.description}</p> */}
                             <p>Status: {shipment.status.toUpperCase()}</p>
                             <p>Origin: {shipment.originNode}</p>
+                        </div>
+                        <div className="infoContainer">
                             <p>Current Location: {shipment.currentNode}</p>
                             <p>Destination: {shipment.destinationNode}</p>
-
+                        </div>
                     </div>
+                    
                     <div className="shipment-info">
                         <div style={{width:'30vw', height:'47vh', textAlign: "left"}}>
                             <h2 style={{'margin-top':'10px','margin-left':'10px'}}>Map</h2>
@@ -211,21 +215,25 @@ export const ViewShipmentPage = () => {
                                 /> */}
                             </GoogleMap>
                         </div>
-                        <div className='infoContainer'>
-
-                        { allScans.reverse().map( scan => {
-                            return(
-                            <div className="scanContainer">
-                                <br/>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
-                                <br/>
+                        
+                        <div className='scan-history-container' style={{overflow: "visible"}}>
+                            <h2 style={{'margin-top':'10px','margin-left':'10px'}}>History</h2>
+                            <div style={{height: "85%",overflowY: "auto"}}>
+                                { allScans.reverse().map( scan => {
+                                return(
+                                <div className="scanContainer">
+                                    <br/>
+                                    <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+                                    <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+                                    <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+                                    <p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+                                    <br/>
+                                </div>
+                                ) 
+                                
+                            })}
                             </div>
-                            ) 
                             
-							})}
                         </div>
                         
                         
