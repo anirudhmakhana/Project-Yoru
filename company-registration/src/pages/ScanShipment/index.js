@@ -5,6 +5,7 @@ import "../../assets/style/style.css"
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
+
 import {
 	useJsApiLoader,
 	GoogleMap,
@@ -22,6 +23,8 @@ import NodeDataService from "../../services/NodeDataService";
 import ShipmentService from "../../services/ShipmentService";
 import CompanyService from "../../services/CompanyService";
 import { getOverlayDirection } from "react-bootstrap/esm/helpers";
+
+import RfidService from "../../services/RfidService";
 
 const google = window.google;
 
@@ -257,8 +260,14 @@ export const ScanSHP = () => {
 								</Dropdown>
 							</div>
 							<div className="textInputContainerCol">
+								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}}></input>
+								<input className="signinBtn" type="submit" value="Scan" style={{width: "70%"}} onClick={() => {
+									RfidService.makeScan()
+									.then ( res => {
+										setShipmentId(res.data.data.uid)
+									})
+								}} ></input>
 							</div>
 						</div>
 
