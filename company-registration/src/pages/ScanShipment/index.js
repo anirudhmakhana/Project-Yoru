@@ -37,14 +37,9 @@ export const ScanSHP = () => {
 	const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 	const [shipmentId, setShipmentId] = useState("");
-	const [description, setDescription] = useState("");
-	const [destinationNode, setDestinationNode] = useState(null);
-	const [status, setStatus] = useState("created");
-	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
+
 	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
-	// const [destinationNode, setDestination] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
-	const navigate = useNavigate();
 	const [warning, setWarning] = useState(null)
     const [showInfo, setShowInfo] = useState(true)
 	const [showScanPopup, setShowScanPopup] = useState(false)
@@ -57,8 +52,6 @@ export const ScanSHP = () => {
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
-	const [nodeStock, setNodeStock] = useState(null);
-	// const [currentMark, setCurrentMark] = useState(null)
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
 		libraries: ["places"],
