@@ -24,15 +24,15 @@ const data1 = [
 export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicatorY}) => {
     return (
         <>
-           <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
-               <VictoryGroup  color="#3751FF"
-                labels={({ datum }) => `${indicatorX}: ${datum.x}\n${indicatorY}: ${datum.y}`}
-                labelComponent={
-                    <VictoryTooltip
-                        style={{ fontSize: 10 }}
-                    />
-                }
-                data={chartDataPrim ? chartDataPrim : data1}>
+            <VictoryChart containerComponent={<VictoryVoronoiContainer/>}>
+                <VictoryGroup  color="#3751FF"
+                    labels={({ datum }) => `${indicatorX}: ${datum.x}\n${indicatorY}: ${datum.y}`}
+                    labelComponent={
+                        <VictoryTooltip
+                            style={{ fontSize: 10 }}
+                        />
+                    }
+                    data={chartDataPrim ? chartDataPrim : data1}>
                     {/* <VictoryAxis></VictoryAxis> */}
                     <VictoryLine  
                         interpolation="monotoneX"
@@ -41,25 +41,29 @@ export const FrequencyChart = ({chartDataPrim, chartDataSec, indicatorX, indicat
                     <VictoryScatter
                         size={({ active }) => active ? 4 : 2}
                     /> 
-               </VictoryGroup>
-               { chartDataSec && 
-               <VictoryGroup color="#DFE0EB"
-               labels={({ datum }) => `${indicatorY}: ${datum.y}`}
-               labelComponent={
-                   <VictoryTooltip
-                       style={{ fontSize: 10, 'z-index': 1  }}
-                   />
-               }
-               data={chartDataSec && chartDataPrim ? chartDataSec : data1}>
-                   <VictoryLine
-                       interpolation="monotoneX"
-                       scale={{x:"time"}} 
-                   />
-                   <VictoryScatter
-                       size={({ active }) => active ? 4 : 2}
-                   /> 
-              </VictoryGroup>
-               }
+                    <VictoryAxis crossAxis tickFormat={(x) => new Date(x).getFullYear()}/>
+                    <VictoryAxis dependentAxis crossAxis tickFormat={(t) => `${Math.round(t)}`}/>
+                </VictoryGroup>
+                { chartDataSec && 
+                <VictoryGroup color="#DFE0EB"
+                    labels={({ datum }) => `${indicatorY}: ${datum.y}`}
+                    labelComponent={
+                        <VictoryTooltip
+                            style={{ fontSize: 10, 'z-index': 1  }}
+                        />
+                    }
+                    data={chartDataSec && chartDataPrim ? chartDataSec : data1}>
+                    <VictoryLine
+                        interpolation="monotoneX"
+                        scale={{x:"time"}} 
+                    />
+                    <VictoryScatter
+                        size={({ active }) => active ? 4 : 2}
+                    /> 
+                    <VictoryAxis crossAxis tickFormat={(x) => new Date(x).getFullYear()}/>
+                    <VictoryAxis dependentAxis crossAxis tickFormat={(t) => `${Math.round(t)}`}/>
+                </VictoryGroup>
+                }
                
             </VictoryChart> 
         </>
