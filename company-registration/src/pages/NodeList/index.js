@@ -7,6 +7,7 @@ import "../../assets/style/style.css"
 import NodeDataService from '../../services/NodeDataService';
 import { NodeTable } from '../../components/node_table';
 import { AddNodePopup } from '../../components/add_node_popup';
+import { EditNodePopup } from '../../components/edit_node_popup';
 
 export const NodeListPage = () => {
     const [allNodes, setAllNodes] = useState(null)
@@ -14,7 +15,8 @@ export const NodeListPage = () => {
     const [pageNumber, setPageNumber] = useState(1)
     const [showAddNode, setShowAddNode] = useState(false)
     const [pageSize, setPageSize] = useState(20)
-    
+    const [editNode, setEditNode] = useState(null)
+    const [showEditNode, setShowEditNode] = useState(false)
     useEffect(() => {
         NodeDataService.getAllNode(userData.token)
         .then( res => setAllNodes(res.data))
@@ -23,11 +25,11 @@ export const NodeListPage = () => {
             console.log(err)
         })
     }
-    ,[showAddNode] );
+    ,[showAddNode, showEditNode] );
 
     const dataTable = () => {
         return allNodes.slice((pageNumber-1)*pageSize, (pageNumber-1)*pageSize+pageSize).map((res, i) => {
-            return <NodeTable userData={userData} obj={res} index={i+1} />
+            return <NodeTable userData={userData} obj={res} index={i+1} setEditNodePopup={setShowEditNode} setEditNode={setEditNode}/>
         })
     }
 
@@ -71,6 +73,8 @@ export const NodeListPage = () => {
             </div>
             : null}
             {showAddNode && <AddNodePopup setOpenPopup={setShowAddNode}/>}
+            {showEditNode && editNode && <EditNodePopup setOpenPopup={setShowEditNode} initNodeCode={editNode}/>}
+
         </div>
     );
 }

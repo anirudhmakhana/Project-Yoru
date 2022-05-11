@@ -15,18 +15,6 @@ export const ViewStaffPopup = ({setOpenPopup, username}) => {
 
     useEffect(() => {
         
-        // setUserData(props.userData)
-        // axios.get('http://localhost:4000/staff/' + username ,
-        // {headers:{"x-access-token":userData.token}})
-        // .then( res => {
-        //     console.log(res.data)
-        //     setFullName(res.data.fullName)
-        //     setEmail(res.data.email)
-        //     setCompanyCode(res.data.companyCode)
-        // })
-        // .catch((error) => {
-        //     console.log(error)
-        // })
         StaffAccountService.getStaffByUsername(username, userData.token)
         .then(res => {
             setFullName(res.data.fullName)
@@ -48,7 +36,7 @@ export const ViewStaffPopup = ({setOpenPopup, username}) => {
         <div className="popupBackground">
             <div className="startPageContainer">
                 <div className="logo">
-                    <h3>View Staff Account</h3>
+                    <h3 className="h3-logo">View Staff Account</h3>
                 </div>
 
                 <form>

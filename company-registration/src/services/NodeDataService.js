@@ -47,6 +47,14 @@ class NodeDataService {
         return response
     }
 
+    async updateNode( nodeCode, newData, token ) {
+        const response = await axios.put("http://localhost:4000/node/update/"+ nodeCode, newData,  {headers:{"x-access-token":token}})
+            .catch( error => {
+                throw error
+            }) 
+        return response
+    }
+
     async getAllNode(token) { 
         const response = await axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
         .catch((error) => {

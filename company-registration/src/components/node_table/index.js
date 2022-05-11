@@ -9,7 +9,11 @@ export class NodeTable extends Component {
     constructor(props) {
         super(props)
         console.log(this.props)  
-
+        this.state = {
+            users: [],
+            setEditNodePopup: this.props.setEditNodePopup,
+            setEditNode: this.props.setEditNode,
+        }
     }
 
     render() {
@@ -29,7 +33,12 @@ export class NodeTable extends Component {
                     <Link to={'view-node/'+this.props.obj.nodeCode}>
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
-                    
+                    &nbsp;&nbsp;
+
+                    <Button size="sm" variant="dark" onClick={() =>{
+                        this.state.setEditNode(this.props.obj.nodeCode)
+                        this.state.setEditNodePopup(true)
+                    }}>EDIT</Button>
                 </td>       
 
             </tr>
