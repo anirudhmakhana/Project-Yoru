@@ -205,7 +205,7 @@ export const CancelSHP = () => {
 
     return (
         <div className="content-main-container">
-			<Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			<Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
            <div className="detailed-main-container" style={{height: "fit-content"}}>
            <form onSubmit={ () => {} }>
                     
@@ -283,82 +283,82 @@ export const CancelSHP = () => {
 									})
 								}} >Scan</Button>
 							</div>
-							{ allScans.reverse().map( scan => {
-                            return(
-                            <div className="scanContainer">
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
-                                <p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
-                                <br/>
-                            </div>
-                            ) 
-                            
-							})}
-						</div>
-						<div className='infoContainer'>
-
-                        
-                        </div>
-
-						<div style={{ width: "50%", height: "55vh" }}>
-							{ shipment ? <GoogleMap
+							
+							<div style={{ width: "100%", height: "55vh" }}>
+								{ shipment ? <GoogleMap
+										center={{ lat: currentNode.lat, lng: currentNode.lng }}
+										zoom={15}
+										mapContainerStyle={{ width: '100%', height: '100%' }}
+										options={options}
+										onLoad={map => setMapRef(map)}
+										onClick={()=>{}}>
+									{directionsResponse ? (
+										directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
+									): null}
+									{showInfo && shipment && shipmentCurNode && <InfoWindow
+										position={{ lat:shipmentCurNode.lat, lng: shipmentCurNode.lng }}
+										onCloseClick={() => {
+											setShowInfo(false)
+										}}
+										>
+										<div>
+											<h2>
+										{shipment.status == "shipping" 
+										? (<span>🚚 {shipment.uid}</span>) :
+										( shipment.status == "completed" ?
+										<span>✅ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
+											
+											
+											</h2>
+											<p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
+											<p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+										</div>
+									</InfoWindow>}
+									<Marker 
+									key={`${currentNode.lat}-${currentNode.lng}`}
+									position={{lat:currentNode.lat, lng:currentNode.lng}}
+									onClick={() => {
+										setShowInfo(true)
+									console.log(currentNode.lat+"-"+ currentNode.lgn)
+									}}
+									map={mapRef}
+									/>
+									</GoogleMap>
+									: <GoogleMap
 									center={{ lat: currentNode.lat, lng: currentNode.lng }}
 									zoom={15}
 									mapContainerStyle={{ width: '100%', height: '100%' }}
 									options={options}
 									onLoad={map => setMapRef(map)}
 									onClick={()=>{}}>
-								{directionsResponse ? (
-									directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
-								): null}
-								{showInfo && shipment && shipmentCurNode && <InfoWindow
-									position={{ lat:shipmentCurNode.lat, lng: shipmentCurNode.lng }}
-									onCloseClick={() => {
-										setShowInfo(false)
+									<Marker 
+									key={`${currentNode.lat}-${currentNode.lng}`}
+									position={{lat:currentNode.lat, lng:currentNode.lng}}
+									onClick={() => {
+										setShowInfo(true)
+									console.log(currentNode.lat+"-"+ currentNode.lgn)
 									}}
-									>
-									<div>
-										<h2>
-									{shipment.status == "shipping" 
-									? (<span>🚚 {shipment.uid}</span>) :
-									( shipment.status == "completed" ?
-									<span>✅ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
-										
-										
-										</h2>
-										<p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
-										<p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
-									</div>
-								</InfoWindow>}
-								<Marker 
-								key={`${currentNode.lat}-${currentNode.lng}`}
-								position={{lat:currentNode.lat, lng:currentNode.lng}}
-								onClick={() => {
-									setShowInfo(true)
-								console.log(currentNode.lat+"-"+ currentNode.lgn)
-								}}
-								map={mapRef}
-								/>
-								</GoogleMap>
-								: <GoogleMap
-                                center={{ lat: currentNode.lat, lng: currentNode.lng }}
-                                zoom={15}
-                                mapContainerStyle={{ width: '100%', height: '100%' }}
-                                options={options}
-                                onLoad={map => setMapRef(map)}
-                                onClick={()=>{}}>
-								<Marker 
-								key={`${currentNode.lat}-${currentNode.lng}`}
-								position={{lat:currentNode.lat, lng:currentNode.lng}}
-								onClick={() => {
-									setShowInfo(true)
-								console.log(currentNode.lat+"-"+ currentNode.lgn)
-								}}
-								map={mapRef}
-								/>
-                            	</GoogleMap>}
+									map={mapRef}
+									/>
+									</GoogleMap>}
+							</div>
 						</div>
+						<div className='scan-history-container' style={{marginLeft: "3%"}}>
+						<h3 style={{color: "#252733", marginBottom: "3%"}}>Update History</h3>
+							{ allScans.reverse().map( scan => {
+                            return(
+								<div>
+									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+									<br/>
+								</div>
+                            ) 
+							})}
+                        </div>
+
+
 					</div>
 
 					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
