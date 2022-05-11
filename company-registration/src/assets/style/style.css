@@ -350,3 +350,14 @@ div.warning{
     color: #252733;
     font-weight: bold;
 }
+
+.scan-history-container {
+    overflow-y: auto;
+    text-align: left;
+    width: 50%;
+}
+
+.container-row {
+    display: flex;
+    flex-direction: row;
+}
