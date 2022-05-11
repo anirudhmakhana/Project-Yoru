@@ -224,7 +224,6 @@ export const CreateSHP = () => {
 
 	const handleChangeDescription = (e) => {
         setDescription( e.target.value )
-     
 	}
 
 	return (
@@ -247,7 +246,7 @@ export const CreateSHP = () => {
 							<div className="textInputContainerCol">
 								<label className="inputLabel" for="desciption">Shipment Description</label>
 								<input type="text" id="desciption" name="desciption" placeholder="e.g. Fender Telecaster" value={description}
-								onChange></input>
+								onChange={handleChangeDescription}></input>
 							</div>
 							
 							<div className="textInputContainerCol">
