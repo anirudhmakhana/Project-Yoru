@@ -187,65 +187,29 @@ export const ViewNodePage = () => {
                     <div className="detailed-title-container">
                         <Button type="button" onClick={() => {
                             navigate(-1)
-                        }}className="back-button">
+                            }}className="back-button">
                             <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
                         </Button>
                         <h3 className="content-header">Node : {node.nodeCode}</h3>
                     </div>
-                    
-                    
-                    
-
-                    <div style={{width:'100%', height:'45%'}}>
-                        <GoogleMap
-                            center={{ lat: node.lat, lng: node.lng }}
-                            zoom={15}
-                            mapContainerStyle={{ width: '100%', height: '100%' }}
-                            options={options}
-                            onLoad={map => setMapRef(map)}
-                            onClick={()=>{}}
-                        >
-                        
-                        { showInfo && <InfoWindow
-                            position={{ lat: node.lat, lng: node.lng }}
-                            onCloseClick={() => {
-                                setShowInfo(false)
-                            }}>
-                            <div>
-                                <h2>
-                                <span>
-                                🏣 {node.nodeCode}
-                                </span>
-                                </h2>
-                                <p>Contact: {node.phoneNumber}</p>
-                                <p>Status: {node.status.toUpperCase()}</p>
-                                <p>{node.lat} : {node.lng}</p>
-                            </div>
-                            </InfoWindow>
-                            }
-                            <Marker
-                                key={`${node.lat}-${node.lng}`}
-                                position={{lat:node.lat, lng:node.lng}}
-                                onClick={() => {
-                                    setShowInfo(true)
-                                console.log(node.lat+"-"+ node.lgn)
-                                }}
-                                map={mapRef}
-                            />
-                        </GoogleMap>
-                    </div>
-                    <div className="node-info">
-                        <div className="body-main">
-                        <p className="mt-5"> {node.nodeCode} </p>
-                        <p>{node.address} </p>
-                        <p >Company: {node.companyCode}</p>
-                        <p >Contact: {node.phoneNumber}</p>
-                        <p >Status: {node.status}</p>
-                        <p className="mb-5">In-stock shipment: {stock.length}</p>
+                    <div className="body-main-row">
+                        <div className="body-main-col" style={{width: "50%"}}>
+                            <p>Node Code: {node.nodeCode}</p>
+                            <p>Address: {node.address}</p>
+                            <p>Company: {node.companyCode}</p>
                         </div>
+                        <div className="body-main-col" style={{width: "50%"}}>
+                            <p>Contact: {node.phoneNumber}</p>
+                            <p>Status: {node.status}</p>
+                            <p>In-stock shipment: {stock.length}</p>
+                        </div>
+                    </div>
+                    
+                    
+                    <div className="node-info">
                         <div style={{"flex-direction":"column", width:"50%"}}>
-                            <div style={{"flex-direction":"row"}}>
-                                <Dropdown onSelect={handleGraphType} >
+                            <div style={{display: "flex", "flex-direction":"row"}}>
+                                <Dropdown onSelect={handleGraphType} style={{marginRight: "2%"}}>
                                     <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
                                         {graphName[graphType]}
                                     </Dropdown.Toggle>
@@ -267,15 +231,51 @@ export const ViewNodePage = () => {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
+                            
                             <div style={{width:'100%', height:'90%'}}>
-                            { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel[graphTimeRange]} indicatorY={yAxisLabel[graphType]}/>}
+                                { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel[graphTimeRange]} indicatorY={yAxisLabel[graphType]}/>}
+                            </div>
                         </div>
-                        
-                        </div>
-                        
+                        <div style={{width:'50%', height:'100%'}}>
+                                <GoogleMap
+                                    center={{ lat: node.lat, lng: node.lng }}
+                                    zoom={15}
+                                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                                    options={options}
+                                    onLoad={map => setMapRef(map)}
+                                    onClick={()=>{}}
+                                >
+                                
+                                { showInfo && <InfoWindow
+                                    position={{ lat: node.lat, lng: node.lng }}
+                                    onCloseClick={() => {
+                                        setShowInfo(false)
+                                    }}>
+                                    <div>
+                                        <h2>
+                                        <span>
+                                        🏣 {node.nodeCode}
+                                        </span>
+                                        </h2>
+                                        <p>Contact: {node.phoneNumber}</p>
+                                        <p>Status: {node.status.toUpperCase()}</p>
+                                        <p>{node.lat} : {node.lng}</p>
+                                    </div>
+                                    </InfoWindow>
+                                    }
+                                    <Marker
+                                        key={`${node.lat}-${node.lng}`}
+                                        position={{lat:node.lat, lng:node.lng}}
+                                        onClick={() => {
+                                            setShowInfo(true)
+                                        console.log(node.lat+"-"+ node.lgn)
+                                        }}
+                                        map={mapRef}
+                                    />
+                                </GoogleMap>
+                            </div>
                     </div>
                 </div>
-                
                 
             </div>
         );
@@ -286,7 +286,6 @@ export const ViewNodePage = () => {
                     <h2>Cannot find any Node</h2>
                 </div>
             
-                
             </div>)
     }
 }
