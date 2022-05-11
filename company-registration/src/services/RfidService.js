@@ -13,7 +13,7 @@ class RfidService {
         //     throw error
         // })
 
-        return {data:{statusCode:200, data:{uid:'2A1E50B4'}}}
+        return {data:{statusCode:200, data:{uid:'SHP002'}}}
     }
 
 }

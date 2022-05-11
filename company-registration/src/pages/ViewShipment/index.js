@@ -157,8 +157,8 @@ export const ViewShipmentPage = () => {
 
                     </div>
                     <div className="shipment-info">
-                        <div style={{width:'30vw', height:'50vh', textAlign: "left"}}>
-                            <h2>Map</h2>
+                        <div style={{width:'30vw', height:'47vh', textAlign: "left"}}>
+                            <h2 style={{'margin-top':'10px','margin-left':'10px'}}>Map</h2>
                             
                             <GoogleMap
                                 center={{ lat: currentNode.lat, lng: currentNode.lng }}
@@ -216,6 +216,7 @@ export const ViewShipmentPage = () => {
                         { allScans.reverse().map( scan => {
                             return(
                             <div className="scanContainer">
+                                <br/>
                                 <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
                                 <p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
                                 <p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>

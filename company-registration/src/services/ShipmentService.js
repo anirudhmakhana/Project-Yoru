@@ -47,9 +47,6 @@ class ShipmentService {
     return 0;
     }
 
-    async getAllShipmentsBlock() {
-        
-    }
     async getAllShipments(token) {
 
         const response = await axios.get('http://localhost:4000/shipment/', {headers:{"x-access-token":token}})
@@ -94,6 +91,15 @@ class ShipmentService {
     
         // return (shipmentsUntilNow.reverse())
         // return {data:this.shipments}
+    }
+
+    async getRelatedShipments( companyCode, token ) {
+        const response = await axios.get('http://localhost:4000/shipment/related/' + companyCode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        
+        return response
     }
     
     async getShipmentByIdChain( shipmentId, walletPublicKey, token ) { 

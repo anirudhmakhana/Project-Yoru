@@ -249,7 +249,6 @@ export const CancelSHP = () => {
 													}
 													else {
 														setUpdateInfo(null)
-														setShipmentId(null)
 														setShipment(null)
 														setWarning("Cancelled or completed shipment cannot be cancelled!")
 														setShowScanPopup(false)

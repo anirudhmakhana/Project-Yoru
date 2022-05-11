@@ -18,7 +18,7 @@ export const ShipmentListPage = () => {
     const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
-            ShipmentService.getAllShipments(userData.token)
+            ShipmentService.getRelatedShipments(userData.companyCode, userData.token)
             .then( res => setAllShipments(res.data))
             .catch(err => {
                 setAllShipments([])

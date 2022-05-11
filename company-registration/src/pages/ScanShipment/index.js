@@ -223,11 +223,13 @@ export const ScanSHP = () => {
 									RfidService.makeScan()
 									.then ( res => {
 										if (res.data.statusCode == 200) {
+											setShipmentId(res.data.data.uid)
+
 											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
 											.then( res_shipment => {
 												console.log(currentNode)
+												
 												if (res_shipment.data) {
-													setShipmentId(res.data.data.uid)
 													setShipment(res_shipment.data)
 													var newState = "arrived"
 													if (res_shipment.data.status == "created" || res_shipment.data.status == "arrived" ) {
@@ -246,7 +248,6 @@ export const ScanSHP = () => {
 													}
 													else {
 														setUpdateInfo(null)
-														setShipmentId(null)
 														setShipment(null)
 														setWarning("Cancelled or completed shipment cannot be updated!")
 														setShowScanPopup(false)
