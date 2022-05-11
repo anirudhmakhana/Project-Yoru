@@ -34,7 +34,7 @@ export class NodeTable extends Component {
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
                     &nbsp;&nbsp;
-                    <Button size="sm" variant="dark" onClick={() =>{
+                    <Button size="sm" variant="outline-primary" onClick={() =>{
                         this.state.setEditNode(this.props.obj.nodeCode)
                         this.state.setEditNodePopup(true)
                     }}>EDIT</Button>

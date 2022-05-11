@@ -190,7 +190,7 @@ export const ViewNodePage = () => {
                             }}className="back-button">
                             <FontAwesomeIcon icon={faAngleLeft} className="alignIconTop"/>
                         </Button>
-                        <h3 className="content-header">Node : {node.nodeCode}</h3>
+                        <h3 className="content-header">Node : {node.nodeCode} 🏣</h3>
                     </div>
                     <div className="body-main-row">
                         <div className="body-main-col" style={{width: "50%"}}>
@@ -283,7 +283,7 @@ export const ViewNodePage = () => {
         return (<div id="shipment">
                 <div className="title-container">
                     <h1>Node</h1>
-                    <h2>Cannot find any Node</h2>
+                    <p>Loading...</p>
                 </div>
             
             </div>)
