@@ -316,7 +316,7 @@ export const CreateSHP = () => {
 									.then ( res => {
 										setShipmentId(res.data.data.uid)
 									})
-								}}style={{width: "70%"}}>Scan</Button>
+								}} style={{width: "70%"}}>Scan</Button>
 							</div>
 						</div>
 
