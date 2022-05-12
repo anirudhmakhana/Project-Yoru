@@ -60,8 +60,9 @@ class GraphService {
 
         this.graphTimeRange = ['day', 'week','month', 'year']
         this.xAxisLabel = {week:"Date", month:"Day", year:"Month", day:"Hour"}
-        this.yAxisLabel = {shipped: "Shipped",stock:"Stock"}
-        this.graphName = {shipped: "Shipments Shipping",stock:"Stocking Shipments"}
+        this.yAxisLabel = {shipping: "Shipped",stock:"Stock", created: "Created", completed:"Completed"}
+        this.graphName = {shipping: "Shipments Shipping",stock:"Stocking Shipments", created:"Created Shipments", completed:"Completed Shipments"}
+        this.graphTypes = ['shipping', 'stock', 'created', 'completed']
     }
 
     
@@ -154,11 +155,11 @@ class GraphService {
 
     // need to input extra start time before the actual time 
     // e.g. last 7 days -> input 7 day time interval + 1 day before that 7 days
-    async getNodeShippedByTime( nodeCode, timeInterval, token) {
+    async getNodeGraphByTimeStatus( nodeCode, timeInterval, status, token) {
     
         var shipped = []
         this.scannedData.forEach((v, i) => {
-            if (v.scannedAt == nodeCode && (v.status == "shipping")){
+            if (v.scannedAt == nodeCode && (v.status == status)){
                 shipped.push(this.scannedData[i])
             }
         })
@@ -190,7 +191,7 @@ class GraphService {
 
     // need to input extra start time before the actual time 
     // e.g. last 7 days -> input 7 day time interval + 1 day before that 7 days
-    async getCompanyShippedByTime( companyCode, timeInterval, token) {
+    async getCompanyGraphByTimeStatus( companyCode, timeInterval, status, token) {
         const res = await NodeDataService.getNodeByCompany( companyCode, token)
         .catch((error) => {
             throw error
@@ -205,7 +206,7 @@ class GraphService {
         })
         var result = []
         await nodes.forEach( async node => {
-            var node_res = await this.getNodeShippedByTime(node.nodeCode, timeInterval, token)
+            var node_res = await this.getNodeGraphByTimeStatus(node.nodeCode, timeInterval, status, token)
             node_res.data.forEach( graph_data => {
                 // console.log(graph_data.x, graph_data.y)
                 temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
@@ -305,9 +306,9 @@ class GraphService {
         }
     
         if (companyCode ) {
-            if (timeRange && graphType == "shipped") {
+            if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
-                const res_graph = await this.getCompanyShippedByTime( companyCode, timeInterval, token)
+                const res_graph = await this.getCompanyGraphByTimeStatus( companyCode, timeInterval, graphType, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
             else if (graphType == "stock" ) {    
@@ -316,14 +317,14 @@ class GraphService {
             }
         }
         else if ( nodeCode) {
-            if (timeRange && graphType == "shipped") {
+            if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
-                const res_graph = await this.getNodeShippedByTime( nodeCode, timeInterval, token)
+                const res_graph = await this.getNodeGraphByTimeStatus( nodeCode, timeInterval, graphType, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
 
             }
             else if (graphType == "stock" ) {    
-                const res_graph = await this.getNodeShippedByTime( nodeCode, timeInterval, token)
+                const res_graph = await this.getNodeStockByTime( nodeCode, timeInterval, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
         }

@@ -29,11 +29,8 @@ export const OverviewPage = (props) => {
     // const [hourGraphData, setHourGraphData] = useState(null)
     const [currentDate, setCurrentDate] = useState( new Date() )
     const [graphTimeRange, setGraphTimeRange] = useState("day")
-    const [graphType, setGraphType] = useState("shipped")
-    const [graphName, setGraphName] = useState({shipped: "Shipments Shipping",stock:"Stocking Shipments"})
-    const [yAxisLabel, setYAxisLabel] = useState({shipped: "Shipped",stock:"Stock"})
-
-    const [xAxisLabel, setXAxisLabel] = useState({week:"Date", month:"Day", year:"Month", day:"Hour"})
+    const [graphType, setGraphType] = useState("shipping")
+    
     const [completedCount, setCompletedCount] = useState(0)
     const [stockCount, setStockCount] = useState(0)
     const [incompleteCount, setIncompleteCount] = useState(0)
@@ -147,11 +144,12 @@ export const OverviewPage = (props) => {
                         <div style={{display: "flex", "flex-direction":"row"}}>
                             <Dropdown onSelect={handleGraphType} style={{marginRight: "2%"}}>
                                 <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
-                                    {graphName[graphType]}
+                                    {GraphService.graphName[graphType]}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item eventKey={"shipped"}>{graphName.shipped}</Dropdown.Item>
-                                    <Dropdown.Item eventKey={"stock"}>{graphName.stock}</Dropdown.Item>
+                                    { GraphService.graphTypes.map( type => 
+                                    <Dropdown.Item eventKey={type}>{GraphService.graphName[type]}</Dropdown.Item>
+                                    )}
                                 </Dropdown.Menu>
                             </Dropdown>
 
@@ -176,7 +174,7 @@ export const OverviewPage = (props) => {
                         </p>
                     </div>
                     <div className="body-chart-container">
-                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={xAxisLabel[graphTimeRange]} indicatorY={yAxisLabel[graphType]}/>}
+                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
                     </div>
                 </div>
                 <div className="chart-info-right">
