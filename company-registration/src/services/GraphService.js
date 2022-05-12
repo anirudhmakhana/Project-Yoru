@@ -241,7 +241,7 @@ class GraphService {
             let dataDate = new Date(data.x)
             if (graphTimeRange == "day") {
                 let dataDate = new Date(data.x)
-                adjustedDate.push({x:dataDate.getHours()+"", y:data.y})
+                adjustedDate.push({x:dataDate.getHours()+":00", y:data.y})
             }
             else if (  graphTimeRange == "week") {
                 dataDate.setDate(dataDate.getDate() - 1)
@@ -249,7 +249,7 @@ class GraphService {
             }
             else if ( graphTimeRange == "month" ) {
                 dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.getDate(), y:data.y})
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
             }
             else if ( graphTimeRange == "year") {
                 let dataDate = new Date(data.x)
