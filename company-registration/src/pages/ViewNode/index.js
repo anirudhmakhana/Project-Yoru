@@ -23,7 +23,7 @@ import "../../assets/style/style.css"
 import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import GraphService from '../../services/GraphService';
-import { FrequencyChart } from '../../components/chart';
+import { LineChart } from '../../components/linechart'; 
 
 const google = window.google
 
@@ -171,9 +171,8 @@ export const ViewNodePage = () => {
                             </Dropdown>
                             </div>
                             
-                            <div style={{width:'100%', height:'90%'}}>
-                                { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} 
-                                indicatorY={GraphService.yAxisLabel[graphType]}/>}
+                            <div style={{width:'100%', height:'90%', display: 'flex', alignItems: 'center'}}>
+                                { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
                             </div>
                         </div>
                         <div style={{width:'50%', height:'100%'}}>
