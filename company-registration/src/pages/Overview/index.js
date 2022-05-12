@@ -9,7 +9,7 @@ import NodeDataService from '../../services/NodeDataService';
 import GraphService from '../../services/GraphService';
 
 import { Card } from "../../components/card";
-import { FrequencyChart } from "../../components/chart";
+import { LineChart } from "../../components/linechart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
@@ -174,7 +174,7 @@ export const OverviewPage = (props) => {
                         </p>
                     </div>
                     <div className="body-chart-container">
-                        { dateGraphData && <FrequencyChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
+                        { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
                     </div>
                 </div>
                 <div className="chart-info-right">
