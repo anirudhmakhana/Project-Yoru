@@ -23,7 +23,6 @@ import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
 import { ViewShipmentPage } from "../../pages/ViewShipment";
 import { CreateSHP } from "../../pages/CreateShipment";
-import { UpdateSHP } from "../../pages/UpdateShipment";
 import { CancelSHP } from "../../pages/CancelShipment";
 import { ScanSHP } from "../../pages/ScanShipment";
 
@@ -114,7 +113,6 @@ export const ManagerSidebar = (props) => {
                 <Route path="create" element={<CreateSHP/>}/>
 
                 {/* CHANGE TO scan/update/:shipmentId */}
-                <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="scan" element={<ScanSHP/>}/>
 

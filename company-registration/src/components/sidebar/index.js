@@ -4,7 +4,6 @@ import { Routes, Route, Link } from "react-router-dom";
 import { OverviewPage } from "../../pages/Overview"
 import { ShipmentListPage } from "../../pages/ShipmentList";
 import { CreateSHP } from "../../pages/CreateShipment";
-import { UpdateSHP } from "../../pages/UpdateShipment";
 import { CancelSHP } from "../../pages/CancelShipment";
 
 import { ViewShipmentPage } from "../../pages/ViewShipment";
@@ -99,7 +98,6 @@ export const CustomSidebar = (props) => {
                 <Route path="scan" element={<ScanSHP/>}/>
                 <Route path="create" element={<CreateSHP/>}/>
                 {/* CHANGE TO scan/update/:shipmentId */}
-                <Route path="shipment/update/:shipmentId" element={<UpdateSHP/>}/>
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="node" element={<NodeListPage/>}/>
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>

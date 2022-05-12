@@ -159,7 +159,6 @@ export const CreateSHP = () => {
 					});
 			})
 			.catch((err) => {
-				setDestinationNode(null);
 				console.log(err);
 			});
 	};

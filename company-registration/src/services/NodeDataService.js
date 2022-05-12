@@ -87,6 +87,14 @@ class NodeDataService {
         return response
     }
 
+    async getAllActiveNode(  token ) {
+        const response = await axios.get('http://localhost:4000/node/active/', {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        return response
+    }
+
     async getNodeByCode(nodeCode, token) {
         const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
         .catch((error) => {
@@ -139,7 +147,29 @@ class NodeDataService {
         }
         return {data: result}
     }
+
+
+    async getRelatedNodeToShipment( shipmentId, token) {
+        const response = await axios.get('http://localhost:4000/node/related/'+shipmentId, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        const result = []
+        response.data.forEach( node => result.push(node.scannedAt))
+        console.log(result)
+        return {data:result}
+    }
     
+    async getNodeWithStockSameDest( destinationNode, token) {
+        const response = await axios.get('http://localhost:4000/node/stock/samedestination/'+destinationNode, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        const result = []
+        response.data.forEach( node => result.push(node.currentNode))
+        console.log(result)
+        return {data:result}
+    }
 
 }
 
