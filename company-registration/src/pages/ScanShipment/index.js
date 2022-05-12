@@ -361,7 +361,7 @@ export const ScanSHP = () => {
 											<h2>
 												Recommended: {recommendNode.nodeCode}
 											</h2>
-											<p style={{color:"#000000"}}>This is the nearest node that has shipment with the same destination!</p>
+											<p style={{color:"#000000"}}>This is the nearest node that has shipment with the same destination as your!</p>
 											<p style={{color:"#000000"}}>Company: {recommendNode.companyCode}</p>
 											<p style={{color:"#000000"}}>Contact: {recommendNode.phoneNumber}</p>
 											<p style={{color:"#000000"}}>Address: {recommendNode.address}</p>
