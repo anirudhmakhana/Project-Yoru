@@ -33,7 +33,7 @@ export const ViewNodePage = () => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const { nodeCode } = useParams()
     const navigate = useNavigate()
-    const [stock, setStock] = useState([])
+    const [stockCount, setStockCount] = useState(0)
     const [dateGraphData, setDateGraphData] = useState(null)
     const [mapRef, setMapRef] = React.useState(/** @type google.map.Map */(null));
     // const [currentMark, setCurrentMark] = useState(null)
@@ -163,18 +163,16 @@ export const ViewNodePage = () => {
         
     }, [graphType,graphTimeRange])
     useEffect(() => {
-        
-
-        ShipmentService.getStockByNode(nodeCode,userData.token)
+        ShipmentService.currentStockCountByNode(nodeCode,userData.token)
         .then( res => {console.log(res)
-            setStock(res.data)
+            setStockCount(res.data)
         })
         .catch( err => {
-            setNode(null)
+            setStockCount(0)
             console.log(err)
         })
     }
-    ,[mapRef] );
+    ,[isLoaded] );
     
     if ( node ) {
         
@@ -194,14 +192,14 @@ export const ViewNodePage = () => {
                     </div>
                     <div className="body-main-row">
                         <div className="body-main-col" style={{width: "50%"}}>
-                            <p>Node Code: {node.nodeCode}</p>
-                            <p>Address: {node.address}</p>
-                            <p>Company: {node.companyCode}</p>
+                            <p><b>Node Code:</b> {node.nodeCode}</p>
+                            <p><b>Address:</b> {node.address}</p>
+                            <p><b>Company:</b> {node.companyCode}</p>
                         </div>
                         <div className="body-main-col" style={{width: "50%"}}>
-                            <p>Contact: {node.phoneNumber}</p>
-                            <p>Status: {node.status}</p>
-                            <p>In-stock shipment: {stock.length}</p>
+                            <p><b>Contact:</b> {node.phoneNumber}</p>
+                            <p><b>Status:</b> {node.status.toUpperCase()}</p>
+                            <p><b>In-stock shipment:</b> {stockCount}</p>
                         </div>
                     </div>
                     

@@ -151,12 +151,16 @@ export const ViewShipmentPage = () => {
                     <div className="container-row mb-4 mt-4">
                         <div className="infoContainer" style={{width: "40%"}}>
                             {/* <p>{shipment.description}</p> */}
-                            <p>Status: {shipment.status.toUpperCase()}</p>
-                            <p>Origin: {shipment.originNode}</p>
+                            <p><b>Producer:</b> {shipment.companyCode}</p>
+                            <p><b>Origin:</b> {shipment.originNode}</p>
+                            <p><b>Destination:</b> {shipment.destinationNode}</p>
+
                         </div>
                         <div className="infoContainer">
-                            <p>Current Location: {shipment.currentNode}</p>
-                            <p>Destination: {shipment.destinationNode}</p>
+                            <p><b>Status:</b> {shipment.status.toUpperCase()}</p>
+                            <p><b>Current Location:</b> {shipment.currentNode}</p>
+                            <p><b>Latest Transaction:</b> {shipment.txnHash}</p>
+
                         </div>
                     </div>
                     

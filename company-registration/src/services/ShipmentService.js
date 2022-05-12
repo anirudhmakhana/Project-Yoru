@@ -129,15 +129,25 @@ class ShipmentService {
     }
 
 
-    async getStockByNode( nodeCode, token ) {
-        var result = []
-        for( let i = 0; i < this.shipments.length; i++ ) {
-            if ( this.shipments[i].status == "arrived" && this.shipments[i].currentNode == nodeCode) {
-                result.push(this.shipments[i])
-            }
-        }
-        console.log(result)
-        return {data:result}
+    async currentStockByNode( nodeCode, token ) {
+        const response = await axios.get("http://localhost:4000/shipment/stock/node/" + nodeCode , 
+        {headers:{"x-access-token":token}})
+        .catch((error) => {
+            return error
+        })
+        console.log(response)
+        return response
+    }
+
+    async currentStockCountByNode( nodeCode, token ) {
+        const response = await axios.get("http://localhost:4000/shipment/stock/node/"+ nodeCode, 
+        {headers:{"x-access-token":token}})
+        .catch( error => {
+            throw error
+        }) 
+        console.log(response)
+        response.data = response.data.length
+        return response
     }
 
     async getScanByShipmentId( shipmentId, token) {
