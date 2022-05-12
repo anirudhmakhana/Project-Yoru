@@ -260,6 +260,75 @@ class GraphService {
         console.log("TEST", adjustedDate)
         return adjustedDate
     }
+
+    async generateGraph(graphType, graphTimeRange, token, companyCode = null, nodeCode = null) {
+        var temp = new Date()
+        var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
+        var timeInterval = []
+        var timeRange = null
+        var graphData = null
+        if (graphTimeRange == "day") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 1).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0).getTime()
+            for ( let i = 0; i <= 23; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
+                timeInterval.push(temp.getTime())
+            }
+        }
+        else if ( graphTimeRange == "week") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
+            for ( let i = 0; i <= 6; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
+                timeInterval.push(temp.getTime())
+            }
+            timeInterval = timeInterval.reverse()
+        }
+        else if ( graphTimeRange == "month") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
+            let noOfDays = DateUtils.daysInMonth(curDate.getMonth(), curDate.getFullYear())
+            for ( let i = 0; i <= noOfDays - 1; i++ ) {
+                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), noOfDays - i + 1) 
+                timeInterval.push(temp.getTime())
+            }
+            timeInterval = timeInterval.reverse().slice(0, curDate.getDate())
+        }
+        else if ( graphTimeRange == "year") {
+            timeRange = new Date(curDate.getFullYear(), curDate.getMonth()).getTime() - 
+                        new Date(curDate.getFullYear(), curDate.getMonth() -1 ).getTime()
+            console.log(new Date(2020, 4).toDateString())
+            for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
+                let temp = new Date(curDate.getFullYear(), i) 
+                timeInterval.push(temp.getTime())
+            }
+        }
+    
+        if (companyCode ) {
+            if (timeRange && graphType == "shipped") {
+                timeInterval.unshift(timeInterval[0] - timeRange)
+                const res_graph = await this.getCompanyShippedByTime( companyCode, timeInterval, token)
+                graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
+            }
+            else if (graphType == "stock" ) {    
+                const res_graph = await this.getCompanyStockByTime( companyCode, timeInterval, token)
+                graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
+            }
+        }
+        else if ( nodeCode) {
+            if (timeRange && graphType == "shipped") {
+                timeInterval.unshift(timeInterval[0] - timeRange)
+                const res_graph = await this.getNodeShippedByTime( nodeCode, timeInterval, token)
+                graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
+
+            }
+            else if (graphType == "stock" ) {    
+                const res_graph = await this.getNodeShippedByTime( nodeCode, timeInterval, token)
+                graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
+            }
+        }
+        return {data:graphData}
+    }
 }
 
 export default new GraphService()

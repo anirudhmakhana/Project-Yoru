@@ -89,73 +89,10 @@ export const OverviewPage = (props) => {
         .catch( err => {
             console.log(err)
         })
-        var temp = new Date()
-        var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
-        var timeInterval = []
-        var timeRange = null
-
-        if (graphTimeRange == "day") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 1).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0).getTime()
-            for ( let i = 0; i <= 23; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
-                timeInterval.push(temp.getTime())
-            }
-        }
-        else if ( graphTimeRange == "week") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
-            for ( let i = 0; i <= 6; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
-                timeInterval.push(temp.getTime())
-            }
-            timeInterval = timeInterval.reverse()
-        }
-        else if ( graphTimeRange == "month") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
-            let noOfDays = DateUtils.daysInMonth(curDate.getMonth(), curDate.getFullYear())
-            for ( let i = 0; i <= noOfDays - 1; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), noOfDays - i + 1) 
-                timeInterval.push(temp.getTime())
-            }
-            timeInterval = timeInterval.reverse().slice(0, curDate.getDate())
-        }
-        else if ( graphTimeRange == "year") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth() -1 ).getTime()
-            console.log(new Date(2020, 4).toDateString())
-            for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
-                let temp = new Date(curDate.getFullYear(), i) 
-                timeInterval.push(temp.getTime())
-            }
-        }
-                
-        if (timeRange && graphType == "shipped") {
-            timeInterval.unshift(timeInterval[0] - timeRange)
-            // console.log('INTERVALLL',timeInterval)
-
-            GraphService.getCompanyShippedByTime( userData.companyCode, timeInterval, userData.token)
-            .then(res_graph => {
-                console.log(res_graph)
-                setDateGraphData(GraphService.adjustGraphTime(res_graph.data, graphTimeRange))
-            })
-            .catch( err => {
-                console.log(err)
-            })
-        }
-        else if (graphType == "stock" ) {
-            // console.log('INTERVALLL',timeInterval)
-
-            GraphService.getCompanyStockByTime( userData.companyCode, timeInterval, userData.token)
-            .then(res_graph => {
-                console.log(res_graph)
-                setDateGraphData(GraphService.adjustGraphTime(res_graph.data, graphTimeRange))
-            })
-            .catch( err => {
-                console.log(err)
-            })
-        }
+        GraphService.generateGraph( graphType, graphTimeRange, userData.token, userData.companyCode, null)
+        .then( res => {
+            setDateGraphData(res.data)
+        })
         
     }, [graphType,graphTimeRange])
 
