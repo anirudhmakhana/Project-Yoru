@@ -136,13 +136,14 @@ export const OverviewPage = (props) => {
         setEditProfPopup(false)
     }
 
-    function getChartItem( header, stDate, enDate, number = 0 ){
+    function getChartItem( header, stDate, enDate, number = 0, additional = '' ){
         return <div className="chart-item">
                 <span><strong>{header}</strong></span>
                 {stDate == enDate ? 
                 <p>({stDate})</p> :
                 <p>({stDate}-{enDate})</p>}
                 <h2 style={{"margin-top":"10px"}}>{number}</h2>
+                <p>{additional}</p>
             </div>
     }
 
@@ -204,9 +205,9 @@ export const OverviewPage = (props) => {
                 <div className="chart-info-right">
                     <hr/>
                     {getChartItem(`Total`, primGraphStartDate, primGraphEndDate, primTotal)}
-                    {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value)}
+                    {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value,)}
                     {/* <hr/> */}
-                    {getChartItem(`Lowest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primLowest.value)}
+                    {getChartItem(`Lowest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primLowest.value,)}
                     {/* <hr/> */}
                     {getChartItem(`Average ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primAverage.toPrecision(2))}
                     {/* <hr/> */}

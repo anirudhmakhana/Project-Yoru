@@ -34,7 +34,7 @@ class GraphService {
 
             {uid:"SHP013", scannedAt:"LKB-1003", scannedTime:new Date(2022, 0, 1, 9, 20).getTime(), status:"created"},
 
-            {uid:"SHP012", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 1, 9, 20).getTime(), status:"created"},
+            {uid:"SHP014", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 1, 9, 20).getTime(), status:"created"},
 
             {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 2, 9, 20).getTime(), status:"created"},
             {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 3, 12, 20).getTime(), status:"shipping"},
@@ -357,15 +357,18 @@ class GraphService {
             }
         }
         console.log(graphData)
-        var highest = {date:graphData.adjustedDate[0].x, value: graphData.adjustedDate[0].y}
-        var lowest =  {date:graphData.adjustedDate[0].x, value: graphData.adjustedDate[0].y}
+        var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
+        var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var total = 0
         var count = 0
         var original = graphData.adjustedDate[0].y
         var latest = graphData.adjustedDate[0].y
-        graphData.adjustedDate.forEach( d => {
-            if (d.y > highest.value) { highest = {date: d.x, value:d.y} }
-            if (d.y < lowest.value) {lowest = d.y}
+        graphData.adjustedDate.slice(1).forEach( d => {
+            if (d.y > highest.value) { highest = {date: d.x+'', value:d.y} }
+            else if (d.y == highest.value) { highest.date = highest.date + ', ' + d.x}
+            if (d.y < lowest.value) {lowest = {date: d.x+'', value:d.y}}
+            else if (d.y == lowest.value) { lowest.date = lowest.date + ', ' + d.x}
+
             total += d.y
             count += 1
             latest = d.y
