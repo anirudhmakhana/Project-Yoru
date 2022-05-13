@@ -142,11 +142,7 @@ export const ViewShipmentPage = () => {
                             <h2>Shipment: {shipment.description}</h2>
                             <h4>ID: {shipment.uid}</h4>
                         </div>
-                        <Button type="button" onClick={() => {
-                            setShowInfo(true)
-                        }} className="infoBtn">
-                            SHOW INFO
-                        </Button>
+                        
                     </div>
                     <div className="container-row mb-4 mt-4">
                         <div className="infoContainer" style={{width: "40%"}}>
@@ -159,14 +155,25 @@ export const ViewShipmentPage = () => {
                         <div className="infoContainer">
                             <p><b>Status:</b> {shipment.status.toUpperCase()}</p>
                             <p><b>Current Location:</b> {shipment.currentNode}</p>
-                            <p><b>Latest Transaction:</b> {shipment.txnHash}</p>
+                            <div style={{display:'flex', flexDirection:'row'}}>
+                                <p><b>Latest Transaction:</b></p>
+                                <p style={{width: '70%', height: '80%','word-break': 'break-word', 'text-align': 'left', 'margin-left': '1%'}}>{shipment.txnHash}</p>
+                            </div>
+                            
 
                         </div>
                     </div>
                     
                     <div className="shipment-info">
                         <div style={{width:'30vw', height:'47vh', textAlign: "left"}}>
-                            <h2 style={{'margin-top':'10px','margin-left':'10px'}}>Map</h2>
+                            <div style={{display:'flex', flexDirection:'row', marginBottom: "10px"}}>
+                                <h2 style={{'margin-top':'10px','margin-left':'10px'}}>Map</h2>
+                                <Button type="button" onClick={() => {
+                                    setShowInfo(true)
+                                }} className="infoBtn" style={{'margin-top':'10px','margin-left':'3%', 'margin-bottom': '2%'}}>
+                                    SHOW INFO
+                                </Button>
+                            </div>
                             
                             <GoogleMap
                                 center={{ lat: currentNode.lat, lng: currentNode.lng }}
@@ -221,7 +228,7 @@ export const ViewShipmentPage = () => {
                         </div>
                         
                         <div className='scan-history-container' style={{overflow: "visible"}}>
-                            <h2 style={{'margin-top':'10px','margin-left':'10px'}}>History</h2>
+                            <h2 style={{'margin-top':'10px','margin-left':'3%'}}>History</h2>
                             <div style={{height: "85%",overflowY: "auto"}}>
                                 { allScans.reverse().map( scan => {
                                 return(
