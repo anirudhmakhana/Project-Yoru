@@ -35,7 +35,13 @@ export const OverviewPage = (props) => {
     const [stockCount, setStockCount] = useState(0)
     const [incompleteCount, setIncompleteCount] = useState(0)
     const [shippingCount, setShippingCount] = useState(0)
-
+    const [primGraphStartDate, setPrimStartDate] = useState('')
+    const [primGraphEndDate, setPrimEndDate] = useState('')
+    const [primHighest, setPrimHighest] = useState(0)
+    const [primAverage, setPrimAverage] = useState(0)
+    const [primLowest, setPrimLowest] = useState(0)
+    const [primChangePercent, setPrimChangePercent] = useState(0)
+    const [primTotal, setTotal] = useState(0)
     // useState(() => {
     //     var node = eval('('+localStorage.getItem("currentNode")+')')
     //     if (node) {
@@ -88,7 +94,16 @@ export const OverviewPage = (props) => {
         })
         GraphService.generateGraph( graphType, graphTimeRange, userData.token, userData.companyCode, null)
         .then( res => {
-            setDateGraphData(res.data)
+            console.log(res.data)
+            setDateGraphData(res.data.graph)
+            setPrimStartDate(res.data.startDate)
+            setPrimEndDate(res.data.endDate)
+            setPrimAverage(res.data.average)
+            setPrimHighest(res.data.highest)
+            setPrimLowest(res.data.lowest)
+            setPrimChangePercent(res.data.percentageChange)
+            setTotal(res.data.total)
+
         })
         
     }, [graphType,graphTimeRange])
@@ -119,6 +134,16 @@ export const OverviewPage = (props) => {
     function handleEditProfCancel() {
         console.log(localStorage)
         setEditProfPopup(false)
+    }
+
+    function getChartItem( header, stDate, enDate, number = 0 ){
+        return <div className="chart-item">
+                <span><strong>{header}</strong></span>
+                {stDate == enDate ? 
+                <p>({stDate})</p> :
+                <p>({stDate}-{enDate})</p>}
+                <h2 style={{"margin-top":"10px"}}>{number}</h2>
+            </div>
     }
 
     return (
@@ -168,10 +193,9 @@ export const OverviewPage = (props) => {
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
-                        <p>
-                            {new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
-                            .toLocaleDateString()} - {currentDate.toLocaleDateString()}
-                        </p>
+                        {primGraphEndDate == primGraphStartDate ? 
+                        <p>{primGraphStartDate}</p> :
+                        <p>{primGraphStartDate}-{primGraphEndDate}</p>}
                     </div>
                     <div className="body-chart-container">
                         { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
@@ -179,17 +203,16 @@ export const OverviewPage = (props) => {
                 </div>
                 <div className="chart-info-right">
                     <hr/>
-                    <div className="chart-item">
-                        <p>Placeholder</p>
-                    </div>
-                    <hr/>
-                    <div className="chart-item">
-                        <p>Placeholder</p>
-                    </div>
-                    <hr/>
-                    <div className="chart-item">
-                        <p>Placeholder</p>
-                    </div>
+                    {getChartItem(`Total`, primGraphStartDate, primGraphEndDate, primTotal)}
+                    {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value)}
+                    {/* <hr/> */}
+                    {getChartItem(`Lowest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primLowest.value)}
+                    {/* <hr/> */}
+                    {getChartItem(`Average ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primAverage.toPrecision(2))}
+                    {/* <hr/> */}
+                    {/* {getChartItem(`Percentage Changes`, primGraphStartDate, primGraphEndDate, `${primChangePercent}%`)} */}
+                    {/* <hr/> */}
+
                     <hr/>
                 </div>
             </div>

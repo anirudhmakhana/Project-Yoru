@@ -40,6 +40,8 @@ export const ViewNodePage = () => {
     const [showInfo, setShowInfo] = useState(true)
     const [graphTimeRange, setGraphTimeRange] = useState("day")
     const [graphType, setGraphType] = useState("shipping")
+    const [primGraphStartDate, setPrimStartDate] = useState('')
+    const [primGraphEndDate, setPrimEndDate] = useState('')
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -87,7 +89,9 @@ export const ViewNodePage = () => {
             setNode(res.data)
             GraphService.generateGraph( graphType, graphTimeRange, userData.token, null, nodeCode)
             .then( res => {
-                setDateGraphData(res.data)
+                setDateGraphData(res.data.graph)
+                setPrimStartDate(res.data.startDate)
+                setPrimEndDate(res.data.endDate)
             })
         })
         .catch( err => {
@@ -169,6 +173,9 @@ export const ViewNodePage = () => {
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
                                 </Dropdown.Menu>
                             </Dropdown>
+                            {primGraphEndDate == primGraphStartDate ? 
+                            <p>{primGraphStartDate}</p> :
+                            <p>{primGraphStartDate}-{primGraphEndDate}</p>}
                             </div>
                             
                             <div style={{width:'100%', height:'90%', display: 'flex', alignItems: 'center'}}>
