@@ -331,7 +331,7 @@ export const CreateSHP = () => {
 												if ( res_shipment.data ) {
 													setShipmentId(null)
 
-													setWarning("Shipment already created!")
+													setWarning(`Shipment ${res.data.data.uid} already created!`)
 													setShowScanPopup(false)
 												}
 												else {
