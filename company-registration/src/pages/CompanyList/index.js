@@ -9,6 +9,8 @@ import { RegisterAdminPage } from '../RegisterAdmin'
 import { EditCompanyPopup } from '../../components/edit_company_popup';
 
 import "../../assets/style/companyList.css";
+import "../../assets/style/style.css";
+
 import { ViewStaffPopup } from '../../components/view_staff_popup';
 import { AddStaffPopup } from '../../components/add_staff_popup';
 import CompanyService from '../../services/CompanyService';
@@ -55,26 +57,28 @@ export function CompanyListPage(props) {
             <div className="content-title-container">
                 <h1  className="adminPageHeader">Companies</h1>
             </div>
-            
-            <Table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Code</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Staff(s)</th>
-                        
-                    </tr>
-                </thead>
-            
-                    {userData ? (dataTable()) : (<></>)}
+            <div className="content-table-container">
+                <Table className="table table-hover company-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Code</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Staff(s)</th>
+                        </tr>
+                    </thead>
+                
+                        {userData ? (dataTable()) : (<></>)}
 
-            </Table>
+                </Table>
+                
+            </div>
             {showEditComp && companyCode && <EditCompanyPopup setOpenPopup={setShowEditComp} companyCode={companyCode} updateTable={updateData}/>}
             {showViewStaff && viewStaffUsername && <ViewStaffPopup setOpenPopup={setShowViewStaff} username={viewStaffUsername}/>}
             {showAddStaff && companyCode && <AddStaffPopup setOpenPopup={setShowAddStaff} companyCode={companyCode} updateTable={() => {
                 window.location.reload(false);
             }}/>}
+            
 
             {/* <Routes>
                 <Route path="edit-company" element={<RegisterAdmin userData={props.userData}/>} />
