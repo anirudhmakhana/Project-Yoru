@@ -138,6 +138,8 @@ export const CreateSHP = () => {
 		console.log(destinationNode);
 		setDestinationNode(null);
 		setNodeStock(null);
+		setDirectionsResponse(null)
+		
 	};
 
 	const handleNodeDropdown = (e) => {
@@ -164,7 +166,6 @@ export const CreateSHP = () => {
 			});
 		} else {
 			setNodeStock(null);
-			setShowDestInfo(null)
 			setDestinationNode(null);
 			setDirectionsResponse(null)
 		}
