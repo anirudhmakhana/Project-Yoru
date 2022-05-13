@@ -203,8 +203,9 @@ export const OverviewPage = (props) => {
                     </div>
                 </div>
                 <div className="chart-info-right">
-                    <hr/>
-                    {getChartItem(`Total`, primGraphStartDate, primGraphEndDate, primTotal)}
+                    {/* <hr/> */}
+                    {getChartItem(`Total Shipment`, primGraphStartDate, primGraphEndDate, primTotal)}
+                    {/* <hr/> */}
                     {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value,)}
                     {/* <hr/> */}
                     {getChartItem(`Lowest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primLowest.value,)}
@@ -214,7 +215,7 @@ export const OverviewPage = (props) => {
                     {/* {getChartItem(`Percentage Changes`, primGraphStartDate, primGraphEndDate, `${primChangePercent}%`)} */}
                     {/* <hr/> */}
 
-                    <hr/>
+                    {/* <hr/> */}
                 </div>
             </div>
             { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
