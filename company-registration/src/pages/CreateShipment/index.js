@@ -142,7 +142,8 @@ export const CreateSHP = () => {
 
 	const handleNodeDropdown = (e) => {
 		console.log(e);
-		NodeDataService.getNodeByCode(e, userData.token)
+		if (e) {
+			NodeDataService.getNodeByCode(e, userData.token)
 			.then((result) => {
 				setDestinationNode(result.data);
 				setShowDestInfo(true)
@@ -161,6 +162,13 @@ export const CreateSHP = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+		} else {
+			setNodeStock(null);
+			setShowDestInfo(null)
+			setDestinationNode(null);
+			setDirectionsResponse(null)
+		}
+		
 	};
 
 	function handleNodePopupConfirm(newCurrentNode) {
@@ -219,6 +227,7 @@ export const CreateSHP = () => {
 				setDescription('')
 				setDestinationNode(null)
 				setDestinationCompany(null)
+				setDirectionsResponse(null)
 				setShipmentId(null)
 			})
 			.catch( err => {
@@ -271,6 +280,7 @@ export const CreateSHP = () => {
 									)}
 
 									<Dropdown.Menu>
+										<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
 										{allCompanies.map((companyCode) => (
 											<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
 										))}
@@ -302,6 +312,8 @@ export const CreateSHP = () => {
 									)}
 
 								<Dropdown.Menu>
+									<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
+
 									{companyNodes.map((node) => {
 										if (node.companyCode != currentNode.companyCode ||
 											node.nodeCode != currentNode.nodeCode) {
@@ -331,7 +343,7 @@ export const CreateSHP = () => {
 												if ( res_shipment.data ) {
 													setShipmentId(null)
 
-													setWarning(`Shipment ${res.data.data.uid} already created!`)
+													setWarning(`Shipment ${res_shipment.data.data.uid} already created!`)
 													setShowScanPopup(false)
 												}
 												else {

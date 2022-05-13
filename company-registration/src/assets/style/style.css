@@ -293,6 +293,7 @@ div.warning{
 .input-location-container {
     display: flex;
     justify-content: flex-start;
+    height: 74vh;
 }
 
 .input-left-container {
@@ -355,10 +356,20 @@ div.warning{
 .scan-history-container {
     overflow-y: auto;
     text-align: left;
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90%;
 }
 
 .container-row {
     display: flex;
     flex-direction: row;
+}
+
+.p-update-info {
+    text-align:"left"; 
+    /* margin-bottom: 1; */
+    color: #585A66;
+
 }

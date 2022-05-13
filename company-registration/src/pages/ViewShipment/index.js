@@ -144,7 +144,7 @@ export const ViewShipmentPage = () => {
                         </div>
                         
                     </div>
-                    <div className="container-row mb-4 mt-4">
+                    <div className="container-row mt-4">
                         <div className="infoContainer" style={{width: "40%"}}>
                             {/* <p>{shipment.description}</p> */}
                             <p><b>Producer:</b> {shipment.companyCode}</p>
