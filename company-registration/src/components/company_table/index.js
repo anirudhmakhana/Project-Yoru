@@ -94,7 +94,7 @@ export class CompanyTable extends Component {
                         return (
                             <tr>
                                 <td>{item.fullName}</td>
-                                <td>
+                                <td style={{width:'55%'}}>
                                     &nbsp;&nbsp;
                                     <Button size="sm" variant="dark" onClick={() =>{
                                         this.state.setViewStaffUsername(item.username)
