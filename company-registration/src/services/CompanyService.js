@@ -21,7 +21,7 @@ class CompanyService {
     }
 
     async getAllCompanyCode( token ) {
-        const response = await axios.get('http://localhost:4000/company/companyCode/', {headers:{"x-access-token":token}})
+        const response = await axios.get('http://localhost:4000/company/', {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
