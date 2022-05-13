@@ -26,6 +26,7 @@ import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 
 import RfidService from "../../services/RfidService";
 import { ScanPopup } from "../../components/scan_popup";
+import NodeRecommender from "../../utils/NodeRecommender";
 
 const google = window.google;
 
@@ -48,7 +49,9 @@ export const ScanSHP = () => {
 	const [updateInfo, setUpdateInfo] = useState(null)
 	const [newStatus, setNewStatus] = useState(null)
 	const [shipmentCurNode, setShipmentCurNode] = useState(null)
-
+	const [recommendNode, setRecommendNode] = useState(null)
+	const [recommendPath, setRecommendPath] = useState(null)
+	const [showRecommend, setShowRecommend] = useState(true)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -196,6 +199,96 @@ export const ScanSHP = () => {
 
 	}
 
+	function handleScan() {
+		setShowScanPopup(true)
+		RfidService.makeScan()
+		.then ( res => {
+			if (res.data.statusCode == 200) {
+				setShipmentId(res.data.data.uid)
+
+				ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+				.then( async res_shipment => {
+					console.log(currentNode)
+					var incorrectCurNode = false
+					if (res_shipment.data) {
+						setShipment(res_shipment.data)
+						var newState = "arrived"
+						if ((res_shipment.data.status == "created" || res_shipment.data.status == "arrived") ) {
+							if ( currentNode.nodeCode != res_shipment.data.currentNode) {
+								incorrectCurNode = true
+								newState = null
+							} else{
+								newState = "shipping"
+								var recommend = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
+								if ( recommend) {
+									NodeDataService.getNodeByCode( recommend, userData.token)
+									.then( async res => {
+										const directionsService = new google.maps.DirectionsService()
+
+										setRecommendNode(res.data)
+										let tempDirection = await directionsService.route({
+											origin: {lat:currentNode.lat, lng:currentNode.lng},
+											destination: {lat:res.data.lat, lng:res.data.lng},
+											// eslint-disable-next-line no-undef
+											travelMode: google.maps.TravelMode.DRIVING,
+										})
+										setRecommendPath(tempDirection)
+									})
+								}
+							}
+						} else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
+							newState = "completed"
+						} else if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
+							newState = null
+						}
+						setNewStatus(newState)
+						if (newState) {
+							
+							setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
+							setWarning(null)
+							setShowScanPopup(false)
+						}
+						else if (incorrectCurNode) {
+							setUpdateInfo(null)
+							setShipment(null)
+							setWarning("Current node not matched. Please check your current node!")
+							setShowScanPopup(false)
+						} else {
+							setUpdateInfo(null)
+							setShipment(null)
+							setWarning("Cancelled or completed shipment cannot be updated!")
+							setShowScanPopup(false)
+						}
+					} else {
+						setUpdateInfo(null)
+						setShipmentId(null)
+						setShipment(null)
+						setWarning("Shipment not found!")
+						setShowScanPopup(false)
+					}
+				})
+				.catch(err => {
+					setShipmentId(null)
+					setShipment(null)
+					setWarning("Shipment not found!")
+					setShowScanPopup(false)
+					
+				})
+			}
+			else if (res.data.statusCode == 300) {
+				setShipmentId(null)
+				setShipment(null)
+				setWarning("Scanning timeout! Please try again.")
+				setShowScanPopup(false)
+				
+			}
+		})
+		.catch(error => {
+			console.log(error)
+			
+		})
+	}
+
     return (
         <div className="content-main-container">
 			<Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
@@ -218,71 +311,14 @@ export const ScanSHP = () => {
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Shiment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" style={{width: "70%"}} onClick={() => {
-									setShowScanPopup(true)
-									RfidService.makeScan()
-									.then ( res => {
-										if (res.data.statusCode == 200) {
-											setShipmentId(res.data.data.uid)
+								<Button className="signinBtn" style={{width: "70%"}} onClick={handleScan} >Scan</Button>
+								{ shipment && <Button className="signinBtn" style={{width: "70%"}} onClick={() => {
+									setShowInfo(true)
+									setShowRecommend(true)
+								}} >Show Info</Button>}
 
-											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
-											.then( res_shipment => {
-												console.log(currentNode)
-												
-												if (res_shipment.data) {
-													setShipment(res_shipment.data)
-													var newState = "arrived"
-													if (res_shipment.data.status == "created" || res_shipment.data.status == "arrived" ) {
-														newState = "shipping"
-													} else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
-														newState = "completed"
-													} else if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
-														newState = null
-													}
-													setNewStatus(newState)
-													if (newState) {
-														
-														setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
-														setWarning(null)
-														setShowScanPopup(false)
-													}
-													else {
-														setUpdateInfo(null)
-														setShipment(null)
-														setWarning("Cancelled or completed shipment cannot be updated!")
-														setShowScanPopup(false)
-													}
-												} else {
-													setUpdateInfo(null)
-													setShipmentId(null)
-													setShipment(null)
-													setWarning("Shipment not found!")
-													setShowScanPopup(false)
-												}
-											})
-											.catch(err => {
-												setShipmentId(null)
-												setShipment(null)
-												setWarning("Shipment not found!")
-												setShowScanPopup(false)
-												
-											})
-										}
-										else if (res.data.statusCode == 300) {
-											setShipmentId(null)
-											setShipment(null)
-											setWarning("Scanning timeout! Please try again.")
-											setShowScanPopup(false)
-											
-										}
-									})
-									.catch(error => {
-										console.log(error)
-										
-									})
-								}} >Scan</Button>
 							</div>
-							<div style={{ width: "100%", height: "55vh" }}>
+							<div style={{ width: "100%", height: "45vh" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
@@ -293,7 +329,8 @@ export const ScanSHP = () => {
 									{directionsResponse ? (
 										directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
 									): null}
-									{showInfo && shipment && shipmentCurNode && <InfoWindow
+									{showInfo && shipment && shipmentCurNode && 
+									<InfoWindow
 										position={{ lat:shipmentCurNode.lat, lng: shipmentCurNode.lng }}
 										onCloseClick={() => {
 											setShowInfo(false)
@@ -310,6 +347,24 @@ export const ScanSHP = () => {
 											</h2>
 											<p style={{color:"#000000"}}>Status: { shipment.status.toUpperCase()}</p>
 											<p style={{color:"#000000"}}>Current: {shipment.currentNode}</p>
+										</div>
+									</InfoWindow>}
+									{recommendPath && <DirectionsRenderer directions={recommendPath} />}
+									{showRecommend && shipment && shipmentCurNode && recommendNode &&
+									<InfoWindow
+										position={{ lat:recommendNode.lat, lng: recommendNode.lng }}
+										onCloseClick={() => {
+											showRecommend(false)
+										}}
+										>
+										<div>
+											<h2>
+												Recommended: {recommendNode.nodeCode}
+											</h2>
+											<p style={{color:"#000000"}}>This is the nearest node that has shipment with the same destination as your!</p>
+											<p style={{color:"#000000"}}>Company: {recommendNode.companyCode}</p>
+											<p style={{color:"#000000"}}>Contact: {recommendNode.phoneNumber}</p>
+											<p style={{color:"#000000"}}>Address: {recommendNode.address}</p>
 										</div>
 									</InfoWindow>}
 									<Marker 

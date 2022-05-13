@@ -9,7 +9,7 @@ import NodeDataService from "../../services/NodeDataService";
 import GraphService from "../../services/GraphService";
 
 import { Card } from "../../components/card";
-import { FrequencyChart } from "../../components/chart";
+import { LineChart } from "../../components/linechart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
@@ -27,30 +27,16 @@ export const OverviewPage = (props) => {
 	const [nodePopup, setNodePopup] = useState(false);
 	const [editProfPopup, setEditProfPopup] = useState(false);
 
-	const [dateGraphData, setDateGraphData] = useState(null);
-	// const [hourGraphData, setHourGraphData] = useState(null)
-	const [currentDate, setCurrentDate] = useState(new Date());
-	const [graphTimeRange, setGraphTimeRange] = useState("day");
-	const [graphType, setGraphType] = useState("shipped");
-	const [graphName, setGraphName] = useState({
-		shipped: "Shipments Shipping",
-		stock: "Stocking Shipments",
-	});
-	const [yAxisLabel, setYAxisLabel] = useState({
-		shipped: "Shipped",
-		stock: "Stock",
-	});
-
-	const [xAxisLabel, setXAxisLabel] = useState({
-		week: "Date",
-		month: "Day",
-		year: "Month",
-		day: "Hour",
-	});
-	const [completedCount, setCompletedCount] = useState(0);
-	const [stockCount, setStockCount] = useState(0);
-	const [incompleteCount, setIncompleteCount] = useState(0);
-	const [shippingCount, setShippingCount] = useState(0);
+    const [dateGraphData, setDateGraphData] = useState(null)
+    // const [hourGraphData, setHourGraphData] = useState(null)
+    const [currentDate, setCurrentDate] = useState( new Date() )
+    const [graphTimeRange, setGraphTimeRange] = useState("day")
+    const [graphType, setGraphType] = useState("shipping")
+    
+    const [completedCount, setCompletedCount] = useState(0)
+    const [stockCount, setStockCount] = useState(0)
+    const [incompleteCount, setIncompleteCount] = useState(0)
+    const [shippingCount, setShippingCount] = useState(0)
 
 	// useState(() => {
 	//     var node = eval('('+localStorage.getItem("currentNode")+')')
@@ -192,50 +178,44 @@ export const OverviewPage = (props) => {
 			}
 		}
 
-		if (timeRange && graphType == "shipped") {
-			timeInterval.unshift(timeInterval[0] - timeRange);
-			// console.log('INTERVALLL',timeInterval)
-
-			GraphService.getCompanyShippedByTime(
-				userData.companyCode,
-				timeInterval,
-				userData.token
-			)
-				.then((res_graph) => {
-					console.log(res_graph);
-					setDateGraphData(
-						GraphService.adjustGraphTime(res_graph.data, graphTimeRange)
-					);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		} else if (graphType == "stock") {
-			// console.log('INTERVALLL',timeInterval)
-
-			GraphService.getCompanyStockByTime(
-				userData.companyCode,
-				timeInterval,
-				userData.token
-			)
-				.then((res_graph) => {
-					console.log(res_graph);
-					setDateGraphData(
-						GraphService.adjustGraphTime(res_graph.data, graphTimeRange)
-					);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
-	}, [graphType, graphTimeRange]);
-
-	function handlePopupConfirm(currentNode) {
-		localStorage.setItem("currentNode", JSON.stringify(currentNode));
-		setCurrentNodeCode(
-			eval("(" + localStorage.getItem("currentNode") + ")").nodeCode
-		);
-		// window.location.reload(false);
+    
+    useEffect(() => {
+        
+        ShipmentService.completedCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setCompletedCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.currentStockCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            console.log(res.data)
+            setStockCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.shippingCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setShippingCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.incompleteCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setIncompleteCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        GraphService.generateGraph( graphType, graphTimeRange, userData.token, userData.companyCode, null)
+        .then( res => {
+            setDateGraphData(res.data)
+        })
+        
+    }, [graphType,graphTimeRange])
 
 		setNodePopup(false);
 	}
@@ -264,39 +244,29 @@ export const OverviewPage = (props) => {
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
                 </button>
             </div> */}
-			<Titlebar
-				pageTitle="Overview"
-				setExtNodePopup={setNodePopup}
-				setExtProfPopup={setEditProfPopup}
-				extNodeCode={currentNodeCode}
-			/>
-			<div className="body-top">
-				<Card title="Incomplete" info={incompleteCount} />
-				<Card title="Shipping" info={shippingCount} />
-				<Card title="Completed" info={completedCount} />
-				<Card title="In-Stock" info={stockCount} />
-			</div>
-			<div className="body-main">
-				<div className="chart-container">
-					<div className="chart-title-container">
-						{/* <h3 className="chart-title">Stocking Shipments</h3> */}
-						<div style={{ display: "flex", "flex-direction": "row" }}>
-							<Dropdown
-								onSelect={handleGraphType}
-								style={{ marginRight: "2%" }}
-							>
-								<Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
-									{graphName[graphType]}
-								</Dropdown.Toggle>
-								<Dropdown.Menu>
-									<Dropdown.Item eventKey={"shipped"}>
-										{graphName.shipped}
-									</Dropdown.Item>
-									<Dropdown.Item eventKey={"stock"}>
-										{graphName.stock}
-									</Dropdown.Item>
-								</Dropdown.Menu>
-							</Dropdown>
+            <Titlebar pageTitle="Overview" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNodeCode}/>
+            <div className="body-top">
+                <Card title="Incomplete" info={incompleteCount}/>
+                <Card title="Shipping" info={shippingCount}/>
+                <Card title="Completed" info={completedCount}/>
+                <Card title="In-Stock" info={stockCount}/>
+            </div>
+            <div className="body-main">
+                
+                <div className="chart-container">
+                    <div className="chart-title-container">
+                        {/* <h3 className="chart-title">Stocking Shipments</h3> */}
+                        <div style={{display: "flex", "flex-direction":"row"}}>
+                            <Dropdown onSelect={handleGraphType} style={{marginRight: "2%"}}>
+                                <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
+                                    {GraphService.graphName[graphType]}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    { GraphService.graphTypes.map( type => 
+                                    <Dropdown.Item eventKey={type}>{GraphService.graphName[type]}</Dropdown.Item>
+                                    )}
+                                </Dropdown.Menu>
+                            </Dropdown>
 
 							<Dropdown onSelect={handleTimeRangeDropdown}>
 								<Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
@@ -313,58 +283,37 @@ export const OverviewPage = (props) => {
                                     <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
                                     <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
-								</Dropdown.Menu>
-							</Dropdown>
-						</div>
-						<p>
-							{new Date(
-								currentDate.getFullYear(),
-								currentDate.getMonth(),
-								currentDate.getDate() - 6
-							).toLocaleDateString()}{" "}
-							- {currentDate.toLocaleDateString()}
-						</p>
-					</div>
-					<div className="body-chart-container">
-						{dateGraphData && (
-							<FrequencyChart
-								chartDataPrim={dateGraphData}
-								indicatorX={xAxisLabel[graphTimeRange]}
-								indicatorY={yAxisLabel[graphType]}
-							/>
-						)}
-					</div>
-				</div>
-				<div className="chart-info-right">
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-				</div>
-			</div>
-			{nodePopup && (
-				<NodeSelectPopup
-					setOpenPopup={setNodePopup}
-					handleConfirm={handlePopupConfirm}
-					handleCancel={handlePopupCancel}
-				/>
-			)}
-			{editProfPopup && (
-				<EditProfilePopup
-					setOpenPopup={setEditProfPopup}
-					handleConfirm={handleEditProfConfirm}
-					handleCancel={handleEditProfCancel}
-				/>
-			)}
-		</div>
-	);
-};
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
+                        <p>
+                            {new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
+                            .toLocaleDateString()} - {currentDate.toLocaleDateString()}
+                        </p>
+                    </div>
+                    <div className="body-chart-container">
+                        { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
+                    </div>
+                </div>
+                <div className="chart-info-right">
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Placeholder</p>
+                    </div>
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Placeholder</p>
+                    </div>
+                    <hr/>
+                    <div className="chart-item">
+                        <p>Placeholder</p>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
+            { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
+
+        </div>
+    );
+}

@@ -50,16 +50,19 @@ export function StaffListPage(props) {
             <div className="content-title-container">
             {companyName ? (<h1  className="adminPageHeader">{companyName}</h1>)
             : (<h1  className="adminPageHeader">{companyCode}</h1>)}
-            <Button onClick={() => {
-                setShowEditComp(false)
-                setShowAddStaff(true)}} variant="dark">
-                    ADD STAFF
-            </Button>
-            <Button onClick={() => {
-                setShowAddStaff(false)
-                setShowEditComp(true)}} variant="dark">
-                    EDIT COMPANY
-            </Button>
+            <div style={{display: "flex", flexDirection: "row", width: "30%", justifyContent: "flex-end"}}>
+                <Button onClick={() => {
+                    setShowEditComp(false)
+                    setShowAddStaff(true)}} variant="dark" style={{marginRight: "2%"}}>
+                        ADD STAFF
+                </Button>
+                <Button onClick={() => {
+                    setShowAddStaff(false)
+                    setShowEditComp(true)}} variant="dark">
+                        EDIT COMPANY
+                </Button>
+            </div>
+            
             </div>
             
             <div className="content-table-container">
