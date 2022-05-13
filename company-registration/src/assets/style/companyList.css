@@ -1,5 +1,7 @@
-#companyList th {
-    color: #FFFFFF;
-    font-size: 1em;
+.company-table th {
     font-weight: bold;
+    vertical-align: middle;
 }
+/* .company-table td {
+    width: 60%;
+} */
