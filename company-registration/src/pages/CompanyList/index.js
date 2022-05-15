@@ -16,8 +16,9 @@ import { AddStaffPopup } from '../../components/add_staff_popup';
 import CompanyService from '../../services/CompanyService';
 
 export function CompanyListPage(props) {
+	const [warning, setWarning] = useState(null)
 
-    const [companies, setCompanies] = useState([])
+    const [companies, setCompanies] = useState(null)
     const [userData] = useState(eval('('+localStorage.getItem("userData")+')'))
     const [showEditComp, setShowEditComp] = useState(false);
     const [showViewStaff, setShowViewStaff] = useState(false);
@@ -48,7 +49,7 @@ export function CompanyListPage(props) {
         return companies.map((res, i) => {
             return <CompanyTable userData={userData} obj={res} key={i} refresh={updateData}
             setEditCompPopup={setShowEditComp} setViewStaffPopup={setShowViewStaff} setViewStaffUsername={setViewStaffUsername} 
-             setCompanyCode={setCompanyCode} setAddStaffPopup={setShowAddStaff}/>
+             setCompanyCode={setCompanyCode} setAddStaffPopup={setShowAddStaff} setWarning={setWarning}/>
         })
     }
 
@@ -57,6 +58,10 @@ export function CompanyListPage(props) {
             <div className="content-title-container">
                 <h1  className="adminPageHeader">Companies</h1>
             </div>
+            { warning &&
+            <div className="alert alert-danger">
+                {warning}
+            </div>}
             <div className="content-table-container">
                 <Table className="table table-hover company-table">
                     <thead>
@@ -68,7 +73,7 @@ export function CompanyListPage(props) {
                         </tr>
                     </thead>
                 
-                        {userData ? (dataTable()) : (<></>)}
+                        {userData && companies ? (dataTable()) : (<></>)}
 
                 </Table>
                 
