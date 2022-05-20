@@ -52,6 +52,8 @@ export const ScanSHP = () => {
 	const [recommendNode, setRecommendNode] = useState(null)
 	const [recommendPath, setRecommendPath] = useState(null)
 	const [showRecommend, setShowRecommend] = useState(true)
+	const [nextCompany, setNextCompany] = useState(null)
+	const [nextNode, setNextNode] = useState(null)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -220,6 +222,9 @@ export const ScanSHP = () => {
 							} else{
 								newState = "shipping"
 								var recommend = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
+								.catch( err=> { 
+									recommend = null
+								})
 								if ( recommend) {
 									NodeDataService.getNodeByCode( recommend, userData.token)
 									.then( async res => {
@@ -318,6 +323,7 @@ export const ScanSHP = () => {
 								}} >Show Info</Button>}
 
 							</div>
+							
 							<div style={{ width: "100%", height: "45vh" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
