@@ -28,7 +28,8 @@ import { ScanPopup } from "../../components/scan_popup";
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng
-  } from "react-places-autocomplete";const google = window.google;
+  } from "react-places-autocomplete";
+const google = window.google;
 
 export const CreateSHP = () => {
 	const [shipment, setShipment] = useState(null);
@@ -361,7 +362,7 @@ export const CreateSHP = () => {
 								</Dropdown>
 							</div>
 							<div className="textInputContainerCol">
-								<label className="inputLabel">Shiment ID: {shipmentId}</label>
+								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
 								<Button className="signinBtn" onClick={() => {
 									setShowScanPopup(true)
@@ -405,7 +406,7 @@ export const CreateSHP = () => {
 							{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 								<div >
 
-									<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Address" })} />
+									<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Next node location" })} />
 
 									<div>
 									{loading ? <div>Loading...</div> : null}
