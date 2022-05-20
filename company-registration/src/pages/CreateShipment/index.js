@@ -401,7 +401,7 @@ export const CreateSHP = () => {
 							</div>
 						</div>
 
-						<div style={{ width: "50%", height: "55vh" }}>
+						<div style={{ width: "50%", height: "90%" }}>
 							<PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
 							{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 								<div >
