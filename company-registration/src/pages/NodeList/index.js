@@ -1,27 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table'
+import Table from 'react-bootstrap/Table';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import "../../assets/style/style.css"
+import "../../assets/style/nodeList.css"
 
 import NodeDataService from '../../services/NodeDataService';
 import { NodeTable } from '../../components/node_table';
 import { AddNodePopup } from '../../components/add_node_popup';
 import { EditNodePopup } from '../../components/edit_node_popup';
 
+import CompanyService from '../../services/CompanyService';
+
 export const NodeListPage = () => {
-    const [allNodes, setAllNodes] = useState(null)
-    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
-    const [pageNumber, setPageNumber] = useState(1)
-    const [showAddNode, setShowAddNode] = useState(false)
-    const [pageSize, setPageSize] = useState(20)
-    const [editNode, setEditNode] = useState(null)
-    const [showEditNode, setShowEditNode] = useState(false)
+    const [allNodes, setAllNodes] = useState(null);
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'));
+    const [pageNumber, setPageNumber] = useState(1);
+    const [showAddNode, setShowAddNode] = useState(false);
+    const [pageSize, setPageSize] = useState(20);
+    const [editNode, setEditNode] = useState(null);
+    const [showEditNode, setShowEditNode] = useState(false);
+    const [destinationCompany, setDestinationCompany] = useState(null);
+    const [allCompanies, setAllCompanies] = useState([]);
+
 
     useEffect(() => {
         updateTable()
     }
     ,[showAddNode, showEditNode] );
+
+    useEffect(() => {
+		CompanyService.getAllCompanyCode(userData.token)
+			.then((result) => {
+				setAllCompanies(result.data);
+			})
+			.catch((err_company) => {
+				console.log(err_company);
+			});
+	}, []);
+
+    function handleCompanyDropdown(e) {
+		console.log(e);
+		setDestinationCompany(e);
+	};
 
     const updateTable = () => {
         NodeDataService.getAllNode(userData.token)
@@ -41,9 +63,27 @@ export const NodeListPage = () => {
 
     return (
         <div className="content-main-container">
-            <div className="content-title-container">
+            <div className="content-title-container node-title-container">
                 <h1>Node</h1>
-                <Button onClick={() => {setShowAddNode(true)}} className="btn-dark" >
+                <Dropdown onSelect={handleCompanyDropdown}>
+                    {destinationCompany ? (
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            {destinationCompany}
+                        </Dropdown.Toggle>
+                    ) : (
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            Company
+                        </Dropdown.Toggle>
+                    )}
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
+                        {allCompanies.map((companyCode) => (
+                            <Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Button onClick={() => {setShowAddNode(true)}} className="btn-dark add-node-btn" >
                     ADD NODE
                 </Button>
             </div>
