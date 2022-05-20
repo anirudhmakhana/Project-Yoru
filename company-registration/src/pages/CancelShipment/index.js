@@ -343,20 +343,24 @@ export const CancelSHP = () => {
 									</GoogleMap>}
 							</div>
 						</div>
-						<div className='scan-history-container' style={{marginLeft: "3%"}}>
-						<h3 style={{color: "#252733", marginBottom: "3%"}}>Update History</h3>
-							{ allScans.reverse().map( scan => {
-                            return(
-								<div>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
-									<br/>
-								</div>
-                            ) 
-							})}
-                        </div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+							<div className='scan-history-container' style={{marginLeft: "3%"}}>
+								
+									{ allScans.reverse().map( scan => {
+									return(
+										<div>
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+											<br/>
+										</div>
+									) 
+									})}
+							</div>
+						</div>
+						
 
 
 					</div>
