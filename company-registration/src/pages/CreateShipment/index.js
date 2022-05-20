@@ -25,7 +25,10 @@ import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 import RfidService from "../../services/RfidService";
 import StringValidator from "../../utils/StringValidator";
 import { ScanPopup } from "../../components/scan_popup";
-const google = window.google;
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from "react-places-autocomplete";const google = window.google;
 
 export const CreateSHP = () => {
 	const [shipment, setShipment] = useState(null);
@@ -49,13 +52,15 @@ export const CreateSHP = () => {
 	const [destinationCompany, setDestinationCompany] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [showDestInfo, setShowDestInfo] = useState(true)
+	const [destRef, setDestRef] = useState( null)
+	const [searchRef, setSearchRef] = useState('')
 	const navigate = useNavigate();
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
 	const [showScanPopup, setShowScanPopup] = useState(false)
 
-	const [nodeStock, setNodeStock] = useState(null);
+	const [nodeStock, setNodeStock] = useState(0);
 	// const [currentMark, setCurrentMark] = useState(null)
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -132,40 +137,58 @@ export const CreateSHP = () => {
     }
     ,[isLoaded, currentNode, destinationNode] );
 
-	const handleCompanyDropdown = (e) => {
-		console.log(e);
-		setDestinationCompany(e);
-		console.log(destinationNode);
-		setDestinationNode(null);
-		setNodeStock(null);
-		setDirectionsResponse(null)
-		
-	};
-
-	const handleNodeDropdown = (e) => {
-		console.log(e);
-		if (e) {
-			NodeDataService.getNodeByCode(e, userData.token)
-			.then((result) => {
-				setDestinationNode(result.data);
-				setShowDestInfo(true)
-				console.log(result.data);
-				ShipmentService.getStockByNode(result.data.nodeCode, userData.token)
+	useEffect( () => {
+		if ( destRef) {
+			NodeDataService.getNearestNodeExcept(destRef, currentNode.nodeCode, userData.token)
+				.then( nearestNode => {
+					setDestinationCompany(nearestNode.data.companyCode)
+					setDestinationNode(nearestNode.data)
+					ShipmentService.currentStockCountByNode(nearestNode.data.nodeCode, userData.token)
 					.then((res_stock) => {
+						// console.log('testtesttest', res_stock)
 						console.log(res_stock.data);
 						setNodeStock(res_stock.data);
 
 					})
 					.catch((err_stock) => {
-						setNodeStock(null);
+						setNodeStock(0);
 						console.log(err_stock);
 					});
 			})
-			.catch((err) => {
-				console.log(err);
+		}
+	}, [destRef])
+
+	function handleCompanyDropdown(e) {
+		console.log(e);
+		setDestinationCompany(e);
+		console.log(destinationNode);
+		setDestinationNode(null);
+		setNodeStock(0);
+		setDirectionsResponse(null)
+		
+	};
+
+	async function handleNodeDropdown(e) {
+		console.log(e);
+		if (e) {
+			const result = await NodeDataService.getNodeByCode(e, userData.token)
+			
+			setDestinationNode(result.data);
+			setShowDestInfo(true)
+			console.log(result.data);
+			ShipmentService.currentStockCountByNode(result.data.nodeCode, userData.token)
+			.then((res_stock) => {
+				// console.log('testtesttest', res_stock)
+				console.log(res_stock.data);
+				setNodeStock(res_stock.data);
+
+			})
+			.catch((err_stock) => {
+				setNodeStock(0);
+				console.log(err_stock);
 			});
 		} else {
-			setNodeStock(null);
+			setNodeStock(0);
 			setDestinationNode(null);
 			setDirectionsResponse(null)
 		}
@@ -185,6 +208,14 @@ export const CreateSHP = () => {
         setNodePopup(false)
 
     }
+
+	async function handleSearchSelect(value) {
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+		setSearchRef(value)
+        setDestRef(latLng);
+
+      };
     
     function handleNodePopupCancel() {
         console.log(localStorage)
@@ -370,16 +401,41 @@ export const CreateSHP = () => {
 						</div>
 
 						<div style={{ width: "50%", height: "55vh" }}>
-							{ GoogleMap ? (currentNode ? (
+							<PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
+							{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+								<div >
+
+									<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Address" })} />
+
+									<div>
+									{loading ? <div>Loading...</div> : null}
+
+									{suggestions.map(suggestion => {
+										const style = {
+										backgroundColor: suggestion.active ? "#D4F0F7" : "#FFFFFF",
+										"text-align" :'left'
+										};
+
+										return (
+										<div {...getSuggestionItemProps(suggestion, { style })}>
+											{suggestion.description}
+										</div>
+										);
+									})}
+									</div>
+								</div>
+							)}
+							</PlacesAutocomplete>
+							{ currentNode ? (
 									<GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
 										mapContainerStyle={{ width: "100%", height: "100%" }}
 										options={options}
 										onLoad={(map) => setMapRef(map)}
-										onClick={() => {}}
+										onClick={(e) => {setDestRef({lat:e.latLng.lat(), lng:e.latLng.lng()})}}
 									>
-										{destinationNode && showDestInfo && nodeStock && <InfoWindow
+										{destinationNode && showDestInfo && <InfoWindow
 											position={{ lat: destinationNode.lat, lng: destinationNode.lng }}
 											onCloseClick={() => {
 												setShowDestInfo(false)
@@ -398,7 +454,7 @@ export const CreateSHP = () => {
 													Contact: {destinationNode.phoneNumber}
 												</p>
 												<p style={{ color: "#000000" }}>
-													Stocking: {nodeStock.length} shipment(s)
+													Stocking: {nodeStock} shipment(s)
 												</p>
 											</div>
 										</InfoWindow>}
@@ -438,8 +494,7 @@ export const CreateSHP = () => {
 										onLoad={(map) => setMapRef(map)}
 										onClick={() => {}}
 									></GoogleMap>
-								)):null
-							}
+								)}
 						</div>
 					</div>
 

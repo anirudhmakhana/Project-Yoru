@@ -121,7 +121,7 @@ class NodeDataService {
         return response
     }
 
-    async getNearestNode( coord, companyCode, token, google ) {
+    async getCompanyNearestNode( coord, companyCode, token ) {
         const response = await this.getNodeByCompany( companyCode, token)
         .catch((error) => {
             throw error
@@ -137,6 +137,60 @@ class NodeDataService {
                 // let curDist =  google.maps.geometry.spherical.computeDistanceBetween( {lat: node.lat, lng:node.lng}, coord)
                 let curDist = this.sphericalDistance(coord.lat, coord.lng, node.lat, node.lng)
                 if ( curDist < minDist) {
+                    result = response.data[ind]
+                    minDist = curDist
+                }
+            }) 
+        }
+        catch (err) {         
+            throw err
+        }
+        return {data: result}
+    }
+
+    async getNearestNode( coord, token ) {
+        const response = await this.getAllNode( token)
+        .catch((error) => {
+            throw error
+        })
+        try {
+
+        var result = response.data[0]
+        // var minDist = google.maps.geometry.spherical.computeDistanceBetween( {lat: result.lat, lng:result.lng}, coord)
+        let minDist = this.sphericalDistance(coord.lat, coord.lng, result.lat, result.lng)
+
+            
+            response.data.forEach( (node, ind) => {
+                // let curDist =  google.maps.geometry.spherical.computeDistanceBetween( {lat: node.lat, lng:node.lng}, coord)
+                let curDist = this.sphericalDistance(coord.lat, coord.lng, node.lat, node.lng)
+                if ( curDist < minDist) {
+                    result = response.data[ind]
+                    minDist = curDist
+                }
+            }) 
+        }
+        catch (err) {         
+            throw err
+        }
+        return {data: result}
+    }
+
+    async getNearestNodeExcept( coord, exceptNodeCode, token ) {
+        const response = await this.getAllNode( token)
+        .catch((error) => {
+            throw error
+        })
+        try {
+
+        var result = response.data[0]
+        // var minDist = google.maps.geometry.spherical.computeDistanceBetween( {lat: result.lat, lng:result.lng}, coord)
+        let minDist = this.sphericalDistance(coord.lat, coord.lng, result.lat, result.lng)
+
+            
+            response.data.forEach( (node, ind) => {
+                // let curDist =  google.maps.geometry.spherical.computeDistanceBetween( {lat: node.lat, lng:node.lng}, coord)
+                let curDist = this.sphericalDistance(coord.lat, coord.lng, node.lat, node.lng)
+                if ( curDist < minDist && node.nodeCode != exceptNodeCode) {
                     result = response.data[ind]
                     minDist = curDist
                 }
