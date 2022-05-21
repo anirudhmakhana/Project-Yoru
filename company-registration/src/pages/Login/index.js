@@ -71,6 +71,8 @@ export const LoginPage = (props) => {
                 .catch( err => {
                     localStorage.setItem("userData", JSON.stringify(res.data))
                     localStorage.setItem("userType", "staff")
+                    localStorage.setItem("currentNode", null)
+
                     navigate("main/overview")
                 })
                 

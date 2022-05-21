@@ -45,8 +45,8 @@ export const CreateSHP = () => {
 	const [description, setDescription] = useState("");
 	const [destinationNode, setDestinationNode] = useState(null);
 	const [status, setStatus] = useState("created");
-	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
-	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
+	const [producer, setProducer ] = useState('');
+	const [currentNode, setCurrentNode] = useState(null);
 	// const [destinationNode, setDestination] = useState(null);
 	const [allCompanies, setAllCompanies] = useState([]);
 	const [companyNodes, setCompanyNodes] = useState([]);
@@ -91,6 +91,10 @@ export const CreateSHP = () => {
 	}
 
 	useEffect(() => {
+		if ( eval('('+localStorage.getItem("currentNode")+')')) {
+            setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
+			setProducer(eval("(" + localStorage.getItem("currentNode") + ")").companyCode)
+        }
 		CompanyService.getAllCompanyCode(userData.token)
 			.then((result) => {
 				setAllCompanies(result.data);
@@ -274,8 +278,8 @@ export const CreateSHP = () => {
 
 	return (
 		<div className="content-main-container">
-			<Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
-
+			{currentNode ? <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			: <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
 			<div className="detailed-main-container" style={{overflowY: "auto", height: "fit-content"}}>
 				<form onSubmit={ () => {} }>
                     
@@ -376,7 +380,7 @@ export const CreateSHP = () => {
 												if ( res_shipment.data ) {
 													setShipmentId(null)
 
-													setWarning(`Shipment ${res_shipment.data.data.uid} already created!`)
+													setWarning(`Shipment ${res_shipment.data.uid} already created!`)
 													setShowScanPopup(false)
 												}
 												else {

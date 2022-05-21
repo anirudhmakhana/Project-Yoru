@@ -21,14 +21,14 @@ export const NodeListPage = () => {
     const [pageSize, setPageSize] = useState(20);
     const [editNode, setEditNode] = useState(null);
     const [showEditNode, setShowEditNode] = useState(false);
-    const [destinationCompany, setDestinationCompany] = useState(null);
+    const [filterCompany, setFilterCompany] = useState(userData.companyCode);
     const [allCompanies, setAllCompanies] = useState([]);
 
 
     useEffect(() => {
         updateTable()
     }
-    ,[showAddNode, showEditNode] );
+    ,[showAddNode, showEditNode, filterCompany] );
 
     useEffect(() => {
 		CompanyService.getAllCompanyCode(userData.token)
@@ -42,11 +42,11 @@ export const NodeListPage = () => {
 
     function handleCompanyDropdown(e) {
 		console.log(e);
-		setDestinationCompany(e);
+		setFilterCompany(e);
 	};
 
     const updateTable = () => {
-        NodeDataService.getAllNode(userData.token)
+        NodeDataService.getNodeByCompany(filterCompany, userData.token)
         .then( res => setAllNodes(res.data))
         .catch( err => {
             setAllNodes([])
@@ -66,9 +66,9 @@ export const NodeListPage = () => {
             <div className="content-title-container node-title-container">
                 <h1>Node</h1>
                 <Dropdown onSelect={handleCompanyDropdown}>
-                    {destinationCompany ? (
+                    {filterCompany ? (
                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                            {destinationCompany}
+                            {filterCompany}
                         </Dropdown.Toggle>
                     ) : (
                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -77,7 +77,6 @@ export const NodeListPage = () => {
                     )}
 
                     <Dropdown.Menu>
-                        <Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
                         {allCompanies.map((companyCode) => (
                             <Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
                         ))}

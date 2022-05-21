@@ -43,7 +43,7 @@ export const ScanSHP = () => {
     const [editProfPopup, setEditProfPopup] = useState(false);
 	const [shipmentId, setShipmentId] = useState("");
 	// const [path, setPath] = useState(null)
-	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
+	const [currentNode, setCurrentNode] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [warning, setWarning] = useState(null)
 	const [recommendInfo, setRecommendInfo] = useState(null)
@@ -108,6 +108,10 @@ export const ScanSHP = () => {
     }
 
 	useEffect(() => {
+		if ( eval('('+localStorage.getItem("currentNode")+')')) {
+            setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
+
+        }
 		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
 		.then((result) => {
 			setUserCompany(result.data);
@@ -430,8 +434,9 @@ export const ScanSHP = () => {
 
     return (
         <div className="content-main-container">
-			<Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
-           <div className="detailed-main-container" style={{height: "fit-content"}}>
+			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			: <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
+			<div className="detailed-main-container" style={{height: "fit-content"}}>
            <form onSubmit={ () => {} }>
                     
 
@@ -451,7 +456,9 @@ export const ScanSHP = () => {
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								{shipment && <label className="inputLabel">Destination: {shipment.destinationNode}</label>}
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" onClick={handleScan} >Scan</Button>
+								{ currentNode ? <Button className="signinBtn" onClick={handleScan} >Scan</Button> :
+								<Button className="signinBtn" onClick={handleScan} disabled>Scan</Button>}
+
 								{ shipment && <Button className="signinBtn" onClick={() => {
 									setShowInfo(true)
 									setShowNextInfo(true)
@@ -614,7 +621,7 @@ export const ScanSHP = () => {
 									map={mapRef}
 									/>
 									</GoogleMap>
-									: <GoogleMap
+									: currentNode ? <GoogleMap
 									center={{ lat: currentNode.lat, lng: currentNode.lng }}
 									zoom={15}
 									mapContainerStyle={{ width: '100%', height: '100%' }}
@@ -630,7 +637,15 @@ export const ScanSHP = () => {
 									}}
 									map={mapRef}
 									/>
-									</GoogleMap>}
+									</GoogleMap> : 
+									 <GoogleMap
+									 center={{ lat: 13.756331, lng: 100.501762 }}
+									 zoom={15}
+									 mapContainerStyle={{ width: '100%', height: '100%' }}
+									 options={options}
+									 onLoad={map => setMapRef(map)}
+									 onClick={()=>{}}>
+									 </GoogleMap>}
 							</div>
 						</div>
 						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>

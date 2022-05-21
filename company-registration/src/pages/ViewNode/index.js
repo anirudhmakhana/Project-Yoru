@@ -146,7 +146,7 @@ export const ViewNodePage = () => {
                     
                     
                     <div className="node-info">
-                        <div style={{"flex-direction":"column", width:"50%"}}>
+                        {node.companyCode == userData.companyCode && <div style={{"flex-direction":"column", width:"50%"}}>
                             <div style={{display: "flex", "flex-direction":"row"}}>
                             <Dropdown onSelect={handleGraphType} style={{marginRight: "2%"}}>
                                 <Dropdown.Toggle className="btn btn-secondary dropdown-toggle">
@@ -181,7 +181,7 @@ export const ViewNodePage = () => {
                             <div style={{width:'100%', height:'90%', display: 'flex', alignItems: 'center'}}>
                                 { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
                             </div>
-                        </div>
+                        </div>}
                         <div style={{width:'50%', height:'100%'}}>
                                 <GoogleMap
                                     center={{ lat: node.lat, lng: node.lng }}
