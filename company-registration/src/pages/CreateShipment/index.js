@@ -397,7 +397,7 @@ export const CreateSHP = () => {
 									.catch( err => {
 										console.log(err)
 									})
-								}} style={{width: "70%"}}>Scan</Button>
+								}} >Scan</Button>
 							</div>
 						</div>
 
