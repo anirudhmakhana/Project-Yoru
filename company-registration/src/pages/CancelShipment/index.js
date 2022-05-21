@@ -221,9 +221,9 @@ export const CancelSHP = () => {
 								{updateInfo}
 							</div>}
 							<div className="textInputContainerCol">
-								<label className="inputLabel">Shiment ID: {shipmentId}</label>
+								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" style={{width: "70%"}} onClick={() => {
+								<Button className="signinBtn" onClick={() => {
 									setShowScanPopup(true)
 									RfidService.makeScan()
 									.then ( res => {
@@ -341,29 +341,32 @@ export const CancelSHP = () => {
 									</GoogleMap>}
 							</div>
 						</div>
-						<div className='scan-history-container' style={{marginLeft: "3%"}}>
-						<h3 style={{color: "#252733", marginBottom: "3%"}}>Update History</h3>
-							{ allScans.reverse().map( scan => {
-                            return(
-								<div>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
-									{scan.status == "shipping" && 
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
-									<br/>
-								</div>
-                            ) 
-							})}
-                        </div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							<div className='scan-history-container'>
+								<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+								{ allScans.reverse().map( scan => {
+								return(
+									<div>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+										{scan.status == "shipping" && 
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+										<br/>
+									</div>
+								) 
+								})}
+							</div>
+						</div>
+						
 
 
 					</div>
 
 					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
+                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444", borderColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
