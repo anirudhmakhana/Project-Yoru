@@ -415,8 +415,8 @@ export const ScanSHP = () => {
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								{shipment && <label className="inputLabel">Destination: {shipment.destinationNode}</label>}
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" style={{width: "70%"}} onClick={handleScan} >Scan</Button>
-								{ shipment && <Button className="signinBtn" style={{width: "70%"}} onClick={() => {
+								<Button className="signinBtn" onClick={handleScan} >Scan</Button>
+								{ shipment && <Button className="signinBtn" onClick={() => {
 									setShowInfo(true)
 									setShowRecommend(true)
 								}} >Show Info</Button>}
