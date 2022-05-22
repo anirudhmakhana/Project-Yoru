@@ -437,41 +437,33 @@ export const ScanSHP = () => {
 			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
 			<div className="detailed-main-container" style={{height: "fit-content"}}>
-           <form onSubmit={ () => {} }>
-                    
-
+           		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
-						<div className="input-left-container">
+						<div className="input-left-container" style={{justifyContent: "normal"}}>
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
 							
 							{ warning &&
-							<div className="alert alert-danger">
+							<div className="alert alert-danger mb-lg-4 mt-lg-4">
 								{warning}
 							</div>}
 							{ updateInfo &&
-							<div className="alert alert-primary">
+							<div className="alert alert-primary mb-lg-4 mt-lg-4">
 								{updateInfo}
 							</div>}
-							<div className="textInputContainerCol">
+							<div className="textInputContainerCol mb-lg-4">
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								{shipment && <label className="inputLabel">Destination: {shipment.destinationNode}</label>}
 								<label className="inputLabel">Scan RFID tag</label>
 								{ currentNode ? <Button className="signinBtn" onClick={handleScan} >Scan</Button> :
 								<Button className="signinBtn" onClick={handleScan} disabled>Scan</Button>}
-
-								{ shipment && <Button className="signinBtn" onClick={() => {
-									setShowInfo(true)
-									setShowNextInfo(true)
-								}} >Show Info</Button>}
-
 							</div>
 							{ shipment && newStatus == "shipping" && recommendInfo &&
-							<div className="alert alert-info">
+							<div className="alert alert-info mb-lg-4">
 								{recommendInfo}
 							</div>}
 							{ shipment && newStatus == "shipping" && 
 							<div>
-								<div className="textInputContainerCol">
+								<div className="textInputContainerCol mb-lg-4">
 									<label className="inputLabel">Select Next Node Company</label>
 									<Dropdown onSelect={handleCompanyDropdown}>
 										{nextCompany ? (
@@ -492,7 +484,7 @@ export const ScanSHP = () => {
 										</Dropdown.Menu>
 									</Dropdown>
 								</div>
-								<div className="textInputContainerCol">
+								<div className="textInputContainerCol mb-lg-4">
 									<label className="inputLabel">Select Next Node</label>
 									<Dropdown onSelect={handleNodeDropdown}>
 									{nextCompany  ? (
@@ -560,7 +552,25 @@ export const ScanSHP = () => {
 								</PlacesAutocomplete>
 							</div>
 							}
-							<div style={{ width: "100%", height: "45vh" }}>
+							
+						</div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							{ recommendNode && <div className="recommendContainer">
+								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
+							</div>}
+							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+								<h3 style={{color: "#252733", paddingLeft:"3%"}}>Map</h3>
+								{ shipment && <Button className="map-info-button" onClick={() => {
+									setShowInfo(true)
+									setShowNextInfo(true)
+								}} >Show Info</Button>}
+							</div>
+							
+							<div style={{ width: "100%", height: "40%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
@@ -647,18 +657,8 @@ export const ScanSHP = () => {
 									 onClick={()=>{}}>
 									 </GoogleMap>}
 							</div>
-						</div>
-						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
-							{ recommendNode && <div className="recommendContainer">
-								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
-							</div>}
-							<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
-
-							<div className='scan-history-container' style={{marginLeft: "3%"}}>
+							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+							<div className='scan-history-container' style={{marginLeft: "3%", height: "40%"}}>
 								{ allScans.reverse().map( scan => {
 									return(
 									<div>
