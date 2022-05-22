@@ -122,7 +122,7 @@ class GraphService {
             throw error
         })
         const nodes = res.data
-        console.log('nodes',nodes)
+        // console.log('nodes',nodes)
         var temp_res = {}
         timeInterval.forEach(t => {
             temp_res[t] = 0
@@ -130,12 +130,12 @@ class GraphService {
         var result = []
         for(let i = 0; i < nodes.length; i++) {
             var node_res = await this.getNodeStockByTime(nodes[i].nodeCode, timeInterval, token)
-            console.log(node_res)
+            // console.log(node_res)
             node_res.data.forEach( graph_data => {
                 temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
             })
         }
-        console.log('graph',temp_res)
+        // console.log('graph',temp_res)
     
         timeInterval.forEach( t => {
             // console.log(temp_res[t])
@@ -185,7 +185,7 @@ class GraphService {
                 }
                 
             })
-            console.log(result)
+            // console.log(result)
 
             // console.log(result)
             return {data:result}
@@ -212,8 +212,8 @@ class GraphService {
         const nodes = res.data
         var temp_res = {}
         let temp_time = timeInterval.slice(1)
-        console.log( "interval", timeInterval) 
-        console.log( "temp_time", temp_time)
+        // console.log( "interval", timeInterval) 
+        // console.log( "temp_time", temp_time)
         temp_time.forEach(t => {
             temp_res[t] = 0
         })
@@ -293,7 +293,7 @@ class GraphService {
                 }
             }
         })
-        console.log("TEST", adjustedDate)
+        // console.log("TEST", adjustedDate)
         return {adjustedDate: adjustedDate, startDate:startDate, endDate:endDate}
     }
 
@@ -333,7 +333,7 @@ class GraphService {
         else if ( graphTimeRange == "year") {
             timeRange = new Date(curDate.getFullYear(), 1).getTime() - 
                         new Date(curDate.getFullYear(), 0 ).getTime()
-            console.log(new Date(2020, 0).toDateString())
+            // console.log(new Date(2020, 0).toDateString())
             for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
                 let temp = new Date(curDate.getFullYear(), i) 
                 timeInterval.push(temp.getTime())
@@ -343,7 +343,7 @@ class GraphService {
         if (companyCode ) {
             if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
-                timeInterval.forEach(t => console.log(new Date(t).toLocaleString()))
+                // timeInterval.forEach(t => console.log(new Date(t).toLocaleString()))
 
                 const res_graph = await this.getCompanyGraphByTimeStatus( companyCode, timeInterval, graphType, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
@@ -366,7 +366,7 @@ class GraphService {
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
         }
-        console.log(graphData)
+        // console.log(graphData)
         var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var total = graphData.adjustedDate[0].y
@@ -385,8 +385,6 @@ class GraphService {
         })
         var change = latest - original
         change = change / original
-        console.log({data:{graph:graphData.adjustedDate, startDate: graphData.startDate, endDate: graphData.endDate, highest:highest,
-            lowest:lowest, average:total/count, change: change, percentageChange: change*100, total:total}})
         return {data:{graph:graphData.adjustedDate, startDate: graphData.startDate, endDate: graphData.endDate, highest:highest,
              lowest:lowest, average:total/count, change: change, percentageChange: change*100, total:total}}
     }
