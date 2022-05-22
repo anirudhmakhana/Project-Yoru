@@ -567,7 +567,7 @@ export const ScanSHP = () => {
 								{ shipment && <Button className="map-info-button" onClick={() => {
 									setShowInfo(true)
 									setShowNextInfo(true)
-								}} >Show Info</Button>}
+								}} >Show Pin Info</Button>}
 							</div>
 							
 							<div style={{ width: "100%", height: "40%" }}>
