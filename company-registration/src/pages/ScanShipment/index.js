@@ -454,12 +454,19 @@ export const ScanSHP = () => {
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								{shipment && <label className="inputLabel">Destination: {shipment.destinationNode}</label>}
 								<label className="inputLabel">Scan RFID tag</label>
-								{ currentNode ? <Button className="signinBtn" onClick={handleScan} >Scan</Button> :
-								<Button className="signinBtn" onClick={handleScan} disabled>Scan</Button>}
+								{ currentNode ? <Button className="universal-button" onClick={handleScan} >Scan</Button> :
+								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
 							{ shipment && newStatus == "shipping" && recommendInfo &&
 							<div className="alert alert-info mb-lg-4">
 								{recommendInfo}
+							</div>}
+							{ recommendNode && <div className="recommendContainer">
+								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
 							</div>}
 							{ shipment && newStatus == "shipping" && 
 							<div>
@@ -555,15 +562,8 @@ export const ScanSHP = () => {
 							
 						</div>
 						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
-							{ recommendNode && <div className="recommendContainer">
-								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
-							</div>}
 							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-								<h3 style={{color: "#252733", paddingLeft:"3%"}}>Map</h3>
+								<h3 style={{color: "#252733"}}>Map</h3>
 								{ shipment && <Button className="map-info-button" onClick={() => {
 									setShowInfo(true)
 									setShowNextInfo(true)
@@ -657,7 +657,7 @@ export const ScanSHP = () => {
 									 onClick={()=>{}}>
 									 </GoogleMap>}
 							</div>
-							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%"}}>Update History</h3>
 							<div className='scan-history-container' style={{marginLeft: "3%", height: "40%"}}>
 								{ allScans.reverse().map( scan => {
 									return(
@@ -680,14 +680,14 @@ export const ScanSHP = () => {
 						newStatus == 'shipping' ? (
 							nextNode ? 
 							<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<Button className="signinBtn" style={{width: "20%"}} onClick={handleUpdateShipment}>Update Shipment</Button>
+                        	<Button className="universal-button" style={{width: "20%"}} onClick={handleUpdateShipment}>Update Shipment</Button>
                     		</div> : 
 							<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
                         	<Button className="cancelBtn" style={{width: "20%"}}  disabled>Update Shipment</Button>
                     		</div>
 						) : 
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-						<Button className="signinBtn" style={{width: "20%"}} onClick={handleUpdateShipment}>Update Shipment</Button>
+						<Button className="universal-button" style={{width: "20%"}} onClick={handleUpdateShipment}>Update Shipment</Button>
 						</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
