@@ -390,3 +390,11 @@ div.warning{
     align-items: flex-start;
     text-align: left;
 }
+
+.map-info-button {
+    background: #3751FF;
+    color: white;
+    font-weight: bold;
+    height: 4vh;
+    margin: 10px 0 15px 0;
+}
