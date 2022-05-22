@@ -1,9 +1,12 @@
 import axios from "axios";
+import { serverBasedURL } from "../utils/ApiUrl";
 
 class StaffAccountService {
-
+    constructor( ) {
+        this.apiURL = serverBasedURL + '/staff'
+    }
     async getStaffByUsername( username, token ) { 
-        const response = await axios.get('http://localhost:4000/staff/' + username ,
+        const response = await axios.get(this.apiURL + '/' + username ,
         {headers:{"x-access-token":token}})
             .catch((error) => {
                 throw error
@@ -12,7 +15,7 @@ class StaffAccountService {
     }
 
     async getStaffByCompany( companyCode, token ) { 
-        const response = await axios.get('http://localhost:4000/staff/getByCompany/'+companyCode,
+        const response = await axios.get(this.apiURL + '/getByCompany/'+companyCode,
         {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
@@ -21,7 +24,7 @@ class StaffAccountService {
     }
 
     async login( loginData ) { 
-        const response = await axios.post("http://localhost:4000/staff/login", loginData)
+        const response = await axios.post(this.apiURL + "/login", loginData)
         .catch( error => {
             throw error
         }) 
@@ -29,7 +32,7 @@ class StaffAccountService {
     }
 
     async checkPassword( loginData, token ) { 
-        const response = await axios.post("http://localhost:4000/staff/checkpassword", loginData,  {headers:{"x-access-token":token}})
+        const response = await axios.post(this.apiURL + "/checkpassword", loginData,  {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
         }) 
@@ -37,7 +40,7 @@ class StaffAccountService {
     }
 
     async updateStaff( username, newData, token ) {
-        const response = await axios.put("http://localhost:4000/staff/update/"+ username, newData,  {headers:{"x-access-token":token}})
+        const response = await axios.put(this.apiURL + "/update/"+ username, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
             }) 
@@ -45,7 +48,7 @@ class StaffAccountService {
     }
 
     async registerStaff( newAccount, token ) { 
-        const response = await axios.post("http://localhost:4000/staff/register", newAccount,  
+        const response = await axios.post(this.apiURL + "/register", newAccount,  
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -54,7 +57,7 @@ class StaffAccountService {
     }
 
     async deleteStaff( username, token ) { 
-        const response = await axios.delete('http://localhost:4000/staff/' + username,
+        const response = await axios.delete(this.apiURL + '/' + username,
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error

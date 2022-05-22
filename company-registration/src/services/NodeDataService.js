@@ -1,4 +1,5 @@
 import axios from "axios";
+import { serverBasedURL } from "../utils/ApiUrl";
 const google = window.google = window.google ? window.google : {}
 class NodeDataService {
 
@@ -17,6 +18,7 @@ class NodeDataService {
              lat:13.731021, lng:100.519982, phoneNumber:"021113333", status:"active"},
 
             ]
+        this.apiURL = serverBasedURL + '/node'
     }
     sphericalDistance(lat1, lon1, lat2, lon2 ) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -39,7 +41,7 @@ class NodeDataService {
     }
 
     async addNode( newData, token ) {
-        const response = await axios.post("http://localhost:4000/node/", newData, 
+        const response = await axios.post(this.apiURL, newData, 
         {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
@@ -48,7 +50,7 @@ class NodeDataService {
     }
 
     async updateNode( nodeCode, newData, token ) {
-        const response = await axios.put("http://localhost:4000/node/update/"+ nodeCode, newData,  {headers:{"x-access-token":token}})
+        const response = await axios.put(this.apiURL + "/update/"+ nodeCode, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
             }) 
@@ -56,7 +58,7 @@ class NodeDataService {
     }
 
     async updateNodeStatus( nodeCode, statusData, token ) {
-        const response = await axios.patch("http://localhost:4000/node/update/status/"+ nodeCode, statusData,  {headers:{"x-access-token":token}})
+        const response = await axios.patch(this.apiURL + "/update/status/"+ nodeCode, statusData,  {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
             }) 
@@ -64,7 +66,7 @@ class NodeDataService {
     }
 
     async getAllNode(token) { 
-        const response = await axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -72,7 +74,7 @@ class NodeDataService {
     }
 
     async getNodeByCompany( companyCode, token ) {
-        const response = await axios.get('http://localhost:4000/node/bycompany/'+companyCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/bycompany/'+companyCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -80,7 +82,7 @@ class NodeDataService {
     }
 
     async getActiveNodeByCompany( companyCode, token ) {
-        const response = await axios.get('http://localhost:4000/node/active/'+companyCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/active/'+companyCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -88,7 +90,7 @@ class NodeDataService {
     }
 
     async getAllActiveNode(  token ) {
-        const response = await axios.get('http://localhost:4000/node/active/', {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/active/', {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -96,7 +98,7 @@ class NodeDataService {
     }
 
     async getNodeByCode(nodeCode, token) {
-        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/' + nodeCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -104,7 +106,7 @@ class NodeDataService {
     }
 
     async getCompanyOfNode( nodeCode, token ) {
-        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/' +nodeCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -113,7 +115,7 @@ class NodeDataService {
     }
 
     async getCoordinateByNode( nodeCode, token ) {
-        const response = await axios.get('http://localhost:4000/node/'+nodeCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/' + nodeCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -136,6 +138,7 @@ class NodeDataService {
             response.data.forEach( (node, ind) => {
                 // let curDist =  google.maps.geometry.spherical.computeDistanceBetween( {lat: node.lat, lng:node.lng}, coord)
                 let curDist = this.sphericalDistance(coord.lat, coord.lng, node.lat, node.lng)
+                // console.log(response.data[ind], curDist)
                 if ( curDist < minDist) {
                     result = response.data[ind]
                     minDist = curDist
@@ -145,6 +148,7 @@ class NodeDataService {
         catch (err) {         
             throw err
         }
+        
         return {data: result}
     }
 
@@ -204,24 +208,24 @@ class NodeDataService {
 
 
     async getRelatedNodeToShipment( shipmentId, token) {
-        const response = await axios.get('http://localhost:4000/node/related/'+shipmentId, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/related/'+shipmentId, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
         const result = []
         response.data.forEach( node => result.push(node.scannedAt))
-        console.log(result)
+        // console.log(result)
         return {data:result}
     }
     
     async getNodeWithStockSameDest( destinationNode, token) {
-        const response = await axios.get('http://localhost:4000/node/stock/samedestination/'+destinationNode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/stock/samedestination/'+destinationNode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
         const result = []
         response.data.forEach( node => result.push(node.currentNode))
-        console.log(result)
+        // console.log(result)
         return {data:result}
     }
 

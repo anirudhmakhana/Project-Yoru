@@ -1,9 +1,14 @@
 import axios from "axios";
+import {serverBasedURL} from "../utils/ApiUrl";
+
 
 class CompanyService {
+    constructor() {
+        this.apiURL = serverBasedURL + '/company'
+    }
 
     async getCompanyByCode( companyCode, token ) { 
-        const response = await axios.get('http://localhost:4000/company/'+companyCode,{headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + companyCode,{headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -12,7 +17,7 @@ class CompanyService {
     }
 
     async getAllCompany( token ) {
-        const response = await axios.get('http://localhost:4000/company/', {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -21,7 +26,7 @@ class CompanyService {
     }
 
     async getAllCompanyCode( token ) {
-        const response = await axios.get('http://localhost:4000/company/', {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL , {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -32,7 +37,7 @@ class CompanyService {
     }
 
     async updateCompany( companyCode, newData, token ) {
-        const response = await axios.put("http://localhost:4000/company/update/"+ companyCode, newData,  {headers:{"x-access-token":token}})
+        const response = await axios.put(this.apiURL +"/update/"+ companyCode, newData,  {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
             }) 
@@ -40,7 +45,7 @@ class CompanyService {
     }
 
     async createCompany( newData, token ) {
-        const response = await axios.post("http://localhost:4000/company/", newData, 
+        const response = await axios.post(this.apiURL , newData, 
         {headers:{"x-access-token":token}})
             .catch( error => {
                 throw error
@@ -49,7 +54,7 @@ class CompanyService {
     }
 
     async deleteCompany( companyCode, token ) { 
-        const response = await axios.delete('http://localhost:4000/company/' + companyCode,
+        const response = await axios.delete(this.apiURL + companyCode,
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
