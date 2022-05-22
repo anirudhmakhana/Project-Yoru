@@ -76,7 +76,9 @@ class GraphService {
             if ( s.scannedTime <= time ){
                 count += 1
             }
+            
         })
+
         return count
     }
     
@@ -84,36 +86,34 @@ class GraphService {
     async getNodeStockByTime( nodeCode, timeInterval, token) {
         
         var stock = []
-        this.scannedData.forEach((v, i) => {
-            if (v.scannedAt == nodeCode && (v.status == "created" || v.status == "arrived" )){
-                stock.push(this.scannedData[i])
-            }
-        })
-        var shipped = []
-        this.scannedData.forEach((v, i) => {
-            if (v.scannedAt == nodeCode && (v.status == "shipping")){
-                shipped.push(this.scannedData[i])
-            }
-        })
-        var result = []
-        // console.log(stock, shipped)
-        timeInterval.forEach( (t, index )=> {
-            let date = new Date(t)
-            // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
-            let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
-            result.push(temp)
-        })
-        // console.log(result)
-        return {data:result}
+        const response = await ShipmentService.scanByNode(nodeCode, token)
+        if (response) {
+            const scannedData = response.data
+            // console.log(scannedData)
+            scannedData.forEach((v, i) => {
+                if (v.scannedAt == nodeCode && (v.status == "created" || v.status == "arrived" )){
+                    stock.push(scannedData[i])
+                }
+            })
+            var shipped = []
+            scannedData.forEach((v, i) => {
+                if (v.scannedAt == nodeCode && (v.status == "shipping")){
+                    shipped.push(scannedData[i])
+                }
+            })
+            var result = []
+            // console.log(stock, shipped)
+            timeInterval.forEach( (t, index )=> {
+                let date = new Date(t)
+                // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+                let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(stock, t) - this.getCountShipmentAtTime(shipped, t)}
+                result.push(temp)
+            })
+            // console.log(result)
+            return {data:result}
+            
+        }
         
-        // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
-        // .then( response => {
-
-        // })
-        // .catch((error) => {
-        //     throw error
-        // })
-        // return response
     }
 
     async getCompanyStockByTime( companyCode, timeInterval, token) {
@@ -122,24 +122,25 @@ class GraphService {
             throw error
         })
         const nodes = res.data
+        console.log('nodes',nodes)
         var temp_res = {}
         timeInterval.forEach(t => {
             temp_res[t] = 0
         })
         var result = []
-        await nodes.forEach( async node => {
-            var node_res = await this.getNodeStockByTime(node.nodeCode, timeInterval, token)
+        for(let i = 0; i < nodes.length; i++) {
+            var node_res = await this.getNodeStockByTime(nodes[i].nodeCode, timeInterval, token)
+            console.log(node_res)
             node_res.data.forEach( graph_data => {
-                // console.log(graph_data.x, graph_data.y)
                 temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
             })
-        })
-
+        }
+        console.log('graph',temp_res)
+    
         timeInterval.forEach( t => {
             // console.log(temp_res[t])
             result.push({x:t, y:temp_res[t]})
         })
-        
 
           
 
@@ -162,27 +163,35 @@ class GraphService {
     async getNodeGraphByTimeStatus( nodeCode, timeInterval, status, token) {
     
         var shipped = []
-        this.scannedData.forEach((v, i) => {
-            if (v.scannedAt == nodeCode && (v.status == status)){
-                shipped.push(this.scannedData[i])
-            }
-        })
-        var result = []
-        // console.log(stock, shipped)
-        timeInterval.forEach( (t, index )=> {
-            if ( index != timeInterval.length -1 ) {
-                let tPlus1 = timeInterval[index+1]
-                let date = new Date(tPlus1)
+        const response = await ShipmentService.scanByNode(nodeCode, token)
+        if ( response) {
+            var scannedData = response.data
+            scannedData.forEach((v, i) => {
+                if (v.scannedAt == nodeCode && (v.status.toLowerCase() == status.toLowerCase())){
+                    shipped.push(scannedData[i])
+                }
+            })
+            var result = []
+            // console.log(stock, shipped)
+            timeInterval.forEach( (t, index )=> {
+                if ( index != timeInterval.length -1 ) {
+                    let tPlus1 = timeInterval[index+1]
+                    let date = new Date(tPlus1)
+    
+                    // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
+                    let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(shipped, tPlus1) - this.getCountShipmentAtTime(shipped, t) }
+                    result.push(temp)
 
-                // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
-                let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(shipped, tPlus1) - this.getCountShipmentAtTime(shipped, t) }
-                result.push(temp)
-            }
+                }
+                
+            })
+            console.log(result)
+
+            // console.log(result)
+            return {data:result}
             
-        })
-        // console.log(result)
-        return {data:result}
-        
+        }
+       
         // axios.get('http://localhost:4000/node/', {headers:{"x-access-token":token}})
         // .then( response => {
 
@@ -209,13 +218,14 @@ class GraphService {
             temp_res[t] = 0
         })
         var result = []
-        await nodes.forEach( async node => {
-            var node_res = await this.getNodeGraphByTimeStatus(node.nodeCode, timeInterval, status, token)
+        for( let i = 0; i < nodes.length; i++) {
+            var node_res = await this.getNodeGraphByTimeStatus(nodes[i].nodeCode, timeInterval, status, token)
             node_res.data.forEach( graph_data => {
                 // console.log(graph_data.x, graph_data.y)
                 temp_res[graph_data.x] = temp_res[graph_data.x] + graph_data.y
             })
-        })
+
+        }
 
         temp_time.forEach( t => {
             // console.log(temp_res[t])
@@ -359,8 +369,8 @@ class GraphService {
         console.log(graphData)
         var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
-        var total = 0
-        var count = 0
+        var total = graphData.adjustedDate[0].y
+        var count = 1
         var original = graphData.adjustedDate[0].y
         var latest = graphData.adjustedDate[0].y
         graphData.adjustedDate.slice(1).forEach( d => {
@@ -375,6 +385,8 @@ class GraphService {
         })
         var change = latest - original
         change = change / original
+        console.log({data:{graph:graphData.adjustedDate, startDate: graphData.startDate, endDate: graphData.endDate, highest:highest,
+            lowest:lowest, average:total/count, change: change, percentageChange: change*100, total:total}})
         return {data:{graph:graphData.adjustedDate, startDate: graphData.startDate, endDate: graphData.endDate, highest:highest,
              lowest:lowest, average:total/count, change: change, percentageChange: change*100, total:total}}
     }

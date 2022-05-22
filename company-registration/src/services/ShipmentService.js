@@ -139,6 +139,16 @@ class ShipmentService {
         return response
     }
 
+    async scanByNode( nodeCode, token ) {
+        const response = await axios.get("http://localhost:4000/scan/node/" + nodeCode , 
+        {headers:{"x-access-token":token}})
+        .catch((error) => {
+            return error
+        })
+        console.log(response)
+        return response
+    }
+
     async currentStockCountByNode( nodeCode, token ) {
         const response = await axios.get("http://localhost:4000/shipment/stock/node/"+ nodeCode, 
         {headers:{"x-access-token":token}})

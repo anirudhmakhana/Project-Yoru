@@ -209,7 +209,8 @@ export const OverviewPage = (props) => {
                 </div>
                 <div className="chart-info-right">
                     {/* <hr/> */}
-                    {getChartItem(`Total Shipment`, primGraphStartDate, primGraphEndDate, primTotal)}
+                    
+                    {graphType != 'stock' && getChartItem(`Total Shipment`, primGraphStartDate, primGraphEndDate, primTotal)}
                     {/* <hr/> */}
                     {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value,)}
                     {/* <hr/> */}
