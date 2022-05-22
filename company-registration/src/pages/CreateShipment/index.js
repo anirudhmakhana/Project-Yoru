@@ -280,7 +280,7 @@ export const CreateSHP = () => {
 		<div className="content-main-container">
 			{currentNode ? <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
-			<div className="detailed-main-container" style={{overflowY: "auto", height: "fit-content"}}>
+			<div className="detailed-main-container p-lg-4 p-md-2" style={{overflowY: "auto", height: "fit-content"}}>
 				<form onSubmit={ () => {} }>
                     
 
