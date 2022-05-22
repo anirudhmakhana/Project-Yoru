@@ -14,7 +14,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen, faCube, faCubes, faBuilding } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faLockOpen, faCubes, faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -30,6 +30,7 @@ import { ScanSHP } from "../../pages/ScanShipment";
 
 export const ManagerSidebar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [menuCollapse, setMenuCollapse] = useState(false)
     // useEffect(() => {
     //     setUserData(props.userData)
     //   }, [userData]);
@@ -49,16 +50,18 @@ export const ManagerSidebar = (props) => {
         return initialIndex;
     });
 
-
+    const menuIconClickHandler = () => {
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+    };
     
     return (
         <>
-            <ProSidebar id="sideNavBar">
+            <ProSidebar id="sideNavBar" collapsed={menuCollapse}>
                 <SidebarHeader className="sidebarHeaderContainer">
-                    <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
-                        <p>Project Yoru</p>
-                    </Link>
-
+                    <div>
+                        <p onClick={menuIconClickHandler}>{menuCollapse ? <FontAwesomeIcon icon={faBars}/> : "LogiChain" }</p>
+                    </div>
+                    
                 </SidebarHeader>
                 <Menu iconShape="square">
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>

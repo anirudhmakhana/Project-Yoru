@@ -27,6 +27,7 @@ import { ScanSHP } from "../../pages/ScanShipment";
 
 export const CustomSidebar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [menuCollapse, setMenuCollapse] = useState(false)
     // useEffect(() => {
     //     setUserData(props.userData)
     //   }, [userData]);
@@ -45,15 +46,20 @@ export const CustomSidebar = (props) => {
         return initialIndex;
     });
 
-
+    const menuIconClickHandler = () => {
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+    };
     
     return (
         <>
-            <ProSidebar id="sideNavBar">
+            <ProSidebar id="sideNavBar" collapsed={menuCollapse}>
                 <SidebarHeader className="sidebarHeaderContainer">
-                    <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink">
-                        <p>Project Yoru</p>
-                    </Link>
+                    {/* <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}} className="headerLink"> */}
+                        <div onClick={menuIconClickHandler}>
+                            <p>{menuCollapse ? "Yoru" : "Project Yoru"}</p>
+                        </div>
+                        
+                    {/* </Link> */}
                 </SidebarHeader>
                 <Menu iconShape="square">
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
