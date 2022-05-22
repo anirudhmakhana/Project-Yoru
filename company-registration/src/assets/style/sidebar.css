@@ -1,7 +1,6 @@
 #sideNavBar {
-    position: -webkit-sticky;
-    position: sticky;
-    height: 100vh;
+    position: relative;
+    height: 100%;
 }
 
 #sideNavBar .sidebarHeaderContainer .headerLink {
@@ -21,7 +20,7 @@
 }
 
 #sideNavBar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
-    padding-left: 30px;
+    padding-left: 20%;
 }
 
 #sideNavBar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {
@@ -32,6 +31,6 @@
     background: rgba(221, 226, 255, 0.15);
     color: #dde2ff;
     border-radius: 16px;
-    margin: 0 20px 0 20px;
+    /* margin: 0 20px 0 20px; */
     transition: all 0.5s;
 }
