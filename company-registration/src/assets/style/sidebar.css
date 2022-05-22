@@ -20,7 +20,7 @@
 }
 
 #sideNavBar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
-    padding-left: 20%;
+    padding-left: auto;
 }
 
 #sideNavBar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {
