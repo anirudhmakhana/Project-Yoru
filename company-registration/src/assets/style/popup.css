@@ -86,7 +86,7 @@
     width: 650px;
     height: 60vh;
     margin-bottom: 10px;
-    margin-top: 10px;
+    margin-top: 10px; 
   }
 
   .add-node-map-container {
@@ -98,8 +98,8 @@
 
   .add-node-popupContainer {
     z-index: -1;
-    width: 900px;
-    height: 900px;
+    width: 60%;
+    height: 60%;
     border-radius: 12px;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -127,5 +127,4 @@
   display: flex;
   flex-direction: column;
   padding: 25px;
-  justify-content: space-between;
 }
