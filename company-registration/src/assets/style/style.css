@@ -216,8 +216,8 @@ div.warning{
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 16px;
     height: fit-content;
-    padding: 2% 4% 2% 4%;
-    /* overflow: auto; */
+    /* padding: 2% 4% 2% 4%; */
+    overflow-y: auto;
 }
 
 .content-title-container {
