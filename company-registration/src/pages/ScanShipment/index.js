@@ -436,7 +436,7 @@ export const ScanSHP = () => {
         <div className="content-main-container">
 			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
-			<div className="detailed-main-container" style={{height: "80%", overflowY: "auto"}}>
+			<div className="detailed-main-container" style={{height: "85%", overflowY: "auto"}}>
            		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container" style={{justifyContent: "normal"}}>
