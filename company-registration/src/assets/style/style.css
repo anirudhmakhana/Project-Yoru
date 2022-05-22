@@ -394,7 +394,13 @@ div.warning{
 .map-info-button {
     background: #3751FF;
     color: white;
-    font-weight: bold;
     height: 4vh;
+    margin: 10px 0 15px 0;
+}
+
+.universal-button {
+    background: #3751FF;
+    color: white;
+    width: 100%;
     margin: 10px 0 15px 0;
 }
