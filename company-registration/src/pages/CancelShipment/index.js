@@ -279,8 +279,8 @@ export const CancelSHP = () => {
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								{ currentNode ? <Button className="signinBtn" onClick={handleScan} >Scan</Button> :
-								<Button className="signinBtn" onClick={handleScan} disabled>Scan</Button>}
+								{ currentNode ? <Button className="universal-button" onClick={handleScan} >Scan</Button> :
+								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
 							
 							<div style={{ width: "100%", height: "45vh" }}>
@@ -359,7 +359,7 @@ export const CancelSHP = () => {
 
 					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444", borderColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
+                            <Button className="universal-button" style={{width: "20%", backgroundColor: "#FF4444", borderColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>

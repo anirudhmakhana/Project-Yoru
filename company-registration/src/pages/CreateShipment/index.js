@@ -368,7 +368,7 @@ export const CreateSHP = () => {
 							<div className="textInputContainerCol">
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" onClick={() => {
+								<Button className="universal-button" onClick={() => {
 									setShowScanPopup(true)
 									RfidService.makeScan()
 									.then ( res => {
@@ -505,7 +505,7 @@ export const CreateSHP = () => {
 
 					{ userCompany && destinationNode && currentNode && shipmentId ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                        	<Button className="signinBtn" style={{width: "20%"}} onClick={handleCreateShipment}>Create Shipment</Button>
+                        	<Button className="universal-button" style={{width: "20%"}} onClick={handleCreateShipment}>Create Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
