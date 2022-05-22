@@ -37,14 +37,9 @@ export const CancelSHP = () => {
 	const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
 	const [shipmentId, setShipmentId] = useState("");
-	const [description, setDescription] = useState("");
-	const [destinationNode, setDestinationNode] = useState(null);
-	const [status, setStatus] = useState("created");
-	const [producer, setProducer ] = useState(eval("(" + localStorage.getItem("currentNode") + ")").companyCode);
-	const [currentNode, setCurrentNode] = useState(eval("(" + localStorage.getItem("currentNode") + ")"));
+	const [currentNode, setCurrentNode] = useState(null);
 	// const [destinationNode, setDestination] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
-	const navigate = useNavigate();
 	const [warning, setWarning] = useState(null)
     const [showInfo, setShowInfo] = useState(true)
 	const [showScanPopup, setShowScanPopup] = useState(false)
@@ -57,7 +52,6 @@ export const CancelSHP = () => {
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
-	const [nodeStock, setNodeStock] = useState(null);
 	// const [currentMark, setCurrentMark] = useState(null)
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -97,6 +91,10 @@ export const CancelSHP = () => {
     }
 
 	useEffect(() => {
+		if ( eval('('+localStorage.getItem("currentNode")+')')) {
+            setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
+
+        }
 		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
 		.then((result) => {
 			setUserCompany(result.data);
@@ -203,13 +201,69 @@ export const CancelSHP = () => {
 
 	}
 
+	function handleScan() {
+		setShowScanPopup(true)
+		RfidService.makeScan()
+		.then ( res => {
+			if (res.data.statusCode == 200) {
+				ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+				.then( res_shipment => {
+					console.log(currentNode)
+					if (res_shipment.data) {
+						setShipmentId(res.data.data.uid)
+						setShipment(res_shipment.data)
+						var newState = "cancel"
+						if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
+							newState = null
+						}
+						setNewStatus(newState)
+						if (newState) {
+							
+							setUpdateInfo(`Cancel shipment at ${currentNode.nodeCode}`)
+							setWarning(null)
+							setShowScanPopup(false)
+						}
+						else {
+							setUpdateInfo(null)
+							setShipment(null)
+							setWarning("Cancelled or completed shipment cannot be cancelled!")
+							setShowScanPopup(false)
+						}
+					} else {
+						setUpdateInfo(null)
+						setShipmentId(null)
+						setShipment(null)
+						setWarning("Shipment not found!")
+						setShowScanPopup(false)
+					}
+				})
+				.catch(err => {
+					setShipmentId(null)
+					setShipment(null)
+					setWarning("Shipment not found!")
+					setShowScanPopup(false)
+					
+				})
+			}
+			else if (res.data.statusCode == 300) {
+				setShipmentId(null)
+				setShipment(null)
+				setWarning("Scanning timeout! Please try again.")
+				setShowScanPopup(false)
+				
+			}
+		})
+		.catch(error => {
+			console.log(error)
+			
+		})
+	}
     return (
         <div className="content-main-container">
-			<Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
-           <div className="detailed-main-container" style={{height: "fit-content"}}>
-           <form onSubmit={ () => {} }>
-                    
-
+			{currentNode ? <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			: <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
+           	<div className="detailed-main-container" style={{height: "fit-content"}}>
+           		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container">
 							{currentNode ? 	null : <p className="p-warning">Please select your current node first!</p>}
@@ -223,65 +277,10 @@ export const CancelSHP = () => {
 								{updateInfo}
 							</div>}
 							<div className="textInputContainerCol">
-								<label className="inputLabel">Shiment ID: {shipmentId}</label>
+								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
-								<Button className="signinBtn" style={{width: "70%"}} onClick={() => {
-									setShowScanPopup(true)
-									RfidService.makeScan()
-									.then ( res => {
-										if (res.data.statusCode == 200) {
-											ShipmentService.getShipmentById( res.data.data.uid, userData.token)
-											.then( res_shipment => {
-												console.log(currentNode)
-												if (res_shipment.data) {
-													setShipmentId(res.data.data.uid)
-													setShipment(res_shipment.data)
-													var newState = "cancel"
-													if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
-														newState = null
-													}
-													setNewStatus(newState)
-													if (newState) {
-														
-														setUpdateInfo(`Cancel shipment at ${currentNode.nodeCode}`)
-														setWarning(null)
-														setShowScanPopup(false)
-													}
-													else {
-														setUpdateInfo(null)
-														setShipment(null)
-														setWarning("Cancelled or completed shipment cannot be cancelled!")
-														setShowScanPopup(false)
-													}
-												} else {
-													setUpdateInfo(null)
-													setShipmentId(null)
-													setShipment(null)
-													setWarning("Shipment not found!")
-													setShowScanPopup(false)
-												}
-											})
-											.catch(err => {
-												setShipmentId(null)
-												setShipment(null)
-												setWarning("Shipment not found!")
-												setShowScanPopup(false)
-												
-											})
-										}
-										else if (res.data.statusCode == 300) {
-											setShipmentId(null)
-											setShipment(null)
-											setWarning("Scanning timeout! Please try again.")
-											setShowScanPopup(false)
-											
-										}
-									})
-									.catch(error => {
-										console.log(error)
-										
-									})
-								}} >Scan</Button>
+								{ currentNode ? <Button className="signinBtn" onClick={handleScan} >Scan</Button> :
+								<Button className="signinBtn" onClick={handleScan} disabled>Scan</Button>}
 							</div>
 							
 							<div style={{ width: "100%", height: "45vh" }}>
@@ -325,45 +324,42 @@ export const CancelSHP = () => {
 									/>
 									</GoogleMap>
 									: <GoogleMap
-									center={{ lat: currentNode.lat, lng: currentNode.lng }}
+									center={{ lat: 13.756331, lng: 100.501762 }}
 									zoom={15}
 									mapContainerStyle={{ width: '100%', height: '100%' }}
 									options={options}
 									onLoad={map => setMapRef(map)}
 									onClick={()=>{}}>
-									<Marker 
-									key={`${currentNode.lat}-${currentNode.lng}`}
-									position={{lat:currentNode.lat, lng:currentNode.lng}}
-									onClick={() => {
-										setShowInfo(true)
-									console.log(currentNode.lat+"-"+ currentNode.lgn)
-									}}
-									map={mapRef}
-									/>
+									
 									</GoogleMap>}
 							</div>
 						</div>
-						<div className='scan-history-container' style={{marginLeft: "3%"}}>
-						<h3 style={{color: "#252733", marginBottom: "3%"}}>Update History</h3>
-							{ allScans.reverse().map( scan => {
-                            return(
-								<div>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
-									<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
-									<br/>
-								</div>
-                            ) 
-							})}
-                        </div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							<div className='scan-history-container'>
+								<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+								{ allScans.reverse().map( scan => {
+								return(
+									<div>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+										{scan.status == "shipping" && 
+											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
+										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+										<br/>
+									</div>
+								) 
+								})}
+							</div>
+						</div>
+						
 
 
 					</div>
 
 					{ newStatus && updateInfo && userCompany && shipment && currentNode ? (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>
-                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
+                            <Button className="signinBtn" style={{width: "20%", backgroundColor: "#FF4444", borderColor: "#FF4444"}} onClick={handleCancelShipment}>Cancel Shipment</Button>
                     	</div>
 					) : (
 						<div style={{display: "flex", justifyContent: "flex-end", marginTop: "2%"}}>

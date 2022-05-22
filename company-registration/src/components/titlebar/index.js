@@ -52,9 +52,14 @@ export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCo
             <h1>{pageTitle}</h1>
 
             <div>
-                { setExtNodePopup && extNodeCode ? (
+                { setExtNodePopup ? (
+                    extNodeCode ? 
                     <button onClick={() => setExtNodePopup(true)} className="node-select-button">
                         <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {extNodeCode}
+                    </button>
+                    :
+                    <button onClick={() => setExtNodePopup(true)} className="node-select-button">
+                        <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: -
                     </button>
                 ) : 
                 <button onClick={() => setNodePopup(true)} className="node-select-button">

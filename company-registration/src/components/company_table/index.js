@@ -16,7 +16,8 @@ export class CompanyTable extends Component {
             setCompanyCode: this.props.setCompanyCode,
             setViewStaffPopup: this.props.setViewStaffPopup,
             setViewStaffUsername: this.props.setViewStaffUsername,
-            setAddStaffPopup: this.props.setAddStaffPopup
+            setAddStaffPopup: this.props.setAddStaffPopup,
+            setWarning: this.props.setWarning
         }
         this.updateTable()
               
@@ -30,6 +31,9 @@ export class CompanyTable extends Component {
             })
         })
         .catch((error) => {
+            this.setState({
+                users: []
+            })
             console.log(error)
         })
     }
@@ -39,10 +43,14 @@ export class CompanyTable extends Component {
         CompanyService.deleteCompany(this.props.obj.companyCode, this.props.userData.token)
         .then(res => {
             console.log(res)
+            if (res) {
+                this.state.setWarning(null)
+            }
             this.props.refresh()
         })
         .catch((error) => {
             console.log(error)
+            this.state.setWarning("Cannot delete this company, this company may created shipment(s) or staff(s).")
         })
         // window.location.reload(false)
 
@@ -94,7 +102,7 @@ export class CompanyTable extends Component {
                         return (
                             <tr>
                                 <td>{item.fullName}</td>
-                                <td>
+                                <td style={{width:'55%'}}>
                                     &nbsp;&nbsp;
                                     <Button size="sm" variant="dark" onClick={() =>{
                                         this.state.setViewStaffUsername(item.username)

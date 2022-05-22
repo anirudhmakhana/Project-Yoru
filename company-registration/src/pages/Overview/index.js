@@ -19,25 +19,39 @@ import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
 
 export const OverviewPage = (props) => {
-	const [userData, setUserData] = useState(
-		eval("(" + localStorage.getItem("userData") + ")")
-	);
-	const [currentNodeCode, setCurrentNodeCode] = useState(
-		eval("(" + localStorage.getItem("currentNode") + ")").nodeCode
-	);
-	const [nodePopup, setNodePopup] = useState(false);
-	const [editProfPopup, setEditProfPopup] = useState(false);
+    const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [currentNodeCode, setCurrentNodeCode] = useState(null)
+    const [nodePopup, setNodePopup] = useState(false);
+    const [editProfPopup, setEditProfPopup] = useState(false);
 
-	const [dateGraphData, setDateGraphData] = useState(null);
-	// const [hourGraphData, setHourGraphData] = useState(null)
-	const [currentDate, setCurrentDate] = useState(new Date());
-	const [graphTimeRange, setGraphTimeRange] = useState("day");
-	const [graphType, setGraphType] = useState("shipping");
-
-	const [completedCount, setCompletedCount] = useState(0);
-	const [stockCount, setStockCount] = useState(0);
-	const [incompleteCount, setIncompleteCount] = useState(0);
-	const [shippingCount, setShippingCount] = useState(0);
+    const [dateGraphData, setDateGraphData] = useState(null)
+    // const [hourGraphData, setHourGraphData] = useState(null)
+    const [currentDate, setCurrentDate] = useState( new Date() )
+    const [graphTimeRange, setGraphTimeRange] = useState("day")
+    const [graphType, setGraphType] = useState("shipping")
+    
+    const [completedCount, setCompletedCount] = useState(0)
+    const [stockCount, setStockCount] = useState(0)
+    const [incompleteCount, setIncompleteCount] = useState(0)
+    const [shippingCount, setShippingCount] = useState(0)
+    const [primGraphStartDate, setPrimStartDate] = useState('')
+    const [primGraphEndDate, setPrimEndDate] = useState('')
+    const [primHighest, setPrimHighest] = useState(0)
+    const [primAverage, setPrimAverage] = useState(0)
+    const [primLowest, setPrimLowest] = useState(0)
+    const [primChangePercent, setPrimChangePercent] = useState(0)
+    const [primTotal, setTotal] = useState(0)
+    // useState(() => {
+    //     var node = eval('('+localStorage.getItem("currentNode")+')')
+    //     if (node) {
+    //         setCurrentNodeCode(node.nodeCode)
+    //     } else {
+    //         setCurrentNodeCode('-')
+    //     }
+    // }, [])
+    const handleGraphType = (e) => {
+        setGraphType(e)        
+    };
 
 	// useState(() => {
 	//     var node = eval('('+localStorage.getItem("currentNode")+')')
@@ -51,66 +65,60 @@ export const OverviewPage = (props) => {
 		setGraphType(e);
 	};
 
-	const handleTimeRangeDropdown = (e) => {
-		setGraphTimeRange(e);
-	};
+    useEffect(() => {
+        if ( eval('('+localStorage.getItem("currentNode")+')')) {
+            setCurrentNodeCode(eval('('+localStorage.getItem("currentNode")+')').nodeCode)
 
-	useEffect(() => {
-		ShipmentService.completedCountByCompany(
-			userData.companyCode,
-			userData.token
-		)
-			.then((res) => {
-				setCompletedCount(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		ShipmentService.currentStockCountByCompany(
-			userData.companyCode,
-			userData.token
-		)
-			.then((res) => {
-				console.log(res.data);
-				setStockCount(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		ShipmentService.shippingCountByCompany(userData.companyCode, userData.token)
-			.then((res) => {
-				setShippingCount(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		ShipmentService.incompleteCountByCompany(
-			userData.companyCode,
-			userData.token
-		)
-			.then((res) => {
-				setIncompleteCount(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		GraphService.generateGraph(
-			graphType,
-			graphTimeRange,
-			userData.token,
-			userData.companyCode,
-			null
-		).then((res) => {
-			setDateGraphData(res.data);
-		});
-	}, [graphType, graphTimeRange]);
+        }
+    }, [])
 
-	function handlePopupConfirm(currentNode) {
-		localStorage.setItem("currentNode", JSON.stringify(currentNode));
-		setCurrentNodeCode(
-			eval("(" + localStorage.getItem("currentNode") + ")").nodeCode
-		);
-		// window.location.reload(false);
+    
+    useEffect(() => {
+        
+        ShipmentService.completedCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setCompletedCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.currentStockCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            console.log(res.data)
+            setStockCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.shippingCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setShippingCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        ShipmentService.incompleteCountByCompany(userData.companyCode, userData.token)
+        .then( res => {
+            setIncompleteCount(res.data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+        GraphService.generateGraph( graphType, graphTimeRange, userData.token, userData.companyCode, null)
+        .then( res => {
+            console.log(res.data)
+            setDateGraphData(res.data.graph)
+            setPrimStartDate(res.data.startDate)
+            setPrimEndDate(res.data.endDate)
+            setPrimAverage(res.data.average)
+            setPrimHighest(res.data.highest)
+            setPrimLowest(res.data.lowest)
+            setPrimChangePercent(res.data.percentageChange)
+            setTotal(res.data.total)
+
+        })
+        
+    }, [graphType,graphTimeRange])
 
 		setNodePopup(false);
 	}
@@ -131,9 +139,40 @@ export const OverviewPage = (props) => {
 		setEditProfPopup(false);
 	}
 
-	return (
-		<div className="overview content-main-container">
-			{/* <div className="content-title-container">
+        setNodePopup(false)
+    }
+    
+    function handlePopupCancel() {
+        console.log(localStorage)
+        setNodePopup(false)
+    }
+
+    function handleEditProfConfirm(newProfile) {
+        localStorage.setItem("userData", JSON.stringify(newProfile))
+        setUserData(eval('('+localStorage.getItem("userData")+')'))
+        setEditProfPopup(false)
+
+    }
+    
+    function handleEditProfCancel() {
+        console.log(localStorage)
+        setEditProfPopup(false)
+    }
+
+    function getChartItem( header, stDate, enDate, number = 0, additional = '' ){
+        return <div className="chart-item">
+                <span><strong>{header}</strong></span>
+                {stDate == enDate ? 
+                <p>({stDate})</p> :
+                <p>({stDate}-{enDate})</p>}
+                <h2 style={{"margin-top":"10px"}}>{number}</h2>
+                <p>{additional}</p>
+            </div>
+    }
+
+    return (
+        <div className="overview content-main-container">
+            {/* <div className="content-title-container">
                 <h1>Overview</h1>
                 <button onClick={() => setButtonPopup(true)} className="node-select-button">
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Current Node: {currentNodeCode}
@@ -187,58 +226,36 @@ export const OverviewPage = (props) => {
                                     <Dropdown.Item eventKey={"week"}>Week</Dropdown.Item>
                                     <Dropdown.Item eventKey={"month"}>Month</Dropdown.Item>
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
-								</Dropdown.Menu>
-							</Dropdown>
-						</div>
-						<p>
-							{new Date(
-								currentDate.getFullYear(),
-								currentDate.getMonth(),
-								currentDate.getDate() - 6
-							).toLocaleDateString()}{" "}
-							- {currentDate.toLocaleDateString()}
-						</p>
-					</div>
-					<div className="body-chart-container">
-						{dateGraphData && (
-							<LineChart
-								chartDataPrim={dateGraphData}
-								indicatorX={GraphService.xAxisLabel[graphTimeRange]}
-								indicatorY={GraphService.yAxisLabel[graphType]}
-							/>
-						)}
-					</div>
-				</div>
-				<div className="chart-info-right">
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-					<div className="chart-item">
-						<p>Placeholder</p>
-					</div>
-					<hr />
-				</div>
-			</div>
-			{nodePopup && (
-				<NodeSelectPopup
-					setOpenPopup={setNodePopup}
-					handleConfirm={handlePopupConfirm}
-					handleCancel={handlePopupCancel}
-				/>
-			)}
-			{editProfPopup && (
-				<EditProfilePopup
-					setOpenPopup={setEditProfPopup}
-					handleConfirm={handleEditProfConfirm}
-					handleCancel={handleEditProfCancel}
-				/>
-			)}
-		</div>
-	);
-};
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
+                        {primGraphEndDate == primGraphStartDate ? 
+                        <p>{primGraphStartDate}</p> :
+                        <p>{primGraphStartDate}-{primGraphEndDate}</p>}
+                    </div>
+                    <div className="body-chart-container">
+                        { dateGraphData && <LineChart chartDataPrim={dateGraphData} indicatorX={GraphService.xAxisLabel[graphTimeRange]} indicatorY={GraphService.yAxisLabel[graphType]}/>}
+                    </div>
+                </div>
+                <div className="chart-info-right">
+                    {/* <hr/> */}
+                    {getChartItem(`Total Shipment`, primGraphStartDate, primGraphEndDate, primTotal)}
+                    {/* <hr/> */}
+                    {getChartItem(`Highest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primHighest.value,)}
+                    {/* <hr/> */}
+                    {getChartItem(`Lowest ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primLowest.value,)}
+                    {/* <hr/> */}
+                    {getChartItem(`Average ${GraphService.graphName[graphType]}`, primGraphStartDate, primGraphEndDate, primAverage.toPrecision(2))}
+                    {/* <hr/> */}
+                    {/* {getChartItem(`Percentage Changes`, primGraphStartDate, primGraphEndDate, `${primChangePercent}%`)} */}
+                    {/* <hr/> */}
+
+                    {/* <hr/> */}
+                </div>
+            </div>
+            { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handlePopupConfirm} handleCancel={handlePopupCancel} />}
+            { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
+
+        </div>
+    );
+}

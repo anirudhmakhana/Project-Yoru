@@ -14,7 +14,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/sidebar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTicket, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen, faMap } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faCubes, faCirclePlus, faPen, faBan, faLocationDot, faAddressBook, faAddressCard, faLockOpen, faMap } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -59,7 +59,7 @@ export const CustomSidebar = (props) => {
                     <MenuItem active={activeItemIndex === 0} icon={<FontAwesomeIcon icon={faChartPie}/>}>
                         <Link to={"overview"} onClick={() => {setActiveItemIndex(0)}}>Overview</Link>
                     </MenuItem>
-                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faTicket}/>}>
+                    <MenuItem active={activeItemIndex === 1} icon={<FontAwesomeIcon icon={faCubes}/>}>
                         <Link to={"shipment"} onClick={() => {setActiveItemIndex(1)}}>Shipment</Link>
                     </MenuItem>
                     <MenuItem active={activeItemIndex === 2} icon={<FontAwesomeIcon icon={faCirclePlus}/>}>

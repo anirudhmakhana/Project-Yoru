@@ -56,7 +56,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
                   var curPos = {lat: pos.coords.latitude, lng: pos.coords.longitude}
                   setCurrentLocation()
                   setStatus(null)
-                  NodeDataService.getNearestNode(curPos, userData.companyCode, userData.token)
+                  NodeDataService.getCompanyNearestNode(curPos, userData.companyCode, userData.token)
                   .then( nearestNode => {
                       setCurrentNode(nearestNode.data)
                       console.log('Nearest node: ', nearestNode.data)

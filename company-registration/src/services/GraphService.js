@@ -32,6 +32,10 @@ class GraphService {
             {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 5, 8, 20).getTime(), status:"shipping"},
             {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 5, 9, 20).getTime(), status:"completed"},
 
+            {uid:"SHP013", scannedAt:"LKB-1003", scannedTime:new Date(2022, 0, 1, 9, 20).getTime(), status:"created"},
+
+            {uid:"SHP014", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 1, 9, 20).getTime(), status:"created"},
+
             {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 2, 9, 20).getTime(), status:"created"},
             {uid:"SHP004", scannedAt:"LKB-1003", scannedTime:new Date(2022, 4, 3, 12, 20).getTime(), status:"shipping"},
             {uid:"SHP004", scannedAt:"RAM-52011", scannedTime:new Date(2022, 4, 3, 13, 20).getTime(), status:"arrived"},
@@ -237,29 +241,50 @@ class GraphService {
 
     adjustGraphTime(graph_data, graphTimeRange) {
         var adjustedDate = []
-        graph_data.forEach( data => {
+        var startDate = null
+        var endDate = null
+        graph_data.forEach( (data, ind) => {
             let dataDate = new Date(data.x)
             if (graphTimeRange == "day") {
                 let dataDate = new Date(data.x)
                 adjustedDate.push({x:dataDate.getHours()+":00", y:data.y})
+                if (ind == 0) {
+                    startDate = dataDate.toLocaleDateString()
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = dataDate.toLocaleDateString()
+                }
             }
             else if (  graphTimeRange == "week") {
                 dataDate.setDate(dataDate.getDate() - 1)
                 adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                if (ind == 0) {
+                    startDate = dataDate.toLocaleDateString()
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = dataDate.toLocaleDateString()
+                }
             }
             else if ( graphTimeRange == "month" ) {
                 dataDate.setDate(dataDate.getDate() - 1)
                 adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                if (ind == 0) {
+                    startDate = dataDate.toLocaleDateString()
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = dataDate.toLocaleDateString()
+                }
             }
             else if ( graphTimeRange == "year") {
                 let dataDate = new Date(data.x)
-                console.log(dataDate.getMonth(), dataDate.toDateString())
-
-                adjustedDate.push({x:DateUtils.shortMonthNames[dataDate.getMonth() - 1]+"", y:data.y})
+                // console.log(dataDate.getMonth(), dataDate.toDateString())
+                adjustedDate.push({x:DateUtils.monthNames[dataDate.getMonth() - 1]+"", y:data.y})
+                if (ind == 0) {
+                    startDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                }
             }
         })
         console.log("TEST", adjustedDate)
-        return adjustedDate
+        return {adjustedDate: adjustedDate, startDate:startDate, endDate:endDate}
     }
 
     async generateGraph(graphType, graphTimeRange, token, companyCode = null, nodeCode = null) {
@@ -296,18 +321,20 @@ class GraphService {
             timeInterval = timeInterval.reverse().slice(0, curDate.getDate())
         }
         else if ( graphTimeRange == "year") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth() -1 ).getTime()
-            console.log(new Date(2020, 4).toDateString())
+            timeRange = new Date(curDate.getFullYear(), 1).getTime() - 
+                        new Date(curDate.getFullYear(), 0 ).getTime()
+            console.log(new Date(2020, 0).toDateString())
             for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
                 let temp = new Date(curDate.getFullYear(), i) 
                 timeInterval.push(temp.getTime())
             }
         }
-    
+        
         if (companyCode ) {
             if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
+                timeInterval.forEach(t => console.log(new Date(t).toLocaleString()))
+
                 const res_graph = await this.getCompanyGraphByTimeStatus( companyCode, timeInterval, graphType, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
@@ -318,6 +345,7 @@ class GraphService {
         }
         else if ( nodeCode) {
             if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
+                
                 timeInterval.unshift(timeInterval[0] - timeRange)
                 const res_graph = await this.getNodeGraphByTimeStatus( nodeCode, timeInterval, graphType, token)
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
@@ -328,7 +356,27 @@ class GraphService {
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
         }
-        return {data:graphData}
+        console.log(graphData)
+        var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
+        var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
+        var total = 0
+        var count = 0
+        var original = graphData.adjustedDate[0].y
+        var latest = graphData.adjustedDate[0].y
+        graphData.adjustedDate.slice(1).forEach( d => {
+            if (d.y > highest.value) { highest = {date: d.x+'', value:d.y} }
+            else if (d.y == highest.value) { highest.date = highest.date + ', ' + d.x}
+            if (d.y < lowest.value) {lowest = {date: d.x+'', value:d.y}}
+            else if (d.y == lowest.value) { lowest.date = lowest.date + ', ' + d.x}
+
+            total += d.y
+            count += 1
+            latest = d.y
+        })
+        var change = latest - original
+        change = change / original
+        return {data:{graph:graphData.adjustedDate, startDate: graphData.startDate, endDate: graphData.endDate, highest:highest,
+             lowest:lowest, average:total/count, change: change, percentageChange: change*100, total:total}}
     }
 }
 

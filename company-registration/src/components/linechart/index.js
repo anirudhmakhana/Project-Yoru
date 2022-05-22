@@ -28,13 +28,14 @@ export const LineChart = ({chartDataPrim, chartDataSec, indicatorX, indicatorY})
                         borderColor: '#2b42d8',
                         tension: 0.1,
                     },
-                    {
-                        label: `Dataset 2`,
-                        data: chartDataSec,
-                        fill: false,
-                        borderColor: '#DFE0EB',
-                        tension: 0.1,
-                    }]
+                    // {
+                    //     label: `Dataset 2`,
+                    //     data: chartDataSec,
+                    //     fill: false,
+                    //     borderColor: '#DFE0EB',
+                    //     tension: 0.1,
+                    // }\
+                    ]
                 }}
                 options={{
                     responsive: true,

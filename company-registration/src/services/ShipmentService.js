@@ -255,18 +255,18 @@ class ShipmentService {
             axios.post("http://localhost:4000/shipment/centralize/", centData, 
             {headers:{"x-access-token":token}})
             .then( res_central => {
-                var createScan = {
-                    uid: shipmentData.uid,
-                    currentNode: shipmentData.currentNode,
-                    scannedTime: shipmentData.scannedTime,
-                    status: shipmentData.status,
-                    transactionHash: response.data.transactionHash
-                }
-                axios.post("http://localhost:4000/scan/", createScan, 
-                {headers:{"x-access-token":token}})
-                .then (res_scan =>  {
-                    console.log(res_scan)
-                })    
+                // var createScan = {
+                //     uid: shipmentData.uid,
+                //     currentNode: shipmentData.currentNode,
+                //     scannedTime: shipmentData.scannedTime,
+                //     status: shipmentData.status,
+                //     transactionHash: response.data.transactionHash
+                // }
+                // axios.post("http://localhost:4000/scan/", createScan, 
+                // {headers:{"x-access-token":token}})
+                // .then (res_scan =>  {
+                //     console.log(res_scan)
+                // })    
             })
         })
         .catch( error => {
@@ -287,18 +287,18 @@ class ShipmentService {
             axios.put("http://localhost:4000/shipment/centralize/update/", centData, 
             {headers:{"x-access-token":token}})
             .then( res_central => {
-                var createScan = {
-                    uid: shipmentData.uid,
-                    currentNode: shipmentData.currentNode,
-                    scannedTime: shipmentData.scannedTime,
-                    status: shipmentData.status,
-                    transactionHash: response.data.transactionHash
-                }
-                axios.post("http://localhost:4000/scan/", createScan, 
-                {headers:{"x-access-token":token}})
-                .then (res_scan =>  {
-                    console.log(res_scan)
-                })    
+                // var createScan = {
+                //     uid: shipmentData.uid,
+                //     scannedAt: shipmentData.currentNode,
+                //     scannedTime: shipmentData.scannedTime,
+                //     status: shipmentData.status,
+                //     transactionHash: response.data.transactionHash
+                // }
+                // axios.post("http://localhost:4000/scan/", createScan, 
+                // {headers:{"x-access-token":token}})
+                // .then (res_scan =>  {
+                //     console.log(res_scan)
+                // })    
             })
         })
         .catch( error => {

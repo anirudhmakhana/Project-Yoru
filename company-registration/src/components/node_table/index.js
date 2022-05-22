@@ -14,6 +14,7 @@ export class NodeTable extends Component {
             setEditNodePopup: this.props.setEditNodePopup,
             setEditNode: this.props.setEditNode,
         }
+        this.userData = eval("(" + localStorage.getItem("userData") + ")")
     }
 
     render() {
@@ -34,12 +35,12 @@ export class NodeTable extends Component {
                     <Button size="sm" variant="dark">VIEW</Button>
                     </Link>
                     &nbsp;&nbsp;
-                    <Button size="sm" variant="outline-primary" onClick={() =>{
+                    {this.userData.companyCode == this.props.obj.companyCode &&<Button size="sm" variant="outline-primary" onClick={() =>{
                         this.state.setEditNode(this.props.obj.nodeCode)
                         this.state.setEditNodePopup(true)
-                    }}>EDIT</Button>
+                    }}>EDIT</Button>}
                     &nbsp;&nbsp;
-                    { this.props.obj.status.toLowerCase() == "active" ? 
+                    { this.userData.companyCode == this.props.obj.companyCode && (this.props.obj.status.toLowerCase() == "active" ? 
                     <Button size="sm" variant="outline-danger" onClick={() =>{
                         this.props.obj.status = "inactive"
                         NodeDataService.updateNodeStatus( this.props.obj.nodeCode, {
@@ -60,7 +61,7 @@ export class NodeTable extends Component {
                             this.props.updateTable()
                         })
 
-                    }}>ACTIVE</Button>}
+                    }}>ACTIVE</Button>)}
                 </td>       
 
             </tr>

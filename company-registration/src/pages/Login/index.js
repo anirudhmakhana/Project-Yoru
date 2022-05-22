@@ -14,8 +14,10 @@ import {useNavigate} from "react-router-dom"
 import {NodeSelectPopup} from "../../components/node_select_popup"
 import NodeDataService from "../../services/NodeDataService";
 import StaffAccountService from "../../services/StaffAccountService";
+
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
+
 import { useEffect } from "react";
 const google = window.google
 
@@ -69,6 +71,8 @@ export const LoginPage = (props) => {
                 .catch( err => {
                     localStorage.setItem("userData", JSON.stringify(res.data))
                     localStorage.setItem("userType", "staff")
+                    localStorage.setItem("currentNode", null)
+
                     navigate("main/overview")
                 })
                 
