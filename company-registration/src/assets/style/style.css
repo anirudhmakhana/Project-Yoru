@@ -223,6 +223,7 @@ div.warning{
 .content-title-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 2vh 0 3vh 0;
 }
 
