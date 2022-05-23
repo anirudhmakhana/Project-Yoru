@@ -14,6 +14,7 @@
     border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.125);
     display: flex;
+    margin-bottom: 1%;
 }
 
 .body-chart-container {
