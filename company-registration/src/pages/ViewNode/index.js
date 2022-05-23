@@ -24,7 +24,7 @@ import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import GraphService from '../../services/GraphService';
 import { LineChart } from '../../components/linechart'; 
-import { ChartDatePicker } from '../../components/date_picker';
+import { ChartDatePicker, ChartMonthPicker, ChartYearPicker } from '../../components/date_picker';
 
 const google = window.google
 
@@ -88,19 +88,23 @@ export const ViewNodePage = () => {
         NodeDataService.getNodeByCode(nodeCode,userData.token)
         .then( res => {console.log(res)
             setNode(res.data)
-            GraphService.generateGraph( graphType, graphTimeRange, userData.token, primGraphEndDate, null, nodeCode)
+            GraphService.generateGraph(
+                graphType,
+                graphTimeRange,
+                userData.token,
+                primGraphStartDate,
+                primGraphEndDate,
+                null,
+                nodeCode
+            )
             .then( res => {
                 setDateGraphData(res.data.graph)
-                setPrimStartDate(res.data.startDate)
-                setPrimEndDate(res.data.endDate)
             })
         })
         .catch( err => {
             setNode(null)
             console.log(err)
         })
-                
-        
         
     }, [graphType,graphTimeRange, primGraphEndDate, primGraphStartDate])
 
@@ -178,9 +182,16 @@ export const ViewNodePage = () => {
                             <p>{primGraphStartDate}</p> :
                             <p>{primGraphStartDate}-{primGraphEndDate}</p>} */}
                             <div className="date-picker-container ms-auto">
-								<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
-								<span>To</span>
-								<ChartDatePicker  date={primGraphEndDate} setDate={setPrimEndDate}/>
+                                {graphTimeRange === "custom" ? 
+                                        <>
+                                            <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
+                                                <span>To</span>
+                                            <ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate}/> 
+                                        </>
+                                        : graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
+                                            : graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
+                                                : <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
+                                    }
 							</div>
                             </div>
                             

@@ -19,6 +19,7 @@ export const ChartDatePicker = ( {date, setDate}) => {
                 renderInput={(params) => <TextField {...params} />}
                 value={date}
                 onChange={(newValue) => {
+                    console.log(newValue)
                     setDate(newValue);
                 }}
             />
@@ -27,10 +28,7 @@ export const ChartDatePicker = ( {date, setDate}) => {
       );
 }
 
-export const ChartMonthPicker = () => {
-    const [value, setValue] = useState(
-        new Date('2022-01-01')
-    );
+export const ChartMonthPicker = ({date, setDate}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -39,9 +37,9 @@ export const ChartMonthPicker = () => {
                 views={['year', 'month']}
                 label="Month"
                 renderInput={(params) => <TextField {...params} />}
-                value={value}
+                value={date}
                 onChange={(newValue) => {
-                    setValue(newValue);
+                    setDate(newValue);
                 }}
             />
             </Stack>
@@ -49,10 +47,7 @@ export const ChartMonthPicker = () => {
       );
 }
 
-export const ChartYearPicker = () => {
-    const [value, setValue] = useState(
-        new Date('2022-01-01')
-    );
+export const ChartYearPicker = ({date, setDate}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -61,9 +56,9 @@ export const ChartYearPicker = () => {
                 views={['year']}
                 label="Year"
                 renderInput={(params) => <TextField {...params} />}
-                value={value}
+                value={date}
                 onChange={(newValue) => {
-                    setValue(newValue);
+                    setDate(newValue);
                 }}
             />
             </Stack>

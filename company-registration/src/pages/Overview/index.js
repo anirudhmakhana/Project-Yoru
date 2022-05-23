@@ -46,6 +46,7 @@ export const OverviewPage = (props) => {
 	const [primTotal, setTotal] = useState(0);
 	const [primGraphStartDate, setPrimStartDate] = useState(new Date());
 	const [primGraphEndDate, setPrimEndDate] = useState(new Date());
+
 	// useState(() => {
 	//     var node = eval('('+localStorage.getItem("currentNode")+')')
 	//     if (node) {
@@ -113,6 +114,7 @@ export const OverviewPage = (props) => {
 			graphType,
 			graphTimeRange,
 			userData.token,
+			primGraphStartDate,
 			primGraphEndDate,
 			userData.companyCode,
 			null
@@ -235,13 +237,13 @@ export const OverviewPage = (props) => {
 							<div className="date-picker-container mt-lg-4 mt-md-2 ms-auto">
 								{graphTimeRange === "custom" ? 
 									<>
-										<ChartDatePicker/>
+										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
 											<span>To</span>
-										<ChartDatePicker/> 
+										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate}/> 
 									</>
-									: graphTimeRange === "year" ? <ChartYearPicker/>
-										: graphTimeRange === "month" ? <ChartMonthPicker/>
-											: <ChartDatePicker/>
+									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
+											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
 								}
 								
 								{/* <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
