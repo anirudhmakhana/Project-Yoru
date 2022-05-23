@@ -271,7 +271,7 @@ export const CancelSHP = () => {
         <div className="content-main-container">
 			{currentNode ? <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
-           	<div className="detailed-main-container p-lg-4 p-md-2" style={{height: "fit-content"}}>
+           	<div className="detailed-main-container p-lg-4 p-md-2">
            		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container">
