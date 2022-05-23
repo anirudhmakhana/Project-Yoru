@@ -17,7 +17,7 @@ import DateUtils from "../../utils/DateUtils";
 import ShipmentService from "../../services/ShipmentService";
 import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
-import { ChartDatePicker } from "../../components/date_picker";
+import { ChartDatePicker, ChartMonthPicker, ChartYearPicker } from "../../components/date_picker";
 
 export const OverviewPage = (props) => {
 	const [userData, setUserData] = useState(
@@ -230,9 +230,17 @@ export const OverviewPage = (props) => {
 								</Dropdown.Menu>
 							</Dropdown>
 							<div className="date-picker-container mt-lg-4 mt-md-2 ms-auto">
-								<ChartDatePicker/>
-								<span>To</span>
-								<ChartDatePicker/>
+								{graphTimeRange === "custom" ? 
+									<>
+										<ChartDatePicker/>
+											<span>To</span>
+										<ChartDatePicker/> 
+									</>
+									: graphTimeRange === "year" ? <ChartYearPicker/>
+										: graphTimeRange === "month" ? <ChartMonthPicker/>
+											: <ChartDatePicker/>
+								}
+								
 							</div>
 						</div>
 						
