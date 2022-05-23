@@ -131,7 +131,7 @@ export const ViewShipmentPage = () => {
                 <div className="content-title-container">
                     <h1>Shipment</h1>
                 </div>
-                <div className="detailed-main-container">
+                <div className="detailed-main-container p-lg-4 p-md-2">
                     <div className="detailed-title-container">
                         <Button type="button" onClick={() => {
                             navigate(-1)
