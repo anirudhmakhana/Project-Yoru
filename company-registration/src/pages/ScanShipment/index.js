@@ -65,7 +65,7 @@ export const ScanSHP = () => {
 	const [allCompanies, setAllCompanies] = useState([]);
 	const [companyNodes, setCompanyNodes] = useState([]);
 	const [recommendNext, setRecommendNext] = useState(null)
-
+	const [falseShipAlert, setFalseShipAlert] = useState(null)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -193,7 +193,16 @@ export const ScanSHP = () => {
 			ShipmentService.getScanByShipmentId(shipmentId, userData.token)
 			.then( res => {
 				console.log(res.data)
-				setAllScans(res.data)
+				var temp = []
+				for ( let i = 0; i < res.data.length; i++ ) {
+					console.log(res.data[i].status )
+
+					if ( (res.data[i].status == "arrived") && res.data[i - 1].nextNode != res.data[i].scannedAt) {
+						res.data[i].scannedAt = res.data[i].scannedAt + " ##MISMATCHED##"
+					} 
+					temp.push(res.data[i])
+				}
+				setAllScans(temp)
 			})
 			.catch(err => {
 				console.log(err)
@@ -305,12 +314,14 @@ export const ScanSHP = () => {
 			console.log("Shipment updated")
 			setWarning(null)
 			setUpdateInfo(null)
+			setFalseShipAlert(null)
 			setShipment(null)
 			setShipmentId(null)
 			setAllScans([])
 			setNextNode(null)
 			setNextCompany(null)
 			setCommonDestNode(null)
+			setRecommendNext(null)
 		})
 		.catch( err => {
 			console.log(err)
@@ -394,10 +405,16 @@ export const ScanSHP = () => {
 							newState = null
 						}
 						setNewStatus(newState)
+						
 						if (newState) {
-							
+							if ( newState == "arrived" && currentNode.nodeCode != res_shipment.data.nextNode) {
+								setFalseShipAlert(`Your shipment should be arrived at ${res_shipment.data.nextNode}!`)
+							} else {
+								setFalseShipAlert(null)
+							}		
 							setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
 							setWarning(null)
+							
 							setShowScanPopup(false)
 						}
 						else if (incorrectCurNode) {
@@ -405,14 +422,19 @@ export const ScanSHP = () => {
 							setShipment(null)
 							setWarning("Current node not matched or already checked out from this node. Please check your current node!")
 							setShowScanPopup(false)
+							setFalseShipAlert(null)
+
 						} else {
 							setUpdateInfo(null)
 							setShipment(null)
 							setWarning("Cancelled or completed shipment cannot be updated!")
 							setShowScanPopup(false)
+							setFalseShipAlert(null)
+
 						}
 					} else {
 						setUpdateInfo(null)
+						setFalseShipAlert(null)
 						setShipmentId(null)
 						setShipment(null)
 						setWarning("Shipment not found!")
@@ -497,6 +519,10 @@ export const ScanSHP = () => {
 								{ currentNode ? <Button className="universal-button" onClick={handleScan} >Scan</Button> :
 								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
+							{ falseShipAlert &&
+							<div className="alert alert-warning mb-lg-4 mt-lg-4">
+								{falseShipAlert}
+							</div>}
 							{ commonDestNode && recommendNext && 
 							<div className="recommendContainer">
 								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>Recommended next node based on the distance.</strong></p>
@@ -512,7 +538,7 @@ export const ScanSHP = () => {
 								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {commonDestNode.address}</p>
 							</div>}
 
-							{ recommendNext && 
+							{ !commonDestNode && recommendNext && 
 							<div className="recommendContainer">
 								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>Recommended next node based on the distance.</strong></p>
 								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNext.nodeCode}</p>
@@ -731,15 +757,17 @@ export const ScanSHP = () => {
 							</div>
 							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%"}}>Update History</h3>
 							<div className='scan-history-container' style={{marginLeft: "3%", height: "40%"}}>
-								{ allScans.reverse().map( scan => {
+								{ allScans.map( (scan) => {
 									return(
+										
 									<div>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+										
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
 										{scan.status == "shipping" && 
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
 										<br/>
 									</div>
 									) 

@@ -179,7 +179,9 @@ class ShipmentService {
         .catch( error => {
             throw error
         }) 
+        console.log(response.data)
         response.data = response.data.sort((a,b) => a.scannedTime - b.scannedTime)
+        console.log('sorted', response.data)
         return response
     }
 
