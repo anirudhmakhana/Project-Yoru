@@ -28,6 +28,7 @@ class NodeRecommender {
             sameDestinationNodes = sameDestinationNodes.data
         }
         
+        
         if (filterCompany) {
             allNodes= await NodeDataService.getActiveNodeByCompany(filterCompany, token).data
             allNodes =  allNodes.data
@@ -35,6 +36,7 @@ class NodeRecommender {
             allNodes = await NodeDataService.getAllActiveNode(token)
             allNodes =  allNodes.data
         }
+        console.log('test test ', sameDestinationNodes)
 
         var allConsiderNodesCoord = []
         var allConsiderNodes = []
@@ -47,6 +49,7 @@ class NodeRecommender {
                 origins_request.push(currentNodeCoord)
             }
         })
+
         return this.findOptimumNode(origins_request, allConsiderNodes, allConsiderNodesCoord, currentNodeCoord, destinationCoord)
     }
 

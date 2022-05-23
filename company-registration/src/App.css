@@ -4,8 +4,8 @@
   justify-content: center;
   align-items: center;
   background-color: #F7F8FC;
-  /* height: 100vh;
-  max-height: fit-content; */
+  height: 100vh;
+  /* max-height: fit-content; */
 }
 
 .App-logo {

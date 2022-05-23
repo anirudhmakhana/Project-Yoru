@@ -24,6 +24,7 @@ import NodeDataService from '../../services/NodeDataService';
 import ShipmentService from '../../services/ShipmentService';
 import GraphService from '../../services/GraphService';
 import { LineChart } from '../../components/linechart'; 
+import { ChartDatePicker, ChartMonthPicker, ChartYearPicker } from '../../components/date_picker';
 
 const google = window.google
 
@@ -40,8 +41,8 @@ export const ViewNodePage = () => {
     const [showInfo, setShowInfo] = useState(true)
     const [graphTimeRange, setGraphTimeRange] = useState("day")
     const [graphType, setGraphType] = useState("shipping")
-    const [primGraphStartDate, setPrimStartDate] = useState('')
-    const [primGraphEndDate, setPrimEndDate] = useState('')
+    const [primGraphStartDate, setPrimStartDate] = useState(new Date())
+    const [primGraphEndDate, setPrimEndDate] = useState(new Date())
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -60,6 +61,14 @@ export const ViewNodePage = () => {
 
     const handleTimeRangeDropdown = (e) => {
         setGraphTimeRange(e)
+        setPrimEndDate(new Date())
+
+		if ( e == "custom") {
+			let cur = new Date()
+			setPrimStartDate(new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() - 1))
+		} else {
+			setPrimStartDate(new Date())
+		}
     };
 
 
@@ -87,21 +96,25 @@ export const ViewNodePage = () => {
         NodeDataService.getNodeByCode(nodeCode,userData.token)
         .then( res => {console.log(res)
             setNode(res.data)
-            GraphService.generateGraph( graphType, graphTimeRange, userData.token, null, nodeCode)
+            GraphService.generateGraph(
+                graphType,
+                graphTimeRange,
+                userData.token,
+                primGraphStartDate,
+                primGraphEndDate,
+                null,
+                nodeCode
+            )
             .then( res => {
                 setDateGraphData(res.data.graph)
-                setPrimStartDate(res.data.startDate)
-                setPrimEndDate(res.data.endDate)
             })
         })
         .catch( err => {
             setNode(null)
             console.log(err)
         })
-                
         
-        
-    }, [graphType,graphTimeRange])
+    }, [graphType,graphTimeRange, primGraphEndDate, primGraphStartDate])
 
     useEffect(() => {
         ShipmentService.currentStockCountByNode(nodeCode,userData.token)
@@ -173,9 +186,21 @@ export const ViewNodePage = () => {
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
                                 </Dropdown.Menu>
                             </Dropdown>
-                            {primGraphEndDate == primGraphStartDate ? 
+                            {/* {primGraphEndDate == primGraphStartDate ? 
                             <p>{primGraphStartDate}</p> :
-                            <p>{primGraphStartDate}-{primGraphEndDate}</p>}
+                            <p>{primGraphStartDate}-{primGraphEndDate}</p>} */}
+                            <div className="date-picker-container ms-auto">
+                            {graphTimeRange === "custom" ? 
+									<>
+										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+											<span>To</span>
+										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate} min={new Date(primGraphStartDate.getFullYear(),primGraphStartDate.getMonth(), primGraphStartDate.getDate() + 1)} max={new Date()}/> 
+									</>
+									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+								}
+							</div>
                             </div>
                             
                             <div style={{width:'100%', height:'90%', display: 'flex', alignItems: 'center'}}>

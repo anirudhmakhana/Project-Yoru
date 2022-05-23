@@ -219,12 +219,12 @@ class NodeDataService {
     }
     
     async getNodeWithStockSameDest( destinationNode, token) {
-        const response = await axios.get(this.apiURL + '/stock/samedestination/'+destinationNode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/stock/samedestination/'+ destinationNode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
         const result = []
-        response.data.forEach( node => result.push(node.currentNode))
+        response.data.forEach( node => result.push(node.scannedAt))
         // console.log(result)
         return {data:result}
     }
