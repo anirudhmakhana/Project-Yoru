@@ -64,7 +64,6 @@ export const ScanSHP = () => {
 	const [nextNode, setNextNode] = useState(null);
 	const [nextNodeStock, setNextNodeStock] = useState(0);
 	const [allCompanies, setAllCompanies] = useState([]);
-	const [showDestInfo, setShowDestInfo] = useState(true)
 	const [companyNodes, setCompanyNodes] = useState([]);
 
 	const [mapRef, setMapRef] = React.useState(
@@ -122,6 +121,37 @@ export const ScanSHP = () => {
 		});
 	}, []);
 
+	useEffect( () => {
+		if ( nextNodeRef) {
+			if ( nextCompany ) {
+				NodeDataService.getCompanyNearestNode( nextNodeRef, nextCompany.companyCode, userData.token)
+				.then( result => {
+				
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				setRecommendInfo(null)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			} else  {
+				NodeDataService.getNearestNode( nextNodeRef, userData.token)
+				.then( result => {
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				setRecommendInfo(null)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			}
+		}
+	}, [nextNodeRef])
+
     useEffect( () => {
 		if (shipmentId) {
 			ShipmentService.getShipmentById(shipmentId ,userData.token)
@@ -148,7 +178,7 @@ export const ScanSHP = () => {
 				setShipment(null)
 				console.log(err_shipment)
 			})
-			CompanyService.getAllCompanyCode(userData.token)
+			CompanyService.getAllCompany(userData.token)
 			.then((result) => {
 				setAllCompanies(result.data);
 			})
@@ -203,7 +233,7 @@ export const ScanSHP = () => {
 
 	useEffect(() => {
 		if (nextCompany) {
-			NodeDataService.getActiveNodeByCompany(nextCompany, userData.token)
+			NodeDataService.getActiveNodeByCompany(nextCompany.companyCode, userData.token)
 				.then((result) => {
 					console.log(result.data);
 					// console.log(path)
@@ -227,7 +257,8 @@ export const ScanSHP = () => {
         const latLng = await getLatLng(results[0]);
 		setSearchRef(value)
         setNextNodeRef(latLng);
-
+		
+		
 	};
 
 	function handleNodePopupConfirm(newCurrentNode) {
@@ -319,11 +350,14 @@ export const ScanSHP = () => {
 								if ( recommend) {
 									NodeDataService.getNodeByCode( recommend, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
+										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+										.then ( res => {
+											setNextCompany(res.data);
+										})
 										setNextNode(res.data)
 										setRecommendInfo("Recommended next node.")
 									})
-									var commonDest = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
+									var commonDest = await NodeRecommender.recommendCommonDest(res_shipment.data, userData.token)
 									.catch( err=> { 
 										commonDest = null
 									})
@@ -337,7 +371,10 @@ export const ScanSHP = () => {
 								else {
 									NodeDataService.getNodeByCode( res_shipment.data.destinationNode, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
+										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+										.then ( res => {
+											setNextCompany(res.data);
+										})
 										setNextNode(res.data)
 										setRecommendInfo("Recommended next node.")
 									})
@@ -405,11 +442,15 @@ export const ScanSHP = () => {
 
 	function handleCompanyDropdown(e) {
 		console.log(e);
-		setNextCompany(e);
+		CompanyService.getCompanyByCode(e, userData.token)
+		.then ( res => {
+			setNextCompany(res.data);
+		})
 		console.log(nextNode);
 		setNextNode(null);
 		setNextNodeStock(0);
 		setDirectionsResponse(null)
+		setNextPath(null)
 		
 	};
 
@@ -419,9 +460,9 @@ export const ScanSHP = () => {
 			const result = await NodeDataService.getNodeByCode(e, userData.token)
 			
 			setNextNode(result.data);
-			setShowDestInfo(true)
-			console.log(result.data);
+			setShowNextInfo(true)
 			setRecommendInfo(null)
+			// console.log(newStatus , updateInfo , userCompany , shipment , currentNode)
 			
 		} else {
 			setNextNodeStock(0);
@@ -475,7 +516,7 @@ export const ScanSHP = () => {
 									<Dropdown onSelect={handleCompanyDropdown}>
 										{nextCompany ? (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
-												{nextCompany}
+												{nextCompany.companyName}
 											</Dropdown.Toggle>
 										) : (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -485,8 +526,8 @@ export const ScanSHP = () => {
 
 										<Dropdown.Menu>
 											<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
-											{allCompanies.map((companyCode) => (
-												<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+											{allCompanies.map((company) => (
+												<Dropdown.Item eventKey={company.companyCode}>{company.companyName}</Dropdown.Item>
 											))}
 										</Dropdown.Menu>
 									</Dropdown>
@@ -532,11 +573,24 @@ export const ScanSHP = () => {
 									</Dropdown>
 								</div>
 								
-								<PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
+								
+							</div>
+							}
+							
+						</div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+								<h3 style={{color: "#252733"}}>Map</h3>
+								{ shipment && <Button className="map-info-button" onClick={() => {
+									setShowInfo(true)
+									setShowNextInfo(true)
+								}} >Show Pin Info</Button>}
+							</div>
+							{ shipment && newStatus == "shipping" && <PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
 								{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 									<div >
 
-										<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Next node location" })} />
+										<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Search for next node location" })} />
 
 										<div>
 										{loading ? <div>Loading...</div> : null}
@@ -556,20 +610,7 @@ export const ScanSHP = () => {
 										</div>
 									</div>
 								)}
-								</PlacesAutocomplete>
-							</div>
-							}
-							
-						</div>
-						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
-							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-								<h3 style={{color: "#252733"}}>Map</h3>
-								{ shipment && <Button className="map-info-button" onClick={() => {
-									setShowInfo(true)
-									setShowNextInfo(true)
-								}} >Show Pin Info</Button>}
-							</div>
-							
+								</PlacesAutocomplete>}
 							<div style={{ width: "100%", height: "40%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
@@ -577,7 +618,8 @@ export const ScanSHP = () => {
 										mapContainerStyle={{ width: '100%', height: '100%' }}
 										options={options}
 										onLoad={map => setMapRef(map)}
-										onClick={()=>{}}>
+										onClick={(e) => {setNextNodeRef({lat:e.latLng.lat(), lng:e.latLng.lng()})}}
+										>
 									{directionsResponse ? (
 										directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
 									): null}
@@ -630,6 +672,25 @@ export const ScanSHP = () => {
 									}}
 									map={mapRef}
 									/>
+
+									{ companyNodes && companyNodes.map( compNode => {
+										if (compNode.nodeCode != currentNode.nodeCode ) {
+											return <Marker
+											key={`${compNode.lat}-${compNode.lng}`}
+											position={{lat:compNode.lat, lng:compNode.lng}}
+											onClick={() => {
+												setShowInfo(true)
+												console.log(compNode.lat+"-"+ compNode.lng)
+												setNextNode(compNode);
+												setShowNextInfo(true)
+												console.log(compNode);
+												setRecommendInfo(null)
+											}}
+											map={mapRef}/>
+										}
+									})
+									}
+
 									</GoogleMap>
 									: currentNode ? <GoogleMap
 									center={{ lat: currentNode.lat, lng: currentNode.lng }}

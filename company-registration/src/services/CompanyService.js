@@ -8,7 +8,7 @@ class CompanyService {
     }
 
     async getCompanyByCode( companyCode, token ) { 
-        const response = await axios.get(this.apiURL + companyCode,{headers:{"x-access-token":token}})
+        const response = await axios.get(this.apiURL + '/' + companyCode,{headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -54,7 +54,7 @@ class CompanyService {
     }
 
     async deleteCompany( companyCode, token ) { 
-        const response = await axios.delete(this.apiURL + companyCode,
+        const response = await axios.delete(this.apiURL + '/' + companyCode,
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error

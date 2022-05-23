@@ -95,7 +95,7 @@ export const CreateSHP = () => {
             setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
 			setProducer(eval("(" + localStorage.getItem("currentNode") + ")").companyCode)
         }
-		CompanyService.getAllCompanyCode(userData.token)
+		CompanyService.getAllCompany(userData.token)
 			.then((result) => {
 				setAllCompanies(result.data);
 			})
@@ -115,7 +115,7 @@ export const CreateSHP = () => {
 
 	useEffect(() => {
 		if (destinationCompany) {
-			NodeDataService.getActiveNodeByCompany(destinationCompany, userData.token)
+			NodeDataService.getActiveNodeByCompany(destinationCompany.companyCode, userData.token)
 				.then((result) => {
 					console.log(result.data);
 					setCompanyNodes(result.data);
@@ -134,9 +134,18 @@ export const CreateSHP = () => {
 			.then(
 				results => 
 				setDirectionsResponse(results)
-
 			)
-	
+			ShipmentService.currentStockCountByNode(destinationNode.nodeCode, userData.token)
+			.then((res_stock) => {
+				// console.log('testtesttest', res_stock)
+				console.log(res_stock.data);
+				setNodeStock(res_stock.data);
+
+			})
+			.catch((err_stock) => {
+				setNodeStock(0);
+				console.log(err_stock);
+			});
 		}
 	
     }
@@ -146,8 +155,14 @@ export const CreateSHP = () => {
 		if ( destRef) {
 			NodeDataService.getNearestNodeExcept(destRef, currentNode.nodeCode, userData.token)
 				.then( nearestNode => {
-					setDestinationCompany(nearestNode.data.companyCode)
+					
 					setDestinationNode(nearestNode.data)
+					setShowDestInfo(true)
+
+					CompanyService.getCompanyByCode(nearestNode.data.companyCode, userData.token)
+					.then ( res => {
+						setDestinationCompany(res.data);
+					})
 					ShipmentService.currentStockCountByNode(nearestNode.data.nodeCode, userData.token)
 					.then((res_stock) => {
 						// console.log('testtesttest', res_stock)
@@ -159,13 +174,19 @@ export const CreateSHP = () => {
 						setNodeStock(0);
 						console.log(err_stock);
 					});
+					
+					
 			})
 		}
 	}, [destRef])
 
 	function handleCompanyDropdown(e) {
 		console.log(e);
-		setDestinationCompany(e);
+		CompanyService.getCompanyByCode(e, userData.token)
+		.then ( res => {
+			setDestinationCompany(res.data);
+		})
+		
 		console.log(destinationNode);
 		setDestinationNode(null);
 		setNodeStock(0);
@@ -177,21 +198,14 @@ export const CreateSHP = () => {
 		console.log(e);
 		if (e) {
 			const result = await NodeDataService.getNodeByCode(e, userData.token)
-			
 			setDestinationNode(result.data);
 			setShowDestInfo(true)
-			console.log(result.data);
-			ShipmentService.currentStockCountByNode(result.data.nodeCode, userData.token)
-			.then((res_stock) => {
-				// console.log('testtesttest', res_stock)
-				console.log(res_stock.data);
-				setNodeStock(res_stock.data);
-
+			CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+			.then ( res => {
+				setDestinationCompany(res.data);
 			})
-			.catch((err_stock) => {
-				setNodeStock(0);
-				console.log(err_stock);
-			});
+			console.log(result.data);
+			
 		} else {
 			setNodeStock(0);
 			setDestinationNode(null);
@@ -308,7 +322,7 @@ export const CreateSHP = () => {
 								<Dropdown onSelect={handleCompanyDropdown}>
 									{destinationCompany ? (
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
-											{destinationCompany}
+											{destinationCompany.companyName}
 										</Dropdown.Toggle>
 									) : (
 										<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -318,8 +332,8 @@ export const CreateSHP = () => {
 
 									<Dropdown.Menu>
 										<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
-										{allCompanies.map((companyCode) => (
-											<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+										{allCompanies.map((company) => (
+											<Dropdown.Item eventKey={company.companyCode}>{company.companyName}</Dropdown.Item>
 										))}
 									</Dropdown.Menu>
 								</Dropdown>
@@ -379,7 +393,6 @@ export const CreateSHP = () => {
 											.then( res_shipment => {
 												if ( res_shipment.data ) {
 													setShipmentId(null)
-
 													setWarning(`Shipment ${res_shipment.data.uid} already created!`)
 													setShowScanPopup(false)
 												}
@@ -406,6 +419,12 @@ export const CreateSHP = () => {
 						</div>
 
 						<div style={{ width: "50%", height: "90%" }}>
+							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+								<h3 style={{color: "#252733"}}>Map</h3>
+								{ destinationNode && <Button className="map-info-button" onClick={() => {
+									setShowDestInfo(true)
+								}} >Show Pin Info</Button>}
+							</div>
 							<PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
 							{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 								<div >
@@ -463,7 +482,6 @@ export const CreateSHP = () => {
 												</p>
 											</div>
 										</InfoWindow>}
-										
 										{destinationNode && 
 										<Marker
 											key={`${destinationNode.lat}-${destinationNode.lng}`}
