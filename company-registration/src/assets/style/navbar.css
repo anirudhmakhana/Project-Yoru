@@ -4,6 +4,9 @@
     justify-content: start;
     align-items: center;
     background-color: #2e2e36;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
 }
 
 .navbar-title {
