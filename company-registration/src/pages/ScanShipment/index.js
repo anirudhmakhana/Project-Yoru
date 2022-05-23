@@ -121,6 +121,37 @@ export const ScanSHP = () => {
 		});
 	}, []);
 
+	useEffect( () => {
+		if ( nextNodeRef) {
+			if ( nextCompany ) {
+				NodeDataService.getCompanyNearestNode( nextNodeRef, nextCompany.companyCode, userData.token)
+				.then( result => {
+				
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				setRecommendInfo(null)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			} else  {
+				NodeDataService.getNearestNode( nextNodeRef, userData.token)
+				.then( result => {
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				setRecommendInfo(null)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			}
+		}
+	}, [nextNodeRef])
+
     useEffect( () => {
 		if (shipmentId) {
 			ShipmentService.getShipmentById(shipmentId ,userData.token)
@@ -147,7 +178,7 @@ export const ScanSHP = () => {
 				setShipment(null)
 				console.log(err_shipment)
 			})
-			CompanyService.getAllCompanyCode(userData.token)
+			CompanyService.getAllCompany(userData.token)
 			.then((result) => {
 				setAllCompanies(result.data);
 			})
@@ -202,7 +233,7 @@ export const ScanSHP = () => {
 
 	useEffect(() => {
 		if (nextCompany) {
-			NodeDataService.getActiveNodeByCompany(nextCompany, userData.token)
+			NodeDataService.getActiveNodeByCompany(nextCompany.companyCode, userData.token)
 				.then((result) => {
 					console.log(result.data);
 					// console.log(path)
@@ -226,15 +257,7 @@ export const ScanSHP = () => {
         const latLng = await getLatLng(results[0]);
 		setSearchRef(value)
         setNextNodeRef(latLng);
-		if ( nextCompany ) {
-			console.log(nextCompany)
-			NodeDataService.getCompanyNearestNode( latLng, nextCompany, userData.token)
-			.then( result => {
-			setNextNode(result.data)
-			setShowNextInfo(true)
-			setRecommendInfo(null)})
-			.catch(err => console.log(err))
-		}
+		
 		
 	};
 
@@ -327,7 +350,10 @@ export const ScanSHP = () => {
 								if ( recommend) {
 									NodeDataService.getNodeByCode( recommend, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
+										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+										.then ( res => {
+											setNextCompany(res.data);
+										})
 										setNextNode(res.data)
 										setRecommendInfo("Recommended next node.")
 									})
@@ -345,7 +371,10 @@ export const ScanSHP = () => {
 								else {
 									NodeDataService.getNodeByCode( res_shipment.data.destinationNode, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
+										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+										.then ( res => {
+											setNextCompany(res.data);
+										})
 										setNextNode(res.data)
 										setRecommendInfo("Recommended next node.")
 									})
@@ -413,7 +442,10 @@ export const ScanSHP = () => {
 
 	function handleCompanyDropdown(e) {
 		console.log(e);
-		setNextCompany(e);
+		CompanyService.getCompanyByCode(e, userData.token)
+		.then ( res => {
+			setNextCompany(res.data);
+		})
 		console.log(nextNode);
 		setNextNode(null);
 		setNextNodeStock(0);
@@ -484,7 +516,7 @@ export const ScanSHP = () => {
 									<Dropdown onSelect={handleCompanyDropdown}>
 										{nextCompany ? (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
-												{nextCompany}
+												{nextCompany.companyName}
 											</Dropdown.Toggle>
 										) : (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -494,8 +526,8 @@ export const ScanSHP = () => {
 
 										<Dropdown.Menu>
 											<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
-											{allCompanies.map((companyCode) => (
-												<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+											{allCompanies.map((company) => (
+												<Dropdown.Item eventKey={company.companyCode}>{company.companyName}</Dropdown.Item>
 											))}
 										</Dropdown.Menu>
 									</Dropdown>
@@ -586,7 +618,8 @@ export const ScanSHP = () => {
 										mapContainerStyle={{ width: '100%', height: '100%' }}
 										options={options}
 										onLoad={map => setMapRef(map)}
-										onClick={()=>{}}>
+										onClick={(e) => {setNextNodeRef({lat:e.latLng.lat(), lng:e.latLng.lng()})}}
+										>
 									{directionsResponse ? (
 										directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
 									): null}
