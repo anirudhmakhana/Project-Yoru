@@ -289,9 +289,9 @@ class GraphService {
                 // console.log(dataDate.getMonth(), dataDate.toDateString())
                 adjustedDate.push({x:DateUtils.monthNames[ind]+"", y:data.y})
                 if (ind == 0) {
-                    startDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                    startDate = DateUtils.monthNames[ind]+""
                 } else if (ind == graph_data.length -1 ) {
-                    endDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                    endDate = DateUtils.monthNames[ind]+""
                 }
             }
         })
@@ -300,7 +300,7 @@ class GraphService {
     }
 
     async generateGraph(graphType, graphTimeRange, token, startTime, endTime, companyCode = null, nodeCode = null) {
-        console.log(endTime.toLocaleDateString())
+        // console.log(endTime.toLocaleDateString())
         var timeInterval = []
         var timeRange = null
         var graphData = null
@@ -344,7 +344,7 @@ class GraphService {
                         new Date(endTime.getFullYear(), 0 ).getTime()
             let curDate = new Date()
             if ( endTime.getFullYear() == curDate.getFullYear()) {
-                for ( let i = 1; i <= endTime.getMonth() + 2; i++ ) {
+                for ( let i = 1; i <= endTime.getMonth() + 1; i++ ) {
                     
                     let temp = new Date(endTime.getFullYear(), i) 
                     timeInterval.push(temp.getTime())
@@ -384,7 +384,8 @@ class GraphService {
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
         }
-        // console.log(graphData)
+        
+        console.log(startTime, endTime, graphData)
         var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var total = graphData.adjustedDate[0].y

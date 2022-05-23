@@ -61,6 +61,14 @@ export const OverviewPage = (props) => {
 
 	const handleTimeRangeDropdown = (e) => {
 		setGraphTimeRange(e);
+		setPrimEndDate(new Date())
+
+		if ( e == "custom") {
+			let cur = new Date()
+			setPrimStartDate(new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() - 1))
+		} else {
+			setPrimStartDate(new Date())
+		}
 	};
 
 	useEffect(() => {
@@ -237,13 +245,13 @@ export const OverviewPage = (props) => {
 							<div className="date-picker-container mt-lg-4 mt-md-2 ms-auto">
 								{graphTimeRange === "custom" ? 
 									<>
-										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
+										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
 											<span>To</span>
-										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate}/> 
+										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate} min={new Date(primGraphStartDate.getFullYear(),primGraphStartDate.getMonth(), primGraphStartDate.getDate() + 1)} max={new Date()}/> 
 									</>
-									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
-										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
-											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
+									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
 								}
 								
 								{/* <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>

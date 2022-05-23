@@ -9,12 +9,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Stack from '@mui/material/Stack';
 
-export const ChartDatePicker = ( {date, setDate}) => {
+export const ChartDatePicker = ( {date, setDate, min = undefined, max = undefined}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
             <DatePicker
+                minDate={min}
+                maxDate={max}
                 label="Date"
                 renderInput={(params) => <TextField {...params} />}
                 value={date}
@@ -28,13 +30,15 @@ export const ChartDatePicker = ( {date, setDate}) => {
       );
 }
 
-export const ChartMonthPicker = ({date, setDate}) => {
+export const ChartMonthPicker = ({date, setDate,  min = undefined, max = undefined}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
             <DatePicker
-                views={['year', 'month']}
+                minDate={min}
+                maxDate={max}
+                views={['month','year']}
                 label="Month"
                 renderInput={(params) => <TextField {...params} />}
                 value={date}
@@ -47,12 +51,14 @@ export const ChartMonthPicker = ({date, setDate}) => {
       );
 }
 
-export const ChartYearPicker = ({date, setDate}) => {
+export const ChartYearPicker = ({date, setDate,  min = undefined, max = undefined}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
             <DatePicker
+                minDate={min}
+                maxDate={max}
                 views={['year']}
                 label="Year"
                 renderInput={(params) => <TextField {...params} />}

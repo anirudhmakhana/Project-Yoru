@@ -61,6 +61,14 @@ export const ViewNodePage = () => {
 
     const handleTimeRangeDropdown = (e) => {
         setGraphTimeRange(e)
+        setPrimEndDate(new Date())
+
+		if ( e == "custom") {
+			let cur = new Date()
+			setPrimStartDate(new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() - 1))
+		} else {
+			setPrimStartDate(new Date())
+		}
     };
 
 
@@ -182,16 +190,16 @@ export const ViewNodePage = () => {
                             <p>{primGraphStartDate}</p> :
                             <p>{primGraphStartDate}-{primGraphEndDate}</p>} */}
                             <div className="date-picker-container ms-auto">
-                                {graphTimeRange === "custom" ? 
-                                        <>
-                                            <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
-                                                <span>To</span>
-                                            <ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate}/> 
-                                        </>
-                                        : graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
-                                            : graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate}/>
-                                                : <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
-                                    }
+                            {graphTimeRange === "custom" ? 
+									<>
+										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+											<span>To</span>
+										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate} min={new Date(primGraphStartDate.getFullYear(),primGraphStartDate.getMonth(), primGraphStartDate.getDate() + 1)} max={new Date()}/> 
+									</>
+									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+								}
 							</div>
                             </div>
                             
