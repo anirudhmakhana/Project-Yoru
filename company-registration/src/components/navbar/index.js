@@ -82,7 +82,8 @@ export const Navbar = (props) => {
                     );
                     })}
                     <li className='nav-footer'>
-                        <Link to='/'>
+                        <Link to='/' onClick={() => {
+                            localStorage.clear()}}>
                             <FontAwesomeIcon icon={faLockOpen} />
                             <span>Logout</span>
                         </Link>
