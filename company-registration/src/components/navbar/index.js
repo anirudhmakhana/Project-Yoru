@@ -14,7 +14,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/navbar.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faBars, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState } from "react";
@@ -77,6 +77,12 @@ export const Navbar = (props) => {
                         </li>
                     );
                     })}
+                    <li>
+                        <Link to='/' className='nav-text'>
+                            <FontAwesomeIcon icon={faLockOpen} />
+                            <span>Logout</span>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
             <Routes>
