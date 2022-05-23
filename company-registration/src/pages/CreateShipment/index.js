@@ -429,7 +429,7 @@ export const CreateSHP = () => {
 							{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 								<div >
 
-									<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Next node location" })} />
+									<input className={"add-node-search-bar map-search-bar"} {...getInputProps({ placeholder: "Next node location" })} />
 
 									<div>
 									{loading ? <div>Loading...</div> : null}

@@ -628,7 +628,7 @@ export const ScanSHP = () => {
 								{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 									<div >
 
-										<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Search for next node location" })} />
+										<input className={"add-node-search-bar map-search-bar"} {...getInputProps({ placeholder: "Search for next node location" })} />
 
 										<div>
 										{loading ? <div>Loading...</div> : null}
