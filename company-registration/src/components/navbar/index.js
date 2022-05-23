@@ -28,6 +28,7 @@ import { ScanSHP } from "../../pages/ScanShipment";
 import { navbarAdminData, navbarManagerData, navbarStaffData } from "./navbarData";
 
 import applogo from "../../assets/icons/applogo.png"
+import { AuditTransactionPage } from "../../pages/AuditTransaction";
 
 
 export const Navbar = (props) => {
@@ -111,6 +112,8 @@ export const Navbar = (props) => {
                 <Route path="node" element={<NodeListPage/>}/>
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
                 <Route path="create" element={<CreateSHP/>}/>
+                <Route path="audit" element={<AuditTransactionPage/>}/>
+
 
                 {/* CHANGE TO scan/update/:shipmentId */}
                 <Route path="cancel" element={<CancelSHP/>}/>
