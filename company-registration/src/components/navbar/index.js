@@ -64,10 +64,10 @@ export const Navbar = (props) => {
             </div>
             <nav className={menuCollapse ? 'nav-menu active' : 'nav-menu'}>
                 <ul className='nav-menu-items' onClick={menuCollapseToggle}>
-                    <li className='navbar-toggle'>
-                    <Link to='#' className='menu-bars'>
-                    <FontAwesomeIcon icon={faXmark} onClick={menuCollapseToggle}/>
-                    </Link>
+                    <li className='navbar-toggle' style={{justifyContent: "flex-end"}}>
+                        <Link to='#' className='menu-bars'>
+                            <FontAwesomeIcon icon={faXmark} onClick={menuCollapseToggle}/>
+                        </Link>
                     </li>
                     {sidebarData.map((item, index) => {
                     return (
