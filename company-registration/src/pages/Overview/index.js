@@ -13,10 +13,11 @@ import { LineChart } from "../../components/linechart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import ShipmentService from "../../services/ShipmentService";
 import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
+import { DatePicker } from "../../components/date_picker";
 
 export const OverviewPage = (props) => {
 	const [userData, setUserData] = useState(
@@ -229,6 +230,7 @@ export const OverviewPage = (props) => {
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
+						<DatePicker/>
 						{primGraphEndDate == primGraphStartDate ? (
 							<p>{primGraphStartDate}</p>
 						) : (
