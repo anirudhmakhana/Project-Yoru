@@ -250,7 +250,7 @@ export const OverviewPage = (props) => {
 										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate} min={new Date(primGraphStartDate.getFullYear(),primGraphStartDate.getMonth(), primGraphStartDate.getDate() + 1)} max={new Date()}/> 
 									</>
 									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
-										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker className="monthPicker" date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
 											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
 								}
 								
