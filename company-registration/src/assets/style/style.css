@@ -218,7 +218,6 @@ div.warning{
     border-radius: 16px;
     height: fit-content;
     /* padding: 2% 4% 2% 4%; */
-    overflow-y: auto;
     overflow-x: hidden;
     margin-bottom: 2%;
 }
@@ -381,13 +380,10 @@ div.warning{
 .recommendContainer {
     display: flex;
     flex-direction: column;
-    margin-left: 3%;
     margin-bottom: 2%;
 
     /* border: 1px solid rgb(0, 23, 138); */
-    padding-left: 1%;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding: 1% 0 1% 2%;
     background-color: #ebf8fa;
     border-width: 100%;
     border-radius: 16px;
@@ -406,4 +402,8 @@ div.warning{
     color: white;
     width: 100%;
     margin: 10px 0 15px 0;
+}
+
+.map-search-bar {
+    margin-bottom: 2%;
 }
