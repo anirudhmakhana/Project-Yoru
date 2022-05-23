@@ -164,7 +164,7 @@ export const OverviewPage = (props) => {
 						({stDate}-{enDate})
 					</p>
 				)}
-				<h2 style={{ "margin-top": "10px" }}>{number}</h2>
+				<h2 style={{ "margin-top": "1%" }}>{number}</h2>
 				<p>{additional}</p>
 			</div>
 		);

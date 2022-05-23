@@ -52,7 +52,16 @@
     padding: 2%;
 }
 
+.chart-item span {
+    font-size: 1vw;
+}
+
 .chart-item p {
+    font-size: 1vw;
     margin-bottom: 0;
+}
+
+.chart-item h2 {
+    font-size: 1.2vw;
 }
 
