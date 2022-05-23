@@ -195,7 +195,7 @@ export const OverviewPage = (props) => {
 				<div className="chart-container">
 					<div className="chart-title-container">
 						{/* <h3 className="chart-title">Stocking Shipments</h3> */}
-						<div style={{ display: "flex", "flex-direction": "row" }}>
+						<div style={{ display: "flex", "flex-direction": "row", alignItems: "center"}}>
 							<Dropdown
 								onSelect={handleGraphType}
 								style={{ marginRight: "2%" }}
