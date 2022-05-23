@@ -57,10 +57,4 @@ export const navbarManagerData = [
         icon: <FontAwesomeIcon icon={faAddressBook}/>,
         cName: 'nav-text'
     },
-    {
-        title: 'Logout',
-        path: '/',
-        icon: <FontAwesomeIcon icon={faLockOpen}/>,
-        cName: 'nav-text'
-    },
 ]
