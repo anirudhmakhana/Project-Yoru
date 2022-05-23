@@ -253,6 +253,7 @@ class GraphService {
         var adjustedDate = []
         var startDate = null
         var endDate = null
+        console.log(graph_data)
         graph_data.forEach( (data, ind) => {
             let dataDate = new Date(data.x)
             if (graphTimeRange == "day") {
@@ -297,8 +298,8 @@ class GraphService {
         return {adjustedDate: adjustedDate, startDate:startDate, endDate:endDate}
     }
 
-    async generateGraph(graphType, graphTimeRange, token, companyCode = null, nodeCode = null) {
-        var temp = new Date()
+    async generateGraph(graphType, graphTimeRange, token, startTime, companyCode = null, nodeCode = null) {
+        var temp = startTime
         var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
         var timeInterval = []
         var timeRange = null
@@ -339,7 +340,6 @@ class GraphService {
                 timeInterval.push(temp.getTime())
             }
         }
-        
         if (companyCode ) {
             if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
