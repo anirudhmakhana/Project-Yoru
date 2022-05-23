@@ -9,7 +9,8 @@ import {
     faLocationDot, 
     faAddressBook, 
     faLockOpen, 
-    faCubes 
+    faCubes, 
+    faHistory
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -55,6 +56,12 @@ export const navbarManagerData = [
         title: 'Company & Staff',
         path: '/main/staff-list/',
         icon: <FontAwesomeIcon icon={faAddressBook}/>,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Audit Transaction',
+        path: '/main/audit',
+        icon: <FontAwesomeIcon icon={faHistory}/>,
         cName: 'nav-text'
     },
 ]
