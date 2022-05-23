@@ -610,7 +610,7 @@ export const ScanSHP = () => {
 									</div>
 								)}
 								</PlacesAutocomplete>}
-							<div style={{ width: "100%", height: "40%" }}>
+							<div style={{ width: "100%", height: "60%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
