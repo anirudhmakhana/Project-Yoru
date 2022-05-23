@@ -1,4 +1,3 @@
-import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent } from "react-pro-sidebar";
 import { Routes, Route, Link } from "react-router-dom";
 
 import { OverviewPage } from "../../pages/Overview";
@@ -8,6 +7,15 @@ import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
 import { EditCompanyPage } from "../../pages/EditCompany";
 import { EditStaffPage } from "../../pages/EditStaff";
+import { NodeListPage } from "../../pages/NodeList";
+import { ViewNodePage } from "../../pages/ViewNode";
+import { ViewShipmentPage } from "../../pages/ViewShipment";
+import { CreateSHP } from "../../pages/CreateShipment";
+import { CancelSHP } from "../../pages/CancelShipment";
+import { ScanSHP } from "../../pages/ScanShipment";
+import { CompanyListPage } from "../../pages/CompanyList";
+import { CreateCompanyPage } from "../../pages/CreateCompany"
+import { RegisterAdminPage } from "../../pages/RegisterAdmin"
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/navbar.css";
@@ -17,13 +25,6 @@ import { faXmark, faBars, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
 import { useState, useEffect } from "react";
-
-import { NodeListPage } from "../../pages/NodeList";
-import { ViewNodePage } from "../../pages/ViewNode";
-import { ViewShipmentPage } from "../../pages/ViewShipment";
-import { CreateSHP } from "../../pages/CreateShipment";
-import { CancelSHP } from "../../pages/CancelShipment";
-import { ScanSHP } from "../../pages/ScanShipment";
 
 import { navbarAdminData, navbarManagerData, navbarStaffData } from "./navbarData";
 
@@ -101,6 +102,7 @@ export const Navbar = (props) => {
                 </ul>
             </nav>
             <Routes>
+                {/* For company user */}
                 <Route path="overview" element={<OverviewPage/>}/>
                 <Route path="shipment" element={<ShipmentListPage/>}/>
                 <Route path="shipment/view-shipment/:shipmentId" element={<ViewShipmentPage/>}/>
@@ -113,14 +115,15 @@ export const Navbar = (props) => {
                 <Route path="node/view-node/:nodeCode" element={<ViewNodePage/>}/>
                 <Route path="create" element={<CreateSHP/>}/>
                 <Route path="audit" element={<AuditTransactionPage/>}/>
-
-
-                {/* CHANGE TO scan/update/:shipmentId */}
                 <Route path="cancel" element={<CancelSHP/>}/>
                 <Route path="scan" element={<ScanSHP/>}/>
-
-                {/* Need to improve pages style and may change to other register page */}
-
+                {/* For system admin */}
+                <Route path="company-list" element={<CompanyListPage/>}/>
+                <Route path="create-company" element={<CreateCompanyPage/>}/>
+                <Route path="register-admin" element={<RegisterAdminPage/>}/>
+                <Route path="company-list/edit-company/:companyCode" element={<EditCompanyPage/>}/>
+                <Route path="company-list/add-staff/:companyCode" element={<AddStaffPage/>}/>
+                <Route path="company-list/view-staff/:username" element={<ViewStaffPage/>}/>
             </Routes>
         </>
         
