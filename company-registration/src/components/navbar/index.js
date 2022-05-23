@@ -8,7 +8,6 @@ import { StaffListPage } from "../../pages/StaffList";
 import { ViewStaffPage } from "../../pages/ViewStaff"
 import { EditCompanyPage } from "../../pages/EditCompany";
 import { EditStaffPage } from "../../pages/EditStaff";
-import { useEffect } from "react"
 
 import 'react-pro-sidebar/dist/css/styles.css';
 import "../../assets/style/navbar.css";
@@ -17,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBars, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { NodeListPage } from "../../pages/NodeList";
 import { ViewNodePage } from "../../pages/ViewNode";
@@ -26,14 +25,16 @@ import { CreateSHP } from "../../pages/CreateShipment";
 import { CancelSHP } from "../../pages/CancelShipment";
 import { ScanSHP } from "../../pages/ScanShipment";
 
-import { navbarManagerData } from "./navbarData";
+import { navbarAdminData, navbarManagerData, navbarStaffData } from "./navbarData";
 
 import applogo from "../../assets/icons/applogo.png"
 
 
 export const Navbar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
+    const [userType, setUserType] = useState(localStorage.getItem("userType"))
     const [menuCollapse, setMenuCollapse] = useState(false)
+    const [sidebarData, setSidebarData] = useState([])
     
     // const [activeItemIndex, setActiveItemIndex] = useState(() => {
     //     const initialIndex = 
@@ -53,7 +54,15 @@ export const Navbar = (props) => {
 
     const menuCollapseToggle = () => setMenuCollapse(!menuCollapse);
 
-    const sidebarData = navbarManagerData
+    useEffect(() => {
+        if ( userType === "admin" ) {
+            setSidebarData(navbarAdminData)
+        } else if ( userData.positionLevel === "staff" ){
+            setSidebarData(navbarStaffData)
+        } else if ( userData.positionLevel === "manager" ) {
+            setSidebarData(navbarManagerData)
+        }
+    });
     
     return (
         <>
