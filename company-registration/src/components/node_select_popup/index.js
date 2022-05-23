@@ -13,6 +13,7 @@ import {
 import AsyncSelect  from 'react-select/async';
 import Dropdown from "react-bootstrap/Dropdown";
 import Map from "../map"
+
 import "../../assets/style/popup.css"
 
 const google = window.google
@@ -88,7 +89,7 @@ export function NodeSelectPopup({ setOpenPopup, handleConfirm, handleCancel }) {
       <div className="popupBackground">
         <div className="popupContainer">
           <div className="title">
-            <h1>Please choose your current location.</h1>
+            <h1>Please choose your current location</h1>
           </div>
           <div className="map-container">
             {GoogleMap && isLoaded? (currentNode && allNodes ? (

@@ -141,7 +141,16 @@ export const CancelSHP = () => {
 			ShipmentService.getScanByShipmentId(shipmentId, userData.token)
 			.then( res => {
 				console.log(res.data)
-				setAllScans(res.data)
+				var temp = []
+				for ( let i = 0; i < res.data.length; i++ ) {
+					console.log(res.data[i].status )
+
+					if ( (res.data[i].status == "arrived") && res.data[i - 1].nextNode != res.data[i].scannedAt) {
+						res.data[i].scannedAt = res.data[i].scannedAt + " ##MISMATCHED##"
+					} 
+					temp.push(res.data[i])
+				}
+				setAllScans(temp)
 			})
 			.catch(err => {
 				console.log(err)
@@ -262,7 +271,7 @@ export const CancelSHP = () => {
         <div className="content-main-container">
 			{currentNode ? <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
-           	<div className="detailed-main-container p-lg-4 p-md-2" style={{height: "fit-content"}}>
+           	<div className="detailed-main-container p-lg-4 p-md-2">
            		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container">
@@ -283,7 +292,7 @@ export const CancelSHP = () => {
 								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
 							
-							<div style={{ width: "100%", height: "45vh" }}>
+							<div style={{ width: "100%", height: "60%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
@@ -337,15 +346,15 @@ export const CancelSHP = () => {
 						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
 							<div className='scan-history-container'>
 								<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
-								{ allScans.reverse().map( scan => {
+								{ allScans.map( scan => {
 								return(
 									<div>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
 										{scan.status == "shipping" && 
-											<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+											<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
 										<br/>
 									</div>
 								) 

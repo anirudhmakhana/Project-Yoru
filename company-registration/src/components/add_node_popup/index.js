@@ -214,7 +214,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
 
             ) : null}
 
-          <div className="body">
+          <div className="body mt-4">
             <form >
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company</label>
@@ -237,7 +237,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
                 </form>
           </div>
           
-          <div className="footer">
+          <div className="footer mt-4">
             <Button
               onClick={handleCancel}
               id="cancelBtn"

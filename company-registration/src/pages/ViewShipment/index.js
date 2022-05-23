@@ -78,7 +78,16 @@ export const ViewShipmentPage = () => {
         ShipmentService.getScanByShipmentId(shipmentId, userData.token)
         .then( res => {
             console.log(res.data)
-            setAllScans(res.data)
+            var temp = []
+            for ( let i = 0; i < res.data.length; i++ ) {
+                console.log(res.data[i].status )
+
+                if ( (res.data[i].status == "arrived") && res.data[i - 1].nextNode != res.data[i].scannedAt) {
+                    res.data[i].scannedAt = res.data[i].scannedAt + " ##MISMATCHED##"
+                } 
+                temp.push(res.data[i])
+            }
+            setAllScans(temp)
         })
         .catch(err => {
             console.log(err)
@@ -230,7 +239,8 @@ export const ViewShipmentPage = () => {
                         <div className='scan-history-container' style={{overflow: "visible", width: "50%", justifyContent: "space-between"}}>
                             <h2 style={{'margin-top':'10px','margin-left':'3%'}}>History</h2>
                             <div style={{height: "85%",overflowY: "auto"}}>
-                                { allScans.reverse().map( scan => {
+                                { allScans.map( (scan) => {
+
                                 return(
                                 <div className="scanContainer">
                                     <br/>

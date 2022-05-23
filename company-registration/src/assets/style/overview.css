@@ -26,7 +26,7 @@
 }
 
 .chart-title-container {
-    padding: 3em 0 0 3em;
+    padding: 3% 3% 0 3%;
     text-align: left;
 }
 
@@ -52,7 +52,34 @@
     padding: 2%;
 }
 
+.chart-item span {
+    font-size: 1vw;
+}
+
 .chart-item p {
+    font-size: 1vw;
     margin-bottom: 0;
 }
 
+.chart-item h2 {
+    font-size: 1.2vw;
+}
+
+.date-picker-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: 0;
+}
+
+.date-picker-container span{
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.date-picker-container input[type=text] {
+    border: none;
+    height: auto;
+    width: auto;
+    background: none;
+}

@@ -104,6 +104,16 @@ class ShipmentService {
         
         return response
     }
+
+    async auditTransaction( txnHash, token) {
+        const response = await axios.get(this.shipmentURL + '/audit/' + txnHash, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        console.log(response)
+        
+        return response
+    }
     
     async getShipmentByIdChain( shipmentId, walletPublicKey, token ) { 
         // const response = await axios.get("http://localhost:4010/shipment/" + shipmentId + "/" + walletPublicKey, 
@@ -169,7 +179,9 @@ class ShipmentService {
         .catch( error => {
             throw error
         }) 
+        console.log(response.data)
         response.data = response.data.sort((a,b) => a.scannedTime - b.scannedTime)
+        console.log('sorted', response.data)
         return response
     }
 

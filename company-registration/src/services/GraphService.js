@@ -62,8 +62,8 @@ class GraphService {
 
         ]
 
-        this.graphTimeRange = ['day', 'week','month', 'year']
-        this.xAxisLabel = {week:"Date", month:"Day", year:"Month", day:"Hour"}
+        this.graphTimeRange = ['day', 'month', 'year', 'custom']
+        this.xAxisLabel = {custom:"Date", month:"Date", year:"Month", day:"Hour"}
         this.yAxisLabel = {shipping: "Shipped",stock:"Stock", created: "Created", completed:"Completed"}
         this.graphName = {shipping: "Shipments Shipping",stock:"Stocking Shipments", created:"Created Shipments", completed:"Completed Shipments"}
         this.graphTypes = ['shipping', 'stock', 'created', 'completed']
@@ -253,20 +253,12 @@ class GraphService {
         var adjustedDate = []
         var startDate = null
         var endDate = null
+        console.log(graph_data)
         graph_data.forEach( (data, ind) => {
             let dataDate = new Date(data.x)
             if (graphTimeRange == "day") {
                 let dataDate = new Date(data.x)
                 adjustedDate.push({x:dataDate.getHours()+":00", y:data.y})
-                if (ind == 0) {
-                    startDate = dataDate.toLocaleDateString()
-                } else if (ind == graph_data.length -1 ) {
-                    endDate = dataDate.toLocaleDateString()
-                }
-            }
-            else if (  graphTimeRange == "week") {
-                dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
                 if (ind == 0) {
                     startDate = dataDate.toLocaleDateString()
                 } else if (ind == graph_data.length -1 ) {
@@ -284,12 +276,22 @@ class GraphService {
             }
             else if ( graphTimeRange == "year") {
                 let dataDate = new Date(data.x)
+                console.log(dataDate.getMonth(), dataDate.toLocaleDateString())
                 // console.log(dataDate.getMonth(), dataDate.toDateString())
-                adjustedDate.push({x:DateUtils.monthNames[dataDate.getMonth() - 1]+"", y:data.y})
+                adjustedDate.push({x:DateUtils.monthNames[ind]+"", y:data.y})
                 if (ind == 0) {
-                    startDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                    startDate = DateUtils.monthNames[ind]+""
                 } else if (ind == graph_data.length -1 ) {
-                    endDate = DateUtils.monthNames[dataDate.getMonth() - 1]+""
+                    endDate = DateUtils.monthNames[ind]+""
+                }
+            }
+            else if (  graphTimeRange == "custom") {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                if (ind == 0) {
+                    startDate = dataDate.toLocaleDateString()
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = dataDate.toLocaleDateString()
                 }
             }
         })
@@ -297,49 +299,65 @@ class GraphService {
         return {adjustedDate: adjustedDate, startDate:startDate, endDate:endDate}
     }
 
-    async generateGraph(graphType, graphTimeRange, token, companyCode = null, nodeCode = null) {
-        var temp = new Date()
-        var curDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate())
+    async generateGraph(graphType, graphTimeRange, token, startTime, endTime, companyCode = null, nodeCode = null) {
+        // console.log(endTime.toLocaleDateString())
         var timeInterval = []
         var timeRange = null
         var graphData = null
         if (graphTimeRange == "day") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 1).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0).getTime()
+            timeRange = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), 1).getTime() - 
+                        new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), 0).getTime()
             for ( let i = 0; i <= 23; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), i) 
+                let temp = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), i) 
                 timeInterval.push(temp.getTime())
             }
         }
-        else if ( graphTimeRange == "week") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
-            for ( let i = 0; i <= 6; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - i + 1) 
+        else if ( graphTimeRange == "custom") {
+            let temp = startTime
+            timeRange = new Date(endTime.getFullYear(), endTime.getMonth(), endTime.getDate()).getTime() - 
+                        new Date(endTime.getFullYear(), endTime.getMonth(), endTime.getDate() - 1).getTime()
+            while ( temp.getTime() < endTime.getTime()) {
+                temp = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate() + 1) 
                 timeInterval.push(temp.getTime())
             }
-            timeInterval = timeInterval.reverse()
+            // timeInterval = timeInterval.reverse()
         }
         else if ( graphTimeRange == "month") {
-            timeRange = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate()).getTime() - 
-                        new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate() - 1).getTime()
-            let noOfDays = DateUtils.daysInMonth(curDate.getMonth(), curDate.getFullYear())
+            timeRange = new Date(endTime.getFullYear(), endTime.getMonth(), endTime.getDate()).getTime() - 
+                        new Date(endTime.getFullYear(), endTime.getMonth(), endTime.getDate() - 1).getTime()
+            let noOfDays = DateUtils.daysInMonth(endTime.getMonth(), endTime.getFullYear())
+            
             for ( let i = 0; i <= noOfDays - 1; i++ ) {
-                let temp = new Date(curDate.getFullYear(), curDate.getMonth(), noOfDays - i + 1) 
+                let temp = new Date(endTime.getFullYear(), endTime.getMonth(), noOfDays - i + 1) 
                 timeInterval.push(temp.getTime())
             }
-            timeInterval = timeInterval.reverse().slice(0, curDate.getDate())
+            let curDate = new Date()
+            if ( endTime.getFullYear() == curDate.getFullYear() && endTime.getMonth() == curDate.getMonth()) {
+                timeInterval = timeInterval.reverse().slice(0, endTime.getDate())
+            } else {
+                timeInterval = timeInterval.reverse()
+
+            }
         }
         else if ( graphTimeRange == "year") {
-            timeRange = new Date(curDate.getFullYear(), 1).getTime() - 
-                        new Date(curDate.getFullYear(), 0 ).getTime()
-            // console.log(new Date(2020, 0).toDateString())
-            for ( let i = 1; i <= curDate.getMonth() + 1; i++ ) {
-                let temp = new Date(curDate.getFullYear(), i) 
-                timeInterval.push(temp.getTime())
+            timeRange = new Date(endTime.getFullYear(), 1).getTime() - 
+                        new Date(endTime.getFullYear(), 0 ).getTime()
+            let curDate = new Date()
+            if ( endTime.getFullYear() == curDate.getFullYear()) {
+                for ( let i = 1; i <= endTime.getMonth() + 1; i++ ) {
+                    
+                    let temp = new Date(endTime.getFullYear(), i) 
+                    timeInterval.push(temp.getTime())
+                }
+            } else {
+                for ( let i = 1; i <= 12; i++ ) {
+                    let temp = new Date(endTime.getFullYear(), i) 
+                    timeInterval.push(temp.getTime())
+                }
             }
+            // console.log(new Date(2020, 0).toDateString())
+            
         }
-        
         if (companyCode ) {
             if (timeRange && (graphType == "shipping" || graphType == "created" || graphType == "completed")) {
                 timeInterval.unshift(timeInterval[0] - timeRange)
@@ -366,7 +384,8 @@ class GraphService {
                 graphData = this.adjustGraphTime(res_graph.data, graphTimeRange)
             }
         }
-        // console.log(graphData)
+        
+        console.log(startTime, endTime, graphData)
         var highest = {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var lowest =  {date:graphData.adjustedDate[0].x+'', value: graphData.adjustedDate[0].y}
         var total = graphData.adjustedDate[0].y
