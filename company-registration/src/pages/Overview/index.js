@@ -237,7 +237,7 @@ export const OverviewPage = (props) => {
 							</p>
 						)}
 					</div>
-					<div className="body-chart-container">
+					<div className="body-chart-container p-lg-4 p-md-2">
 						{dateGraphData && (
 							<LineChart
 								chartDataPrim={dateGraphData}
