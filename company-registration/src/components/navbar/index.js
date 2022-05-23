@@ -66,7 +66,7 @@ export const Navbar = (props) => {
             </div>
             <nav className={menuCollapse ? 'nav-menu active' : 'nav-menu'}>
                 <ul className='nav-menu-items' onClick={menuCollapseToggle}>
-                    <li className='navbar-toggle' style={{justifyContent: "flex-end"}}>
+                    <li className='navbar-toggle' style={{justifyContent: "flex-end", marginTop: "5%", marginBottom: "5%"}}>
                         <Link to='#' className='menu-bars'>
                             <FontAwesomeIcon icon={faXmark} onClick={menuCollapseToggle}/>
                         </Link>
