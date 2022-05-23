@@ -1,13 +1,20 @@
 .navbar {
-    height: 80px;
+    height: 7%;
     display: flex;
     justify-content: start;
     align-items: center;
+    background-color: #2e2e36;
+}
 
+.navbar-title {
+    color: white;
+    margin-left: 2%;
+    margin-right: auto;
 }
 
 .menu-bars {
     margin-left: 2rem;
+    margin-right: 2rem;
     font-size: 2rem;
     background: none;
 }
@@ -20,14 +27,14 @@
     justify-content: center;
     position: fixed;
     top: 0;
-    left: -100%;
+    right: -100%;
     transition: 850ms;
     z-index: 101;
 }
 
 .nav-menu.active {
-    left: 0;
-    transition: 350ms;
+    right: 0;
+    transition: 350ms ease-in-out;
 }
 
 .nav-text {
