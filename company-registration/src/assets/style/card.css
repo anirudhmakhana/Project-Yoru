@@ -1,0 +1,27 @@
+.card {
+    overflow: initial;
+    background: #ffffff;
+    width: 18vw;
+    height: 9vw;
+    border-radius: 16px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 200ms ease-in;
+}
+
+.card-title {
+    font-size: 1.5em;
+} 
+
+.card-info {
+    margin-bottom: 0;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+

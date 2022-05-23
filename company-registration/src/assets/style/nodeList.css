@@ -1,0 +1,11 @@
+.node-title-container {
+    justify-content: normal !important;
+}
+
+.node-title-container h1 {
+    margin-right: auto;
+}
+
+.node-title-container .add-node-btn {
+    margin-left: 2%;
+}
