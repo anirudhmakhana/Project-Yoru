@@ -90,7 +90,7 @@ export function CreateCompanyPage(props) {
                 <h2>Create Company</h2>
 
             </div>
-            <div className="detailed-main-container" style={{height: "fit-content"}}>
+            <div className="detailed-main-container p-lg-4 p-md-2" style={{height: "fit-content"}}>
             
 
                 <p>Enter new company information below.</p>
