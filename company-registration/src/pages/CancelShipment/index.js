@@ -283,7 +283,7 @@ export const CancelSHP = () => {
 								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
 							
-							<div style={{ width: "100%", height: "45vh" }}>
+							<div style={{ width: "100%", height: "60%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}

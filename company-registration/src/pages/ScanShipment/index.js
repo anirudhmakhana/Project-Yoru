@@ -502,13 +502,6 @@ export const ScanSHP = () => {
 							<div className="alert alert-info mb-lg-4">
 								{recommendInfo}
 							</div>}
-							{ recommendNode && <div className="recommendContainer">
-								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
-							</div>}
 							{ shipment && newStatus == "shipping" && 
 							<div>
 								<div className="textInputContainerCol mb-lg-4">
@@ -576,7 +569,13 @@ export const ScanSHP = () => {
 								
 							</div>
 							}
-							
+							{ recommendNode && <div className="recommendContainer">
+								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
+							</div>}
 						</div>
 						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
 							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
@@ -611,7 +610,7 @@ export const ScanSHP = () => {
 									</div>
 								)}
 								</PlacesAutocomplete>}
-							<div style={{ width: "100%", height: "40%" }}>
+							<div style={{ width: "100%", height: "60%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
