@@ -17,7 +17,7 @@ import DateUtils from "../../utils/DateUtils";
 import ShipmentService from "../../services/ShipmentService";
 import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
-import { DatePicker } from "../../components/date_picker";
+import { ChartDatePicker } from "../../components/date_picker";
 
 export const OverviewPage = (props) => {
 	const [userData, setUserData] = useState(
@@ -229,17 +229,23 @@ export const OverviewPage = (props) => {
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
 								</Dropdown.Menu>
 							</Dropdown>
+							<div className="date-picker-container mt-lg-4 mt-md-2 ms-auto">
+								<ChartDatePicker/>
+								<span>To</span>
+								<ChartDatePicker/>
+							</div>
 						</div>
-						<DatePicker/>
-						{primGraphEndDate == primGraphStartDate ? (
+						
+						
+						{/* {primGraphEndDate == primGraphStartDate ? (
 							<p>{primGraphStartDate}</p>
 						) : (
 							<p>
 								{primGraphStartDate}-{primGraphEndDate}
 							</p>
-						)}
+						)} */}
 					</div>
-					<div className="body-chart-container p-lg-4 p-md-2">
+					<div className="body-chart-container pt-lg-0 p-lg-4 p-md-2">
 						{dateGraphData && (
 							<LineChart
 								chartDataPrim={dateGraphData}
