@@ -56,9 +56,11 @@ export const Navbar = (props) => {
     return (
         <>
             <div className="navbar">
+                <h1 className="navbar-title">LogiChain</h1>
                 <Link to='#' className='menu-bars'>
                     <FontAwesomeIcon icon={faBars} onClick={menuCollapseToggle}/>
                 </Link>
+                
             </div>
             <nav className={menuCollapse ? 'nav-menu active' : 'nav-menu'}>
                 <ul className='nav-menu-items' onClick={menuCollapseToggle}>
