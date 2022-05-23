@@ -16,24 +16,5 @@ export const MainPage = (props) => {
             <Navbar/>
         </div>
     );
-    // if ( userType == "admin" ) {
-    //     return (
-    //         <div className="mainPageWrapper">
-    //             <AdminSidebar/>
-    //         </div>
-    //     );
-    // } else if (userData.positionLevel == "staff"){
-    //     return (
-    //         <div className="mainPageWrapper">
-    //             <Navbar/>
-    //         </div>
-    //     );
-    // } else if ( userData.positionLevel == "manager") {
-    //     return (
-    //         <div className="mainPageWrapper">
-    //             <Navbar/>
-    //         </div>
-    //     );
-    // }
     
 }
