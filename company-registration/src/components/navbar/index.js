@@ -28,6 +28,8 @@ import { ScanSHP } from "../../pages/ScanShipment";
 
 import { navbarManagerData } from "./navbarData";
 
+import applogo from "../../assets/icons/applogo.png"
+
 
 export const Navbar = (props) => {
     const [userData, setUserData] = useState(eval('('+localStorage.getItem("userData")+')'))
@@ -56,7 +58,7 @@ export const Navbar = (props) => {
     return (
         <>
             <div className="navbar">
-                <h1 className="navbar-title">LogiChain</h1>
+                <img src={applogo} alt="logo" className="navbar-title"/>
                 <Link to='#' className='menu-bars'>
                     <FontAwesomeIcon icon={faBars} onClick={menuCollapseToggle}/>
                 </Link>
@@ -79,8 +81,8 @@ export const Navbar = (props) => {
                         </li>
                     );
                     })}
-                    <li>
-                        <Link to='/' className='nav-text'>
+                    <li className='nav-footer'>
+                        <Link to='/'>
                             <FontAwesomeIcon icon={faLockOpen} />
                             <span>Logout</span>
                         </Link>
