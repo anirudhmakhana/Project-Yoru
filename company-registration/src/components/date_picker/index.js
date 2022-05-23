@@ -8,10 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Stack from '@mui/material/Stack';
 
-export const ChartDatePicker = () => {
-    const [value, setValue] = useState(
-        new Date('2022-01-01')
-    );
+export const ChartDatePicker = ( {date, setDate}) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -19,9 +16,9 @@ export const ChartDatePicker = () => {
             <DatePicker
                 label="Date"
                 renderInput={(params) => <TextField {...params} />}
-                value={value}
+                value={date}
                 onChange={(newValue) => {
-                    setValue(newValue);
+                    setDate(newValue);
                 }}
             />
             </Stack>

@@ -361,6 +361,7 @@ export const ScanSHP = () => {
 									.catch( err=> { 
 										commonDest = null
 									})
+									console.log(commonDest)
 									if ( commonDest) {
 										NodeDataService.getNodeByCode( commonDest, userData.token)
 										.then( async res => {
