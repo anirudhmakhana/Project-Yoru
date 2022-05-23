@@ -219,6 +219,7 @@ div.warning{
     height: fit-content;
     /* padding: 2% 4% 2% 4%; */
     overflow-y: auto;
+    margin-bottom: 2%;
 }
 
 .content-title-container {
