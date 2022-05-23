@@ -62,7 +62,7 @@ class GraphService {
 
         ]
 
-        this.graphTimeRange = ['day', 'custom','month', 'year']
+        this.graphTimeRange = ['day', 'month', 'year', 'custom']
         this.xAxisLabel = {custom:"Date", month:"Date", year:"Month", day:"Hour"}
         this.yAxisLabel = {shipping: "Shipped",stock:"Stock", created: "Created", completed:"Completed"}
         this.graphName = {shipping: "Shipments Shipping",stock:"Stocking Shipments", created:"Created Shipments", completed:"Completed Shipments"}
@@ -265,15 +265,6 @@ class GraphService {
                     endDate = dataDate.toLocaleDateString()
                 }
             }
-            else if (  graphTimeRange == "custom") {
-                dataDate.setDate(dataDate.getDate() - 1)
-                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
-                if (ind == 0) {
-                    startDate = dataDate.toLocaleDateString()
-                } else if (ind == graph_data.length -1 ) {
-                    endDate = dataDate.toLocaleDateString()
-                }
-            }
             else if ( graphTimeRange == "month" ) {
                 dataDate.setDate(dataDate.getDate() - 1)
                 adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
@@ -292,6 +283,15 @@ class GraphService {
                     startDate = DateUtils.monthNames[ind]+""
                 } else if (ind == graph_data.length -1 ) {
                     endDate = DateUtils.monthNames[ind]+""
+                }
+            }
+            else if (  graphTimeRange == "custom") {
+                dataDate.setDate(dataDate.getDate() - 1)
+                adjustedDate.push({x:dataDate.toLocaleDateString(), y:data.y})
+                if (ind == 0) {
+                    startDate = dataDate.toLocaleDateString()
+                } else if (ind == graph_data.length -1 ) {
+                    endDate = dataDate.toLocaleDateString()
                 }
             }
         })
