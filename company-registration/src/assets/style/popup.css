@@ -1,130 +1,152 @@
 .popupBackground {
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(200, 200, 200, 0.8);
-    top: 0;
-    left: 0;
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .popupContainer {
-    z-index: -1;
-    width: 700px;
-    height: 500px;
-    border-radius: 12px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-  }
-  
-  .popupContainer .title {
-    z-index: -1;
-
-    display: inline-block;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1em;
-  }
-  
-  .titleCloseBtn {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .titleCloseBtn button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .popupContainer .body {
-    z-index: -1;
-
-    flex: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    vertical-align:middle;
-  }
-  
-  .popupContainer .footer {
-    flex: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .popupContainer .footer button {
-    width: 150px;
-    height: 45px;
-    margin: 10px;
-    border: none;
-    background-color: #3751FF;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-    p {
-    color: #9FA2B4;
-    margin-bottom: 20px;
-  }
-  #cancelBtn {
-    background-color: #9FA2B4;
-  }
-
-  .dropdown-menu {
-    overflow-y: auto;
-  }
-
-  .map-container {
-    width: 650px;
-    height: 60vh;
-    margin-bottom: 10px;
-    margin-top: 10px; 
-  }
-
-  .add-node-map-container {
-    width: 850px;
-    height: 90vh;
-    margin-bottom: 30px;
-    margin-top: 20px;
-  }
-
-  .add-node-popupContainer {
-    z-index: -1;
-    width: 60%;
-    height: 60%;
-    border-radius: 12px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-  }
-
-  .add-node-search-bar {
-    width: 100%;
-    /* height: 40vh; */
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    display: flex;
-    flex-direction:row;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(200, 200, 200, 0.8);
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.scan-popupContainer {
-  z-index: -1;
-  width: 600px;
-  height: 200px;
+
+.popupContainer {
+  z-index: 1;
+  width: 60%;
+  height: 60%;
   border-radius: 12px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   display: flex;
   flex-direction: column;
+  padding: 2%;
+}
+
+.popupContainer .title {
+  z-index: -1;
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 992px){
+  .title h1 {
+    font-size: 2vw !important;
+  }
+
+  p {
+    font-size: 1.5vw !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .title h1 {
+    font-size: 2.5vw !important;
+  }
+
+  p {
+    font-size: 1.75vw !important;
+  }
+}
+
+.titleCloseBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.titleCloseBtn button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.popupContainer .body {
+  z-index: -1;
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align:middle;
+}
+
+.popupContainer .footer {
+  flex: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popupContainer .footer button {
+  width: 30%;
+  height: 65%;
+  max-width: 175px;
+  max-height: 75px;
+  margin: 10px;
+  border: none;
+  background-color: #3751FF;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+  p {
+  color: #9FA2B4;
+  margin-bottom: 20px;
+}
+#cancelBtn {
+  background-color: #9FA2B4;
+}
+
+.dropdown-menu {
+  overflow-y: auto;
+}
+
+.map-container {
+  width: auto;
+  height: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px; 
+}
+
+.add-node-map-container {
+  width: 100%;
+  height: 70%;
+  margin-bottom: 3%;
+  margin-top: 2%;
+}
+
+.add-node-popupContainer {
+  z-index: -1;
+  width: 60%;
+  height: 70%;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.add-node-search-bar {
+  width: 100%;
+  /* height: 40vh; */
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: flex;
+  flex-direction:row;
+}
+.scan-popupContainer {
+  z-index: -1;
+  width: 40%;
+  height: 20%;
+  max-width: 800px;
+  max-height: 200px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 25px;
 }
