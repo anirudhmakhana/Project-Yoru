@@ -74,7 +74,7 @@ export const Navbar = (props) => {
                     {sidebarData.map((item, index) => {
                     return (
                         <li key={index} className={item.cName}>
-                            <Link to={item.path}>
+                            <Link to={item.title === "Company & Staff" ? item.path + userData.companyCode : item.path}>
                                 {item.icon}
                                 <span>{item.title}</span>
                             </Link>
