@@ -10,6 +10,8 @@
     color: white;
     margin-left: 2%;
     margin-right: auto;
+    height: 40%;
+    width: auto;
 }
 
 .menu-bars {
@@ -17,6 +19,7 @@
     margin-right: 2rem;
     font-size: 2rem;
     background: none;
+    color: white;
 }
 
 .nav-menu {
