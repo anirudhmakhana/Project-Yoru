@@ -6,8 +6,10 @@ import {useNavigate} from "react-router-dom"
 
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
+
 import AdminAccountService from "../../services/AdminAccountService";
-    
+
+import applogo from "../../assets/icons/applogo.png"
 
 export const AdminLoginPage = (props) => {
 
@@ -62,8 +64,9 @@ export const AdminLoginPage = (props) => {
         <div className="backgroundLogin">
             <div className="loginContainer">
                 <div className="startPageContainer">
-                    <div className="logo">
+                    <div className="logo mb-lg-5 mb-md-2">
                         <h3>Admin</h3>
+                        <img src={applogo} alt="logo" className="login-logo"/>
                     </div>
 
                     <h2>Log In to Project Yoru</h2>
