@@ -401,7 +401,7 @@ export const ScanSHP = () => {
 						}
 						 else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
 							newState = "completed"
-						} else if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
+						} else if (res_shipment.data.status == "cancelled" || res_shipment.data.status == "completed") {
 							newState = null
 						}
 						setNewStatus(newState)

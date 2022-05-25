@@ -40,6 +40,7 @@ export class ShipmentTable extends Component {
                     { (this.props.obj.status == "created" || this.props.obj.status == "arrived") && <td>{this.props.obj.status.toUpperCase()} 📦</td>}
                     { (this.props.obj.status == "completed") && <td>{this.props.obj.status.toUpperCase()} ✅ </td>}
                     { (this.props.obj.status == "shipping") && <td>{this.props.obj.status.toUpperCase()} 🚚</td>}
+                    { (this.props.obj.status == "cancelled") && <td>{this.props.obj.status.toUpperCase()} ❌</td>}
 
                     <td>
                         {/* <Link to={'view-staff/'+this.props.obj.username}>

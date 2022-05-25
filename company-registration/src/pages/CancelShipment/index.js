@@ -191,7 +191,7 @@ export const CancelSHP = () => {
 			currentNode: currentNode.nodeCode,
 			destinationNode: shipment.destinationNode,
 			companyCode: shipment.companyCode,
-			status:'cancel',
+			status:'cancelled',
 			scannedTime:new Date().getTime() }
 		ShipmentService.updateShipment(shipmentData, userCompany.walletPublicKey, userData.token )
 		.then(res => {
@@ -221,8 +221,8 @@ export const CancelSHP = () => {
 					if (res_shipment.data) {
 						setShipmentId(res.data.data.uid)
 						setShipment(res_shipment.data)
-						var newState = "cancel"
-						if (res_shipment.data.status == "cancel" || res_shipment.data.status == "completed") {
+						var newState = "cancelled"
+						if (res_shipment.data.status == "cancelled" || res_shipment.data.status == "completed") {
 							newState = null
 						}
 						setNewStatus(newState)

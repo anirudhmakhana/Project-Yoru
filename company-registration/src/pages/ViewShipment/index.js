@@ -207,7 +207,9 @@ export const ViewShipmentPage = () => {
                                 {shipment.status == "shipping" 
                                 ? (<span>🚚 {shipment.uid}</span>) :
                                 ( shipment.status == "completed" ?
-                                <span>✅ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
+                                <span>✅ {shipment.uid}</span> :
+                                shipment.status == "cancelled" ?
+                                <span>❌ {shipment.uid}</span> : <span>📦 {shipment.uid}</span>)}
                                     
                                     
                                     </h2>
