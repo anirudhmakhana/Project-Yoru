@@ -28,7 +28,7 @@ import { useState, useEffect } from "react";
 
 import { navbarAdminData, navbarManagerData, navbarStaffData } from "./navbarData";
 
-import applogo from "../../assets/icons/applogo.png"
+import applogo_w from "../../assets/icons/applogo_w.png"
 import { AuditTransactionPage } from "../../pages/AuditTransaction";
 
 
@@ -69,7 +69,7 @@ export const Navbar = (props) => {
     return (
         <>
             <div className="navbar">
-                <img src={applogo} alt="logo" className="navbar-title"/>
+                <img src={applogo_w} alt="logo" className="navbar-title"/>
                 <Link to='#' className='menu-bars'>
                     <FontAwesomeIcon icon={faBars} onClick={menuCollapseToggle}/>
                 </Link>
