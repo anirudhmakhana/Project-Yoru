@@ -136,7 +136,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
       <div className="popupBackground">
         <div className="add-node-popupContainer">
           <div className="title">
-            <h1>Please choose your node location.</h1>
+            <h1>Add new node</h1>
           </div>
           { warning &&
                  <div className="alert alert-danger">
