@@ -6,12 +6,12 @@ class RfidService {
 
 
     async makeScan() { 
-        // const response = await axios.get(rfidURL)
-        // .catch((error) => {
-        //     throw error
-        // })
-        // return response
-        return {data:{statusCode:200, data:{uid:'SHP004'}}}
+        const response = await axios.get(rfidURL)
+        .catch((error) => {
+            throw error
+        })
+        return response
+        // return {data:{statusCode:200, data:{uid:'SHP004'}}}
     }
 
 }

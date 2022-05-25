@@ -20,7 +20,7 @@
 .menu-bars {
     margin-left: 2rem;
     margin-right: 2rem;
-    font-size: 2rem;
+    font-size: 1.75vw;
     background: none;
     color: white;
 }
@@ -54,10 +54,20 @@
     margin-bottom: 5%;
 }
 
+@media screen and (max-width: 992px) {
+    .nav-text a {
+        font-size: 0.85vw;
+    }
+}
+@media screen and (max-width: 820px) {
+    .nav-text a {
+        font-size: calc(0.85vw + 0.75vh);
+    }
+}
+
 .nav-text a {
     text-decoration: none;
     color: #A4A6B3;
-    font-size: 18px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -106,7 +116,7 @@ span {
 .nav-footer a {
     text-decoration: none;
     color: #A4A6B3;
-    font-size: 1.2rem;
+    font-size: 0.85vw;
 }
 
 .nav-footer a:hover {

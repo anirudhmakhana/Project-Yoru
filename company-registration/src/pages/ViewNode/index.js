@@ -189,7 +189,7 @@ export const ViewNodePage = () => {
                             {/* {primGraphEndDate == primGraphStartDate ? 
                             <p>{primGraphStartDate}</p> :
                             <p>{primGraphStartDate}-{primGraphEndDate}</p>} */}
-                            <div className="date-picker-container ms-auto">
+                            <div className="date-picker-container ms-auto me-lg-4 me-md-2">
                             {graphTimeRange === "custom" ? 
 									<>
 										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
