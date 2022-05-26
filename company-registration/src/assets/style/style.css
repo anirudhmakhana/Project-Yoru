@@ -25,6 +25,11 @@ form {
     width: 100%;
 }
 
+.textInputContainerRow {
+    display: flex;
+    flex-direction: row;
+}
+
 .textInputContainerCol {
     display: flex;
     flex-direction: column;
