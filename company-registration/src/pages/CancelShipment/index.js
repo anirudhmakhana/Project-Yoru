@@ -26,6 +26,7 @@ import { getOverlayDirection } from "react-bootstrap/esm/helpers";
 
 import RfidService from "../../services/RfidService";
 import { ScanPopup } from "../../components/scan_popup";
+import { RfidUrlPopup } from "../../components/rfid_url_popup";
 
 const google = window.google;
 
@@ -48,7 +49,8 @@ export const CancelSHP = () => {
 	const [updateInfo, setUpdateInfo] = useState(null)
 	const [newStatus, setNewStatus] = useState(null)
 	const [shipmentCurNode, setShipmentCurNode] = useState(null)
-
+	const [rfidUrl, setRfidUrl] = useState('')
+	const [urlPopup, setUrlPopup] = useState(false)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -93,7 +95,9 @@ export const CancelSHP = () => {
 	useEffect(() => {
 		if ( eval('('+localStorage.getItem("currentNode")+')')) {
             setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
-
+        }
+		if ( localStorage.getItem("rfidUrl")) {
+            setRfidUrl(localStorage.getItem("rfidUrl"))
         }
 		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
 		.then((result) => {
@@ -172,6 +176,18 @@ export const CancelSHP = () => {
         setNodePopup(false)
     }
 
+	function handleUrlPopupConfirm(newUrl) {
+        localStorage.setItem("rfidUrl", newUrl)
+		setRfidUrl(newUrl)
+        setUrlPopup(false)
+
+    }
+    
+    function handleUrlPopupCancel() {
+        console.log(localStorage)
+        setUrlPopup(false)
+    }
+
     function handleEditProfConfirm(newProfile) {
         localStorage.setItem("userData", JSON.stringify(newProfile))
         setUserData(eval('('+localStorage.getItem("userData")+')'))
@@ -211,8 +227,11 @@ export const CancelSHP = () => {
 	}
 
 	function handleScan() {
+		if (rfidUrl) {
+
+		
 		setShowScanPopup(true)
-		RfidService.makeScan()
+		RfidService.makeScan(rfidUrl)
 		.then ( res => {
 			if (res.data.statusCode == 200) {
 				ShipmentService.getShipmentById( res.data.data.uid, userData.token)
@@ -264,12 +283,14 @@ export const CancelSHP = () => {
 		})
 		.catch(error => {
 			console.log(error)
-			
 		})
+		} else {
+			setWarning("Please enter RFID scan API URL!")
+		}
 	}
     return (
         <div className="content-main-container">
-			{currentNode ? <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			{currentNode ? <Titlebar pageTitle="Cancel Shipment" setExtUrlPopup={setUrlPopup} setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Cancel Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
            	<div className="detailed-main-container p-lg-4 p-md-2">
            		<form onSubmit={ () => {} }>
@@ -380,6 +401,8 @@ export const CancelSHP = () => {
 			{ showScanPopup && <ScanPopup setOpenPopup={setShowScanPopup}/>}
             { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
-        </div>
+			{ urlPopup && <RfidUrlPopup setOpenPopup={setEditProfPopup} handleConfirm={handleUrlPopupConfirm} handleCancel={handleUrlPopupCancel} />}
+
+		</div>
     );
 }

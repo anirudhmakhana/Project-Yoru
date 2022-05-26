@@ -29,6 +29,7 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng
   } from "react-places-autocomplete";
+import { RfidUrlPopup } from "../../components/rfid_url_popup";
 const google = window.google;
 
 export const CreateSHP = () => {
@@ -37,7 +38,8 @@ export const CreateSHP = () => {
 		eval("(" + localStorage.getItem("userData") + ")")
 	);
 	const [userCompany, setUserCompany] = useState(null)
-
+	const [rfidUrl, setRfidUrl] = useState('')
+	const [urlPopup, setUrlPopup] = useState(false)
 	const [warning, setWarning] = useState(null)
 	const [nodePopup, setNodePopup] = useState(false);
     const [editProfPopup, setEditProfPopup] = useState(false);
@@ -94,6 +96,9 @@ export const CreateSHP = () => {
 		if ( eval('('+localStorage.getItem("currentNode")+')')) {
             setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
 			setProducer(eval("(" + localStorage.getItem("currentNode") + ")").companyCode)
+        }
+		if ( localStorage.getItem("rfidUrl")) {
+            setRfidUrl(localStorage.getItem("rfidUrl"))
         }
 		CompanyService.getAllCompany(userData.token)
 			.then((result) => {
@@ -228,6 +233,19 @@ export const CreateSHP = () => {
 
     }
 
+	function handleUrlPopupConfirm(newUrl) {
+        localStorage.setItem("rfidUrl", newUrl)
+		setRfidUrl(newUrl)
+        setUrlPopup(false)
+
+    }
+    
+    function handleUrlPopupCancel() {
+        console.log(localStorage)
+        setUrlPopup(false)
+    }
+
+
 	async function handleSearchSelect(value) {
         const results = await geocodeByAddress(value);
         const latLng = await getLatLng(results[0]);
@@ -292,7 +310,7 @@ export const CreateSHP = () => {
 
 	return (
 		<div className="content-main-container">
-			{currentNode ? <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			{currentNode ? <Titlebar pageTitle="Create Shipment" setExtUrlPopup={setUrlPopup} setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Create Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
 			<div className="detailed-main-container p-lg-4 p-md-2" style={{overflowY: "auto", height: "fit-content"}}>
 				<form onSubmit={ () => {} }>
@@ -383,8 +401,10 @@ export const CreateSHP = () => {
 								<label className="inputLabel">Shipment ID: {shipmentId}</label>
 								<label className="inputLabel">Scan RFID tag</label>
 								<Button className="universal-button" onClick={() => {
+									if ( rfidUrl ){
+
 									setShowScanPopup(true)
-									RfidService.makeScan()
+									RfidService.makeScan(rfidUrl)
 									.then ( res => {
 										console.log(res)
 										if (res.data.statusCode == 200) {
@@ -414,6 +434,9 @@ export const CreateSHP = () => {
 									.catch( err => {
 										console.log(err)
 									})
+								} else {
+									setWarning("Please enter RFID scan API URL!")
+								}
 								}} >Scan</Button>
 							</div>
 						</div>
@@ -535,6 +558,8 @@ export const CreateSHP = () => {
 			{ showScanPopup && <ScanPopup setOpenPopup={setShowScanPopup}/>}
 			{ nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
+			{ urlPopup && <RfidUrlPopup setOpenPopup={setEditProfPopup} handleConfirm={handleUrlPopupConfirm} handleCancel={handleUrlPopupCancel} />}
+
 		</div>
 	);
 

@@ -107,6 +107,12 @@ class StringValidator {
             return "Please enter shipment description."
         }
     }
+
+    validateRfidUrl = (description) => {
+        if ( description.length < 1) {
+            return "Please enter API Url."
+        }
+    }
 }
 
 export default new StringValidator()

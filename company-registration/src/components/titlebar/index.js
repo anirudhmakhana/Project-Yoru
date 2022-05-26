@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { EditProfilePopup } from "../edit_profile_popup";
 
-export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCode}) => {
+export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, setExtUrlPopup, extNodeCode}) => {
     const [currentNodeCode, setCurrentNodeCode] = useState(null)
     const [nodePopup, setNodePopup] = useState(false);
     const [profPopup, setProfPopup] = useState(false);
@@ -52,6 +52,12 @@ export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCo
             <h1>{pageTitle}</h1>
 
             <div>
+                { setExtUrlPopup &&
+                    <button onClick={() => setExtUrlPopup(true)} className="node-select-button">
+                        <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit RFID API
+                    </button>
+                    }
+
                 { setExtNodePopup ? (
                     extNodeCode ? 
                     <button onClick={() => setExtNodePopup(true)} className="node-select-button">
@@ -74,6 +80,8 @@ export const Titlebar = ({pageTitle, setExtNodePopup, setExtProfPopup, extNodeCo
                 <button onClick={() => setProfPopup(true)} className="node-select-button">
                     <FontAwesomeIcon icon={faPen} className="node-select-icon"/>Edit Profile
                 </button>}
+
+
             </div>
             
             

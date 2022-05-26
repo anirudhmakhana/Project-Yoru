@@ -31,6 +31,7 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng
   } from "react-places-autocomplete";
+import { RfidUrlPopup } from "../../components/rfid_url_popup";
 
 const google = window.google;
 
@@ -46,7 +47,6 @@ export const ScanSHP = () => {
 	const [currentNode, setCurrentNode] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [warning, setWarning] = useState(null)
-
     const [showInfo, setShowInfo] = useState(true)
 	const [showScanPopup, setShowScanPopup] = useState(false)
 	const [allScans, setAllScans] = useState([])
@@ -66,6 +66,8 @@ export const ScanSHP = () => {
 	const [companyNodes, setCompanyNodes] = useState([]);
 	const [recommendNext, setRecommendNext] = useState(null)
 	const [falseShipAlert, setFalseShipAlert] = useState(null)
+	const [rfidUrl, setRfidUrl] = useState('')
+	const [urlPopup, setUrlPopup] = useState(false)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -109,7 +111,10 @@ export const ScanSHP = () => {
 	useEffect(() => {
 		if ( eval('('+localStorage.getItem("currentNode")+')')) {
             setCurrentNode(eval('('+localStorage.getItem("currentNode")+')'))
+        }
 
+		if ( localStorage.getItem("rfidUrl")) {
+            setRfidUrl(localStorage.getItem("rfidUrl"))
         }
 		CompanyService.getCompanyByCode(userData.companyCode, userData.token)
 		.then((result) => {
@@ -119,6 +124,7 @@ export const ScanSHP = () => {
 			setShipment(null);
 			console.log(err_company);
 		});
+
 	}, []);
 
 	useEffect( () => {
@@ -264,8 +270,6 @@ export const ScanSHP = () => {
         const latLng = await getLatLng(results[0]);
 		setSearchRef(value)
         setNextNodeRef(latLng);
-		
-		
 	};
 
 	function handleNodePopupConfirm(newCurrentNode) {
@@ -279,6 +283,18 @@ export const ScanSHP = () => {
     function handleNodePopupCancel() {
         console.log(localStorage)
         setNodePopup(false)
+    }
+
+	function handleUrlPopupConfirm(newUrl) {
+        localStorage.setItem("rfidUrl", newUrl)
+		setRfidUrl(newUrl)
+        setUrlPopup(false)
+
+    }
+    
+    function handleUrlPopupCancel() {
+        console.log(localStorage)
+        setUrlPopup(false)
     }
 
     function handleEditProfConfirm(newProfile) {
@@ -332,135 +348,138 @@ export const ScanSHP = () => {
 	}
 
 	function handleScan() {
-		setShowScanPopup(true)
-		RfidService.makeScan()
-		.then ( res => {
-			if (res.data.statusCode == 200) {
-				setShipmentId(res.data.data.uid)
+		if ( rfidUrl ){
+			setShowScanPopup(true)
+			RfidService.makeScan(rfidUrl)
+			.then ( res => {
+				if (res.data.statusCode == 200) {
+					setShipmentId(res.data.data.uid)
 
-				ShipmentService.getShipmentById( res.data.data.uid, userData.token)
-				.then( async res_shipment => {
-					console.log(currentNode)
-					var incorrectCurNode = false
-					if (res_shipment.data) {
-						setShipment(res_shipment.data)
-						var newState = "arrived"
-						if ((res_shipment.data.status == "created" || res_shipment.data.status == "arrived") ) {
-							if ( currentNode.nodeCode != res_shipment.data.currentNode) {
-								incorrectCurNode = true
-								newState = null
-							} else{
-								newState = "shipping"
-								var recommend = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
-								.catch( err=> { 
-									recommend = null
-								})
-								if ( recommend) {
-									NodeDataService.getNodeByCode( recommend, userData.token)
-									.then( async res => {
-										
-										setRecommendNext(res.data)
-										var commonDest = await NodeRecommender.recommendCommonDest(res_shipment.data, userData.token)
-										.catch( err=> { 
-											commonDest = null
-										})
-										console.log(commonDest)
-										if ( commonDest) {
-											NodeDataService.getNodeByCode( commonDest, userData.token)
-											.then( async res_common => {
-												setCommonDestNode(res_common.data)
-											})
-										} else {
-											CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
-											.then ( res => {
-												setNextCompany(res.data);
-											})
-											setNextNode(res.data)
-										}
+					ShipmentService.getShipmentById( res.data.data.uid, userData.token)
+					.then( async res_shipment => {
+						console.log(currentNode)
+						var incorrectCurNode = false
+						if (res_shipment.data) {
+							setShipment(res_shipment.data)
+							var newState = "arrived"
+							if ((res_shipment.data.status == "created" || res_shipment.data.status == "arrived") ) {
+								if ( currentNode.nodeCode != res_shipment.data.currentNode) {
+									incorrectCurNode = true
+									newState = null
+								} else{
+									newState = "shipping"
+									var recommend = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
+									.catch( err=> { 
+										recommend = null
 									})
+									if ( recommend) {
+										NodeDataService.getNodeByCode( recommend, userData.token)
+										.then( async res => {
+											
+											setRecommendNext(res.data)
+											var commonDest = await NodeRecommender.recommendCommonDest(res_shipment.data, userData.token)
+											.catch( err=> { 
+												commonDest = null
+											})
+											console.log(commonDest)
+											if ( commonDest) {
+												NodeDataService.getNodeByCode( commonDest, userData.token)
+												.then( async res_common => {
+													setCommonDestNode(res_common.data)
+												})
+											} else {
+												CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+												.then ( res => {
+													setNextCompany(res.data);
+												})
+												setNextNode(res.data)
+											}
+										})
+										
+									}
+									else {
+										NodeDataService.getNodeByCode( res_shipment.data.destinationNode, userData.token)
+										.then( async res => {
+											CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+											.then ( res_comp => {
+												setNextCompany(res_comp.data);
+											})
+											setRecommendNext(res.data)
+											setNextNode(res.data)
+										})
+
+									}
 									
 								}
-								else {
-									NodeDataService.getNodeByCode( res_shipment.data.destinationNode, userData.token)
-									.then( async res => {
-										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
-										.then ( res_comp => {
-											setNextCompany(res_comp.data);
-										})
-										setRecommendNext(res.data)
-										setNextNode(res.data)
-									})
-
-								}
-								
 							}
-						}
-						else if ( res_shipment.data.status == "shipping" && res_shipment.data.currentNode == currentNode.nodeCode) {
-							incorrectCurNode = true
-							newState = null
-						}
-						 else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
-							newState = "completed"
-						} else if (res_shipment.data.status == "cancelled" || res_shipment.data.status == "completed") {
-							newState = null
-						}
-						setNewStatus(newState)
-						
-						if (newState) {
-							if ( newState == "arrived" && currentNode.nodeCode != res_shipment.data.nextNode) {
-								setFalseShipAlert(`Your shipment should be arrived at ${res_shipment.data.nextNode}!`)
-							} else {
-								setFalseShipAlert(null)
-							}		
-							setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
-							setWarning(null)
+							else if ( res_shipment.data.status == "shipping" && res_shipment.data.currentNode == currentNode.nodeCode) {
+								incorrectCurNode = true
+								newState = null
+							}
+							else if (res_shipment.data.status == "shipping" && res_shipment.data.destinationNode == currentNode.nodeCode) {
+								newState = "completed"
+							} else if (res_shipment.data.status == "cancelled" || res_shipment.data.status == "completed") {
+								newState = null
+							}
+							setNewStatus(newState)
 							
-							setShowScanPopup(false)
-						}
-						else if (incorrectCurNode) {
-							setUpdateInfo(null)
-							setShipment(null)
-							setWarning("Current node not matched or already checked out from this node. Please check your current node!")
-							setShowScanPopup(false)
-							setFalseShipAlert(null)
+							if (newState) {
+								if ( newState == "arrived" && currentNode.nodeCode != res_shipment.data.nextNode) {
+									setFalseShipAlert(`Your shipment should be arrived at ${res_shipment.data.nextNode}!`)
+								} else {
+									setFalseShipAlert(null)
+								}		
+								setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
+								setWarning(null)
+								
+								setShowScanPopup(false)
+							}
+							else if (incorrectCurNode) {
+								setUpdateInfo(null)
+								setShipment(null)
+								setWarning("Current node not matched or already checked out from this node. Please check your current node!")
+								setShowScanPopup(false)
+								setFalseShipAlert(null)
 
+							} else {
+								setUpdateInfo(null)
+								setShipment(null)
+								setWarning("Cancelled or completed shipment cannot be updated!")
+								setShowScanPopup(false)
+								setFalseShipAlert(null)
+
+							}
 						} else {
 							setUpdateInfo(null)
-							setShipment(null)
-							setWarning("Cancelled or completed shipment cannot be updated!")
-							setShowScanPopup(false)
 							setFalseShipAlert(null)
-
+							setShipmentId(null)
+							setShipment(null)
+							setWarning("Shipment not found!")
+							setShowScanPopup(false)
 						}
-					} else {
-						setUpdateInfo(null)
-						setFalseShipAlert(null)
+					})
+					.catch(err => {
 						setShipmentId(null)
 						setShipment(null)
 						setWarning("Shipment not found!")
 						setShowScanPopup(false)
-					}
-				})
-				.catch(err => {
+						
+					})
+				}
+				else if (res.data.statusCode == 300) {
 					setShipmentId(null)
 					setShipment(null)
-					setWarning("Shipment not found!")
-					setShowScanPopup(false)
-					
-				})
-			}
-			else if (res.data.statusCode == 300) {
-				setShipmentId(null)
-				setShipment(null)
-				setWarning("Scanning timeout! Please try again.")
-				setShowScanPopup(false)
-				
-			}
-		})
-		.catch(error => {
-			console.log(error)
-			
-		})
+					setWarning("Scanning timeout! Please try again.")
+					setShowScanPopup(false)				
+				}
+			})
+			.catch(error => {
+				console.log(error)				
+			})
+		}
+		else {
+			setWarning("Please enter RFID scan API URL!")
+		}
 	}
 
 	function handleCompanyDropdown(e) {
@@ -496,7 +515,7 @@ export const ScanSHP = () => {
 
     return (
         <div className="content-main-container">
-			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
+			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtUrlPopup={setUrlPopup} setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
 			<div className="detailed-main-container p-lg-4 p-md-2">
            		<form onSubmit={ () => {} }>
@@ -799,6 +818,8 @@ export const ScanSHP = () => {
 			{ showScanPopup && <ScanPopup setOpenPopup={setShowScanPopup}/>}
             { nodePopup && <NodeSelectPopup setOpenPopup={setNodePopup} handleConfirm={handleNodePopupConfirm} handleCancel={handleNodePopupCancel} />}
             { editProfPopup && <EditProfilePopup setOpenPopup={setEditProfPopup} handleConfirm={handleEditProfConfirm} handleCancel={handleEditProfCancel} />}
-        </div>
+			{ urlPopup && <RfidUrlPopup setOpenPopup={setEditProfPopup} handleConfirm={handleUrlPopupConfirm} handleCancel={handleUrlPopupCancel} />}
+
+	    </div>
     );
 }

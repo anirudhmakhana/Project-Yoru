@@ -1,9 +1,8 @@
 import axios from "axios";
-import { rfidURL } from "../utils/ApiUrl";
 
 class RfidService {
-	async makeScan() {
-		const response = await axios.get(rfidURL).catch((error) => {
+	async makeScan(rfidURL) {
+		const response = await axios.get(rfidURL + '/radioData').catch((error) => {
 			throw error;
 		});
 		return response;
