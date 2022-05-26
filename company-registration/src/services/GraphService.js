@@ -65,7 +65,7 @@ class GraphService {
         this.graphTimeRange = ['day', 'month', 'year', 'custom']
         this.xAxisLabel = {custom:"Date", month:"Date", year:"Month", day:"Hour"}
         this.yAxisLabel = {shipping: "Shipped",stock:"Stock", created: "Created", completed:"Completed"}
-        this.graphName = {shipping: "Shipments Shipping",stock:"Stocking Shipments", created:"Created Shipments", completed:"Completed Shipments"}
+        this.graphName = {shipping: "Shipping Shipments",stock:"In-Stock Shipments", created:"Created Shipments", completed:"Completed Shipments"}
         this.graphTypes = ['shipping', 'stock', 'created', 'completed']
     }
 
