@@ -1,2 +1,4 @@
-export const serverBasedURL = "http://localhost:4000";
-export const rfidURL = 'http://17cd-2001-fb1-ff-d847-f401-1d3a-fd3d-fa2c.ngrok.io/radioData';
+export const serverBasedURL =
+	"https://6351-2001-fb1-fc-cd00-d42c-d526-ec9b-fa24.ap.ngrok.io/";
+export const rfidURL =
+	"http://2b8e-2001-fb1-fc-cd00-acaf-fc83-1864-2f66.ngrok.io/radioData";

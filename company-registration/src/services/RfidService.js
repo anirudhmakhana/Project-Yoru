@@ -2,11 +2,6 @@ import axios from "axios";
 import { rfidURL } from "../utils/ApiUrl";
 
 class RfidService {
-	constructor() {
-		this.scanUrl =
-			"http://17cd-2001-fb1-ff-d847-f401-1d3a-fd3d-fa2c.ngrok.io/radioData";
-	}
-
 	async makeScan() {
 		const response = await axios.get(rfidURL).catch((error) => {
 			throw error;
