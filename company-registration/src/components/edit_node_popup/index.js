@@ -29,7 +29,8 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
     const [nodeRef, setNodeRef] = useState('')
     const [selectPosition, setSelectPosition] = useState(null)
     const [mapRef, setMapRef] = React.useState(/** @type google.maps.Map */(null));
-    const [nodeCode, setNodeCode] = useState(initNodeCode)
+    const [newNodeCode, setNewNodeCode] = useState(initNodeCode)
+    const [nodeCode, setNodeCode] = useState(''+initNodeCode)
     const [address, setAddress] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [status, setStatus] = useState("active")
@@ -49,7 +50,7 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
 
     useEffect(() => {
         setCompanyCode(userData.companyCode)
-        NodeDataService.getNodeByCode(nodeCode, userData.token)
+        NodeDataService.getNodeByCode(newNodeCode, userData.token)
         .then( res => {
             setSelectPosition({lat:res.data.lat, lng:res.data.lng})
             setAddress(res.data.address)
@@ -60,7 +61,7 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
 
 
     function handleConfirm(currentNode) {
-        var invalidCode = StringValidator.validateNodeCode(nodeCode);
+        var invalidCode = StringValidator.validateNodeCode(newNodeCode);
         var invalidAddress = StringValidator.validateAddress(address);
         var invalidPhone = StringValidator.validatePhoneNumber(phoneNumber);
         
@@ -78,9 +79,10 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
         }
         
         else {
+            console.log(nodeCode, newNodeCode)
             const newNode = {
                 companyCode: companyCode,
-                nodeCode: nodeCode,
+                nodeCode: newNodeCode,
                 address: address,
                 phoneNumber: phoneNumber,
                 lat: selectPosition.lat,
@@ -89,10 +91,10 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
             }
             console.log(newNode)
             
-            NodeDataService.updateNode(initNodeCode, newNode, userData.token)
+            NodeDataService.updateNode(nodeCode, newNode, userData.token)
             .then( res =>{
                 setWarning(null)
-                setNodeCode("")
+                setNewNodeCode("")
                 setSelectPosition(null)
                 setAddress("")
                 setPhoneNumber("")
@@ -120,7 +122,7 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
     }
 
     function handleChangeNodeCode(e) {
-        setNodeCode(e.target.value)
+        setNewNodeCode(e.target.value)
     }
 
     function handleChangePhone(e) {
@@ -230,7 +232,7 @@ export function EditNodePopup({ setOpenPopup, initNodeCode, updateTable }) {
                     
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="nodeCode">Node Code</label>
-                        <input type="text" id="nodeCode" name="nodeCode" placeholder="e.g. LKB-001" value={nodeCode} onChange={handleChangeNodeCode}></input>
+                        <input type="text" id="nodeCode" name="nodeCode" placeholder="e.g. LKB-001" value={newNodeCode} onChange={handleChangeNodeCode} disabled></input>
                     </div>
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="address">Address</label>
