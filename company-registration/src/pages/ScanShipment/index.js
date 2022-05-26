@@ -756,7 +756,7 @@ export const ScanSHP = () => {
 									 </GoogleMap>}
 							</div>
 							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%"}}>Update History</h3>
-							<div className='scan-history-container' style={{marginLeft: "3%", height: "40%"}}>
+							<div className='scan-history-container' style={{height: "40%"}}>
 								{ allScans.map( (scan) => {
 									return(
 										
