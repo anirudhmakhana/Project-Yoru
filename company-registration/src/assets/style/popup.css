@@ -12,8 +12,10 @@
 
 .popupContainer {
   z-index: 1;
-  width: 60%;
-  height: 60%;
+  width: 40%;
+  height: 70%;
+  min-width: 550px;
+  min-height: 650px;
   border-radius: 12px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -62,7 +64,6 @@
 
 .popupContainer .body {
   z-index: -1;
-  flex: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +82,7 @@
   width: 30%;
   height: 65%;
   max-width: 175px;
-  max-height: 75px;
+  max-height: 45px;
   margin: 10px;
   border: none;
   background-color: #3751FF;
@@ -118,7 +119,8 @@
 .add-node-popupContainer {
   z-index: -1;
   width: 60%;
-  height: 70%;
+  height: 80%;
+  max-width: 900px;
   border-radius: 12px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -149,4 +151,8 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 25px;
+}
+
+.w-100 {
+  width: 100%;
 }

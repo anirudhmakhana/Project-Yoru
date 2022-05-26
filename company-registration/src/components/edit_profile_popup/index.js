@@ -79,7 +79,7 @@ export const EditProfilePopup = ({setOpenPopup, handleConfirm, handleCancel }) =
     return (
         
         <div className="popupBackground">
-            <div className="startPageContainer">
+            <div className="startPageContainer p-lg-3 p-md-1">
 
                 <div className="logo">
                     <h3 className="h3-logo">Edit Account</h3>
