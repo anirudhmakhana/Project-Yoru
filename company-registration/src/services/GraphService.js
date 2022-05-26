@@ -81,6 +81,18 @@ class GraphService {
 
         return count
     }
+
+    getCountShipmentAtTimeInterval( shipments, lowerBound, upperBound ){
+        var count = 0
+        shipments.forEach( s => {
+            if ( s.scannedTime >= lowerBound && s.scannedTime <= upperBound ){
+                count += 1
+            }
+            
+        })
+
+        return count
+    }
     
 
     async getNodeStockByTime( nodeCode, timeInterval, token) {
@@ -179,7 +191,7 @@ class GraphService {
                     let date = new Date(tPlus1)
     
                     // console.log( date.toLocaleDateString(), this.getCountShipmentAtTime(stock, t), this.getCountShipmentAtTime(shipped, t))
-                    let temp = {x:date.getTime(), y:this.getCountShipmentAtTime(shipped, tPlus1) - this.getCountShipmentAtTime(shipped, t) }
+                    let temp = {x:date.getTime(), y:this.getCountShipmentAtTimeInterval(shipped, t, tPlus1) }
                     result.push(temp)
 
                 }
