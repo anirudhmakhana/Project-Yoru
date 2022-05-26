@@ -2,23 +2,22 @@
     min-height: 550px;
     min-width: 420px;
     width: 20vw;
-    height: 55vh;
-    border: solid 1px;
+    /* height: 55vh; */
     background: #FFFFFF;
     border-radius: 16px;
     padding: 10px 2vw 10px 2vw ;
     flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .editCompanyContainer {
     min-height: 55vh;
     min-width: 700px;
     width: 20vw;
-    border: solid 1px;
     background: #FFFFFF;
     border-radius: 16px;
-    padding: 10px 2vw 10px 2vw ;
     flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 form {
