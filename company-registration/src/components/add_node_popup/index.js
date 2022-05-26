@@ -150,7 +150,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                             <div >
 
-                                <input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Address" })} />
+                                <input className={"add-node-search-bar mb-lg-2 mb-md-1"} {...getInputProps({ placeholder: "Search for Address" })} />
 
                                 <div>
                                 {loading ? <div>Loading...</div> : null}
@@ -216,25 +216,25 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
 
           <div className="body mt-4">
             <form >
-                    <div className="textInputContainerCol">
+                <div className="textInputContainerRow mt-lg-2 mt-md-1">
+                    <div className="textInputContainerCol w-100 me-lg-3 me-md-1">
                         <label className="inputLabel" for="companyCode">Company</label>
                         <input type="text" id="companyCode" name="companyCode" placeholder={companyCode} disabled></input>
                     </div>
-                    
-                    <div className="textInputContainerCol">
+                    <div className="textInputContainerCol w-100 me-lg-3 me-md-1">
                         <label className="inputLabel" for="nodeCode">Node Code</label>
                         <input type="text" id="nodeCode" name="nodeCode" placeholder="e.g. LKB-001" value={nodeCode} onChange={handleChangeNodeCode}></input>
                     </div>
-                    <div className="textInputContainerCol">
-                        <label className="inputLabel" for="address">Address</label>
-                        <input type="text" id="address" name="address" placeholder="e.g. 123 Lad Krabang, Bangkok 10520" value={address} onChange={handleChangeAddress}></input>
-                    </div>
-                    <div className="textInputContainerCol">
+                    <div className="textInputContainerCol w-100">
                         <label className="inputLabel" for="phoneNumber">Contact Number</label>
                         <input type="text" id="phoneNumber" name="phoneNumber" placeholder="e.g. 021232131" value={phoneNumber} onChange={handleChangePhone}></input>
                     </div>
-            
-                </form>
+                </div>
+                <div className="textInputContainerCol">
+                    <label className="inputLabel" for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="e.g. 123 Lad Krabang, Bangkok 10520" value={address} onChange={handleChangeAddress}></input>
+                </div>
+            </form>
           </div>
           
           <div className="footer mt-4">
