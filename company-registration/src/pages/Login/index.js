@@ -109,7 +109,7 @@ export const LoginPage = (props) => {
     return (
         <div className="backgroundLogin">
             <div className="loginContainer">
-                <div className="startPageContainer">
+                <div className="startPageContainer" style={{height: "55vh"}}>
                     <div className="logo mb-lg-5 mb-md-2">
                         <img src={applogo} alt="logo" className="login-logo"/>
                     </div>
