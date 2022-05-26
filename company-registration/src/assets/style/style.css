@@ -1,7 +1,8 @@
 .startPageContainer {
-    min-height: 55vh;
+    min-height: 550px;
     min-width: 420px;
     width: 20vw;
+    height: 55vh;
     border: solid 1px;
     background: #FFFFFF;
     border-radius: 16px;
@@ -148,6 +149,7 @@ label.inputLabel {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
 }
 
 .adminPageHeader {
@@ -216,13 +218,15 @@ div.warning{
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 16px;
     height: fit-content;
-    padding: 2% 4% 2% 4%;
-    /* overflow: auto; */
+    /* padding: 2% 4% 2% 4%; */
+    overflow-x: hidden;
+    margin-bottom: 2%;
 }
 
 .content-title-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 2vh 0 3vh 0;
 }
 
@@ -359,7 +363,7 @@ div.warning{
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* height: 100%; */
+    /* height: 50%; */
 }
 
 .container-row {
@@ -377,13 +381,10 @@ div.warning{
 .recommendContainer {
     display: flex;
     flex-direction: column;
-    margin-left: 3%;
     margin-bottom: 2%;
 
     /* border: 1px solid rgb(0, 23, 138); */
-    padding-left: 1%;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding: 1% 0 1% 2%;
     background-color: #ebf8fa;
     border-width: 100%;
     border-radius: 16px;
@@ -394,7 +395,6 @@ div.warning{
 .map-info-button {
     background: #3751FF;
     color: white;
-    height: 4vh;
     margin: 10px 0 15px 0;
 }
 
@@ -403,4 +403,8 @@ div.warning{
     color: white;
     width: 100%;
     margin: 10px 0 15px 0;
+}
+
+.map-search-bar {
+    margin-bottom: 2%;
 }

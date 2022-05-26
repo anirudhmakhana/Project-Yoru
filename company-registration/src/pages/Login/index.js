@@ -18,6 +18,8 @@ import StaffAccountService from "../../services/StaffAccountService";
 import "../../assets/style/login.css"
 import "../../assets/style/style.css"
 
+import applogo from "../../assets/icons/applogo.png"
+
 import { useEffect } from "react";
 const google = window.google
 
@@ -108,8 +110,8 @@ export const LoginPage = (props) => {
         <div className="backgroundLogin">
             <div className="loginContainer">
                 <div className="startPageContainer">
-                    <div className="logo">
-                        <h3>Project Yoru</h3>
+                    <div className="logo mb-lg-5 mb-md-2">
+                        <img src={applogo} alt="logo" className="login-logo"/>
                     </div>
 
                     <h2>Log In to Project Yoru</h2>

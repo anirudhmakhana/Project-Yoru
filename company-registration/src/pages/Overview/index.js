@@ -13,10 +13,11 @@ import { LineChart } from "../../components/linechart";
 import { NodeSelectPopup } from "../../components/node_select_popup";
 import { Titlebar } from "../../components/titlebar";
 import DateUtils from "../../utils/DateUtils";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import ShipmentService from "../../services/ShipmentService";
 import { EditProfilePopup } from "../../components/edit_profile_popup";
 // In this case, January = 0
+import { ChartDatePicker, ChartMonthPicker, ChartYearPicker } from "../../components/date_picker";
 
 export const OverviewPage = (props) => {
 	const [userData, setUserData] = useState(
@@ -36,13 +37,16 @@ export const OverviewPage = (props) => {
 	const [stockCount, setStockCount] = useState(0);
 	const [incompleteCount, setIncompleteCount] = useState(0);
 	const [shippingCount, setShippingCount] = useState(0);
-	const [primGraphStartDate, setPrimStartDate] = useState("");
-	const [primGraphEndDate, setPrimEndDate] = useState("");
+	const [primGraphStartText, setPrimStartText] = useState("");
+	const [primGraphEndText, setPrimEndText] = useState("");
 	const [primHighest, setPrimHighest] = useState(0);
 	const [primAverage, setPrimAverage] = useState(0);
 	const [primLowest, setPrimLowest] = useState(0);
 	const [primChangePercent, setPrimChangePercent] = useState(0);
 	const [primTotal, setTotal] = useState(0);
+	const [primGraphStartDate, setPrimStartDate] = useState(new Date());
+	const [primGraphEndDate, setPrimEndDate] = useState(new Date());
+
 	// useState(() => {
 	//     var node = eval('('+localStorage.getItem("currentNode")+')')
 	//     if (node) {
@@ -57,6 +61,14 @@ export const OverviewPage = (props) => {
 
 	const handleTimeRangeDropdown = (e) => {
 		setGraphTimeRange(e);
+		setPrimEndDate(new Date())
+
+		if ( e == "custom") {
+			let cur = new Date()
+			setPrimStartDate(new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() - 1))
+		} else {
+			setPrimStartDate(new Date())
+		}
 	};
 
 	useEffect(() => {
@@ -110,20 +122,22 @@ export const OverviewPage = (props) => {
 			graphType,
 			graphTimeRange,
 			userData.token,
+			primGraphStartDate,
+			primGraphEndDate,
 			userData.companyCode,
 			null
 		).then((res) => {
 			console.log(res.data);
 			setDateGraphData(res.data.graph);
-			setPrimStartDate(res.data.startDate);
-			setPrimEndDate(res.data.endDate);
+			setPrimStartText(res.data.startDate);
+			setPrimEndText(res.data.endDate);
 			setPrimAverage(res.data.average);
 			setPrimHighest(res.data.highest);
 			setPrimLowest(res.data.lowest);
 			setPrimChangePercent(res.data.percentageChange);
 			setTotal(res.data.total);
 		});
-	}, [graphType, graphTimeRange]);
+	}, [graphType, graphTimeRange, primGraphEndDate, primGraphStartDate]);
 
 	function handlePopupConfirm(currentNode) {
 		localStorage.setItem("currentNode", JSON.stringify(currentNode));
@@ -164,7 +178,7 @@ export const OverviewPage = (props) => {
 						({stDate}-{enDate})
 					</p>
 				)}
-				<h2 style={{ "margin-top": "10px" }}>{number}</h2>
+				<h2 style={{ "margin-top": "1%" }}>{number}</h2>
 				<p>{additional}</p>
 			</div>
 		);
@@ -194,7 +208,7 @@ export const OverviewPage = (props) => {
 				<div className="chart-container">
 					<div className="chart-title-container">
 						{/* <h3 className="chart-title">Stocking Shipments</h3> */}
-						<div style={{ display: "flex", "flex-direction": "row" }}>
+						<div style={{ display: "flex", "flex-direction": "row", alignItems: "center"}}>
 							<Dropdown
 								onSelect={handleGraphType}
 								style={{ marginRight: "2%" }}
@@ -228,16 +242,34 @@ export const OverviewPage = (props) => {
                                     <Dropdown.Item eventKey={"year"}>Year</Dropdown.Item> */}
 								</Dropdown.Menu>
 							</Dropdown>
+							<div className="date-picker-container mt-lg-4 mt-md-2 ms-auto">
+								{graphTimeRange === "custom" ? 
+									<>
+										<ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+											<span>To</span>
+										<ChartDatePicker date={primGraphEndDate} setDate={setPrimEndDate} min={new Date(primGraphStartDate.getFullYear(),primGraphStartDate.getMonth(), primGraphStartDate.getDate() + 1)} max={new Date()}/> 
+									</>
+									: graphTimeRange === "year" ? <ChartYearPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+										: graphTimeRange === "month" ? <ChartMonthPicker date={primGraphEndDate} setDate={setPrimEndDate} max={new Date()}/>
+											: <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate} max={new Date()}/>
+								}
+								
+								{/* <ChartDatePicker date={primGraphStartDate} setDate={setPrimStartDate}/>
+								<span>To</span>
+								<ChartDatePicker  date={primGraphEndDate} setDate={setPrimEndDate}/> */}
+							</div>
 						</div>
-						{primGraphEndDate == primGraphStartDate ? (
+						
+						
+						{/* {primGraphEndDate == primGraphStartDate ? (
 							<p>{primGraphStartDate}</p>
 						) : (
 							<p>
 								{primGraphStartDate}-{primGraphEndDate}
 							</p>
-						)}
+						)} */}
 					</div>
-					<div className="body-chart-container">
+					<div className="body-chart-container pt-lg-0 p-lg-4 p-md-2">
 						{dateGraphData && (
 							<LineChart
 								chartDataPrim={dateGraphData}
@@ -253,29 +285,29 @@ export const OverviewPage = (props) => {
 					{graphType != "stock" &&
 						getChartItem(
 							`Total Shipment`,
-							primGraphStartDate,
-							primGraphEndDate,
+							primGraphStartText,
+							primGraphEndText,
 							primTotal
 						)}
 					{/* <hr/> */}
 					{getChartItem(
 						`Highest ${GraphService.graphName[graphType]}`,
-						primGraphStartDate,
-						primGraphEndDate,
+						primGraphStartText,
+						primGraphEndText,
 						primHighest.value
 					)}
 					{/* <hr/> */}
 					{getChartItem(
 						`Lowest ${GraphService.graphName[graphType]}`,
-						primGraphStartDate,
-						primGraphEndDate,
+						primGraphStartText,
+						primGraphEndText,
 						primLowest.value
 					)}
 					{/* <hr/> */}
 					{getChartItem(
 						`Average ${GraphService.graphName[graphType]}`,
-						primGraphStartDate,
-						primGraphEndDate,
+						primGraphStartText,
+						primGraphEndText,
 						primAverage.toPrecision(2)
 					)}
 					{/* <hr/> */}

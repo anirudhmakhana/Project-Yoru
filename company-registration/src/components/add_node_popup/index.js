@@ -136,7 +136,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
       <div className="popupBackground">
         <div className="add-node-popupContainer">
           <div className="title">
-            <h1>Please choose your node location.</h1>
+            <h1>Add new node</h1>
           </div>
           { warning &&
                  <div className="alert alert-danger">
@@ -214,7 +214,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
 
             ) : null}
 
-          <div className="body">
+          <div className="body mt-4">
             <form >
                     <div className="textInputContainerCol">
                         <label className="inputLabel" for="companyCode">Company</label>
@@ -237,7 +237,7 @@ export function AddNodePopup({ setOpenPopup, updateTable }) {
                 </form>
           </div>
           
-          <div className="footer">
+          <div className="footer mt-4">
             <Button
               onClick={handleCancel}
               id="cancelBtn"

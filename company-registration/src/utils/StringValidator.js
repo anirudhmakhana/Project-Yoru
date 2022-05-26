@@ -56,7 +56,13 @@ class StringValidator {
     validateWalletPublicKey = (key) => {
         var pref = new RegExp('^'+'0x')
         if (key.length != 42 || !pref.test(key) || !String(key).match(/^[a-zA-Z0-9]+$/)){
-            return "Wallet public key must be 42 characters long with 'Ox' prefix and contains only English alphabet and number."}
+            return "Wallet public key must be 40 characters long with additional 'Ox' prefix and contains only English alphabet and number."}
+    };
+
+    validateTxnHash = (key) => {
+        var pref = new RegExp('^'+'0x')
+        if (key.length != 66 || !pref.test(key) || !String(key).match(/^[a-zA-Z0-9]+$/)){
+            return "Transaction hash must be 62 characters long with additional 'Ox' prefix and contains only English alphabet and number."}
     };
 
     validateWalletPrivateKey = (key) => {

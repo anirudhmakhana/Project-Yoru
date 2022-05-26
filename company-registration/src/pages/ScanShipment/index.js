@@ -46,7 +46,6 @@ export const ScanSHP = () => {
 	const [currentNode, setCurrentNode] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null)
 	const [warning, setWarning] = useState(null)
-	const [recommendInfo, setRecommendInfo] = useState(null)
 
     const [showInfo, setShowInfo] = useState(true)
 	const [showScanPopup, setShowScanPopup] = useState(false)
@@ -55,7 +54,7 @@ export const ScanSHP = () => {
 	const [updateInfo, setUpdateInfo] = useState(null)
 	const [newStatus, setNewStatus] = useState(null)
 	const [shipmentCurNode, setShipmentCurNode] = useState(null)
-	const [recommendNode, setRecommendNode] = useState(null)
+	const [commonDestNode, setCommonDestNode] = useState(null)
 	const [nextPath, setNextPath] = useState(null)
 	const [showNextInfo, setShowNextInfo] = useState(true)
 	const [nextNodeRef, setNextNodeRef] = useState(null)
@@ -64,9 +63,9 @@ export const ScanSHP = () => {
 	const [nextNode, setNextNode] = useState(null);
 	const [nextNodeStock, setNextNodeStock] = useState(0);
 	const [allCompanies, setAllCompanies] = useState([]);
-	const [showDestInfo, setShowDestInfo] = useState(true)
 	const [companyNodes, setCompanyNodes] = useState([]);
-
+	const [recommendNext, setRecommendNext] = useState(null)
+	const [falseShipAlert, setFalseShipAlert] = useState(null)
 	const [mapRef, setMapRef] = React.useState(
 		/** @type google.map.Map */ (null)
 	);
@@ -122,6 +121,35 @@ export const ScanSHP = () => {
 		});
 	}, []);
 
+	useEffect( () => {
+		if ( nextNodeRef) {
+			if ( nextCompany ) {
+				NodeDataService.getCompanyNearestNode( nextNodeRef, nextCompany.companyCode, userData.token)
+				.then( result => {
+				
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			} else  {
+				NodeDataService.getNearestNode( nextNodeRef, userData.token)
+				.then( result => {
+				setNextNode(result.data)
+				setShowNextInfo(true)
+				CompanyService.getCompanyByCode(result.data.companyCode, userData.token)
+				.then ( res => {
+					setNextCompany(res.data);
+				})
+				})
+				.catch(err => console.log(err))
+			}
+		}
+	}, [nextNodeRef])
+
     useEffect( () => {
 		if (shipmentId) {
 			ShipmentService.getShipmentById(shipmentId ,userData.token)
@@ -148,7 +176,7 @@ export const ScanSHP = () => {
 				setShipment(null)
 				console.log(err_shipment)
 			})
-			CompanyService.getAllCompanyCode(userData.token)
+			CompanyService.getAllCompany(userData.token)
 			.then((result) => {
 				setAllCompanies(result.data);
 			})
@@ -165,7 +193,16 @@ export const ScanSHP = () => {
 			ShipmentService.getScanByShipmentId(shipmentId, userData.token)
 			.then( res => {
 				console.log(res.data)
-				setAllScans(res.data)
+				var temp = []
+				for ( let i = 0; i < res.data.length; i++ ) {
+					console.log(res.data[i].status )
+
+					if ( (res.data[i].status == "arrived") && res.data[i - 1].nextNode != res.data[i].scannedAt) {
+						res.data[i].scannedAt = res.data[i].scannedAt + " ##MISMATCHED##"
+					} 
+					temp.push(res.data[i])
+				}
+				setAllScans(temp)
 			})
 			.catch(err => {
 				console.log(err)
@@ -203,7 +240,7 @@ export const ScanSHP = () => {
 
 	useEffect(() => {
 		if (nextCompany) {
-			NodeDataService.getActiveNodeByCompany(nextCompany, userData.token)
+			NodeDataService.getActiveNodeByCompany(nextCompany.companyCode, userData.token)
 				.then((result) => {
 					console.log(result.data);
 					// console.log(path)
@@ -227,7 +264,8 @@ export const ScanSHP = () => {
         const latLng = await getLatLng(results[0]);
 		setSearchRef(value)
         setNextNodeRef(latLng);
-
+		
+		
 	};
 
 	function handleNodePopupConfirm(newCurrentNode) {
@@ -276,13 +314,14 @@ export const ScanSHP = () => {
 			console.log("Shipment updated")
 			setWarning(null)
 			setUpdateInfo(null)
+			setFalseShipAlert(null)
 			setShipment(null)
 			setShipmentId(null)
 			setAllScans([])
 			setNextNode(null)
 			setNextCompany(null)
-			setRecommendInfo(null)
-			setRecommendNode(null)
+			setCommonDestNode(null)
+			setRecommendNext(null)
 		})
 		.catch( err => {
 			console.log(err)
@@ -319,27 +358,37 @@ export const ScanSHP = () => {
 								if ( recommend) {
 									NodeDataService.getNodeByCode( recommend, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
-										setNextNode(res.data)
-										setRecommendInfo("Recommended next node.")
-									})
-									var commonDest = await NodeRecommender.recommendNextNode(res_shipment.data, userData.token)
-									.catch( err=> { 
-										commonDest = null
-									})
-									if ( commonDest) {
-										NodeDataService.getNodeByCode( commonDest, userData.token)
-										.then( async res => {
-											setRecommendNode(res.data)
+										
+										setRecommendNext(res.data)
+										var commonDest = await NodeRecommender.recommendCommonDest(res_shipment.data, userData.token)
+										.catch( err=> { 
+											commonDest = null
 										})
-									}
+										console.log(commonDest)
+										if ( commonDest) {
+											NodeDataService.getNodeByCode( commonDest, userData.token)
+											.then( async res_common => {
+												setCommonDestNode(res_common.data)
+											})
+										} else {
+											CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+											.then ( res => {
+												setNextCompany(res.data);
+											})
+											setNextNode(res.data)
+										}
+									})
+									
 								}
 								else {
 									NodeDataService.getNodeByCode( res_shipment.data.destinationNode, userData.token)
 									.then( async res => {
-										setNextCompany(res.data.companyCode)
+										CompanyService.getCompanyByCode(res.data.companyCode, userData.token)
+										.then ( res_comp => {
+											setNextCompany(res_comp.data);
+										})
+										setRecommendNext(res.data)
 										setNextNode(res.data)
-										setRecommendInfo("Recommended next node.")
 									})
 
 								}
@@ -356,10 +405,16 @@ export const ScanSHP = () => {
 							newState = null
 						}
 						setNewStatus(newState)
+						
 						if (newState) {
-							
+							if ( newState == "arrived" && currentNode.nodeCode != res_shipment.data.nextNode) {
+								setFalseShipAlert(`Your shipment should be arrived at ${res_shipment.data.nextNode}!`)
+							} else {
+								setFalseShipAlert(null)
+							}		
 							setUpdateInfo(`Update shipment status to ${newState.toUpperCase()} at ${currentNode.nodeCode}`)
 							setWarning(null)
+							
 							setShowScanPopup(false)
 						}
 						else if (incorrectCurNode) {
@@ -367,14 +422,19 @@ export const ScanSHP = () => {
 							setShipment(null)
 							setWarning("Current node not matched or already checked out from this node. Please check your current node!")
 							setShowScanPopup(false)
+							setFalseShipAlert(null)
+
 						} else {
 							setUpdateInfo(null)
 							setShipment(null)
 							setWarning("Cancelled or completed shipment cannot be updated!")
 							setShowScanPopup(false)
+							setFalseShipAlert(null)
+
 						}
 					} else {
 						setUpdateInfo(null)
+						setFalseShipAlert(null)
 						setShipmentId(null)
 						setShipment(null)
 						setWarning("Shipment not found!")
@@ -405,11 +465,15 @@ export const ScanSHP = () => {
 
 	function handleCompanyDropdown(e) {
 		console.log(e);
-		setNextCompany(e);
+		CompanyService.getCompanyByCode(e, userData.token)
+		.then ( res => {
+			setNextCompany(res.data);
+		})
 		console.log(nextNode);
 		setNextNode(null);
 		setNextNodeStock(0);
 		setDirectionsResponse(null)
+		setNextPath(null)
 		
 	};
 
@@ -419,14 +483,12 @@ export const ScanSHP = () => {
 			const result = await NodeDataService.getNodeByCode(e, userData.token)
 			
 			setNextNode(result.data);
-			setShowDestInfo(true)
-			console.log(result.data);
-			setRecommendInfo(null)
+			setShowNextInfo(true)
+			// console.log(newStatus , updateInfo , userCompany , shipment , currentNode)
 			
 		} else {
 			setNextNodeStock(0);
 			setNextNode(null);
-			setRecommendInfo(null)
 			setDirectionsResponse(null)
 		}
 		
@@ -436,7 +498,7 @@ export const ScanSHP = () => {
         <div className="content-main-container">
 			{currentNode ? <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} extNodeCode={currentNode.nodeCode}/>
 			: <Titlebar pageTitle="Update Shipment" setExtNodePopup={setNodePopup} setExtProfPopup={setEditProfPopup} />}
-			<div className="detailed-main-container" style={{height: "fit-content"}}>
+			<div className="detailed-main-container p-lg-4 p-md-2">
            		<form onSubmit={ () => {} }>
 					<div className="input-location-container" style={{margin: 0}}>
 						<div className="input-left-container" style={{justifyContent: "normal"}}>
@@ -457,17 +519,34 @@ export const ScanSHP = () => {
 								{ currentNode ? <Button className="universal-button" onClick={handleScan} >Scan</Button> :
 								<Button className="universal-button" onClick={handleScan} disabled>Scan</Button>}
 							</div>
-							{ shipment && newStatus == "shipping" && recommendInfo &&
-							<div className="alert alert-info mb-lg-4">
-								{recommendInfo}
+							{ falseShipAlert &&
+							<div className="alert alert-warning mb-lg-4 mt-lg-4">
+								{falseShipAlert}
 							</div>}
-							{ recommendNode && <div className="recommendContainer">
+							{ commonDestNode && recommendNext && 
+							<div className="recommendContainer">
+								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>Recommended next node based on the distance.</strong></p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNext.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNext.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNext.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNext.address}</p>
+								<br/>
 								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>This is the nearest node that has shipment with the same destination as your shipment!</strong></p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNode.nodeCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNode.companyCode}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNode.phoneNumber}</p>
-								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNode.address}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {commonDestNode.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {commonDestNode.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {commonDestNode.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {commonDestNode.address}</p>
 							</div>}
+
+							{ !commonDestNode && recommendNext && 
+							<div className="recommendContainer">
+								<p style={{color:"#277382","text-align":"left", 'marginBottom':1}}><strong>Recommended next node based on the distance.</strong></p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Node:</strong> {recommendNext.nodeCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Company:</strong> {recommendNext.companyCode}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Contact:</strong> {recommendNext.phoneNumber}</p>
+								<p style={{color:"#388493","text-align":"left", 'marginBottom':1}}><strong>Address:</strong> {recommendNext.address}</p>
+							</div>}
+							
 							{ shipment && newStatus == "shipping" && 
 							<div>
 								<div className="textInputContainerCol mb-lg-4">
@@ -475,7 +554,7 @@ export const ScanSHP = () => {
 									<Dropdown onSelect={handleCompanyDropdown}>
 										{nextCompany ? (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
-												{nextCompany}
+												{nextCompany.companyName}
 											</Dropdown.Toggle>
 										) : (
 											<Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -485,8 +564,8 @@ export const ScanSHP = () => {
 
 										<Dropdown.Menu>
 											<Dropdown.Item eventKey={null}>--- Cancel Selection ---</Dropdown.Item>
-											{allCompanies.map((companyCode) => (
-												<Dropdown.Item eventKey={companyCode}>{companyCode}</Dropdown.Item>
+											{allCompanies.map((company) => (
+												<Dropdown.Item eventKey={company.companyCode}>{company.companyName}</Dropdown.Item>
 											))}
 										</Dropdown.Menu>
 									</Dropdown>
@@ -532,11 +611,24 @@ export const ScanSHP = () => {
 									</Dropdown>
 								</div>
 								
-								<PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
+								
+							</div>
+							}
+							
+						</div>
+						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
+							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+								<h3 style={{color: "#252733"}}>Map</h3>
+								{ shipment && <Button className="map-info-button" onClick={() => {
+									setShowInfo(true)
+									setShowNextInfo(true)
+								}} >Show Pin Info</Button>}
+							</div>
+							{ shipment && newStatus == "shipping" && <PlacesAutocomplete value={searchRef} onChange={setSearchRef} onSelect={handleSearchSelect}>
 								{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 									<div >
 
-										<input className={"add-node-search-bar"} {...getInputProps({ placeholder: "Next node location" })} />
+										<input className={"add-node-search-bar map-search-bar"} {...getInputProps({ placeholder: "Search for next node location" })} />
 
 										<div>
 										{loading ? <div>Loading...</div> : null}
@@ -556,28 +648,16 @@ export const ScanSHP = () => {
 										</div>
 									</div>
 								)}
-								</PlacesAutocomplete>
-							</div>
-							}
-							
-						</div>
-						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
-							<div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-								<h3 style={{color: "#252733"}}>Map</h3>
-								{ shipment && <Button className="map-info-button" onClick={() => {
-									setShowInfo(true)
-									setShowNextInfo(true)
-								}} >Show Info</Button>}
-							</div>
-							
-							<div style={{ width: "100%", height: "40%" }}>
+								</PlacesAutocomplete>}
+							<div style={{ width: "100%", height: "60%" }}>
 								{ shipment ? <GoogleMap
 										center={{ lat: currentNode.lat, lng: currentNode.lng }}
 										zoom={15}
 										mapContainerStyle={{ width: '100%', height: '100%' }}
 										options={options}
 										onLoad={map => setMapRef(map)}
-										onClick={()=>{}}>
+										onClick={(e) => {setNextNodeRef({lat:e.latLng.lat(), lng:e.latLng.lng()})}}
+										>
 									{directionsResponse ? (
 										directionsResponse.map((direction) =><DirectionsRenderer directions={direction} />)
 									): null}
@@ -630,6 +710,24 @@ export const ScanSHP = () => {
 									}}
 									map={mapRef}
 									/>
+
+									{ companyNodes && companyNodes.map( compNode => {
+										if (compNode.nodeCode != currentNode.nodeCode ) {
+											return <Marker
+											key={`${compNode.lat}-${compNode.lng}`}
+											position={{lat:compNode.lat, lng:compNode.lng}}
+											onClick={() => {
+												setShowInfo(true)
+												console.log(compNode.lat+"-"+ compNode.lng)
+												setNextNode(compNode);
+												setShowNextInfo(true)
+												console.log(compNode);
+											}}
+											map={mapRef}/>
+										}
+									})
+									}
+
 									</GoogleMap>
 									: currentNode ? <GoogleMap
 									center={{ lat: currentNode.lat, lng: currentNode.lng }}
@@ -659,15 +757,17 @@ export const ScanSHP = () => {
 							</div>
 							<h3 style={{color: "#252733", marginTop: "3%", marginBottom: "3%"}}>Update History</h3>
 							<div className='scan-history-container' style={{marginLeft: "3%", height: "40%"}}>
-								{ allScans.reverse().map( scan => {
+								{ allScans.map( (scan) => {
 									return(
+										
 									<div>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan At:</strong> {scan.scannedAt}</p>
+										
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Scan Timestamp:</strong> {new Date(scan.scannedTime).toLocaleString()}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Status:</strong> {scan.status.toUpperCase()}</p>
 										{scan.status == "shipping" && 
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
-										<p style={{"text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Shipped to:</strong> {scan.nextNode}</p>}
+										<p style={{color:"#585A66","text-align":"left", 'marginBottom':1}}><strong>Transaction Hash:</strong> {scan.txnHash}</p>
 										<br/>
 									</div>
 									) 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { rfidURL } from "../utils/ApiUrl";
 
 class RfidService {
 	constructor() {
@@ -7,12 +8,11 @@ class RfidService {
 	}
 
 	async makeScan() {
-		// const response = await axios.get(this.scanUrl)
-		// .catch((error) => {
-		//     throw error
-		// })
-		// return response
-		return { data: { statusCode: 200, data: { uid: "SHP007" } } };
+		const response = await axios.get(rfidURL).catch((error) => {
+			throw error;
+		});
+		return response;
+		// return {data:{statusCode:200, data:{uid:'SHP004'}}}
 	}
 }
 

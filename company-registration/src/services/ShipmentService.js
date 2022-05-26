@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
+import { serverBasedURL } from "../utils/ApiUrl";
 import abi from "../utils/TrackingContract.json"
 
 class ShipmentService {
@@ -36,6 +37,8 @@ class ShipmentService {
             {uid:"SHP003", scannedAt:"RAM-52011", scannedTime:1651303711, status:"shipping"},
             {uid:"SHP003", scannedAt:"LKB-1003", scannedTime:1651306711, status:"completed"},
         ]
+        this.scanURL = serverBasedURL + '/scan'
+        this.shipmentURL = serverBasedURL + '/shipment'
     }
     compareTime = ( a, b ) => {
     if ( a.scannedTime < b.scannedTime ){
@@ -49,7 +52,7 @@ class ShipmentService {
 
     async getAllShipments(token) {
 
-        const response = await axios.get('http://localhost:4000/shipment/', {headers:{"x-access-token":token}})
+        const response = await axios.get(this.shipmentURL, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
@@ -94,10 +97,20 @@ class ShipmentService {
     }
 
     async getRelatedShipments( companyCode, token ) {
-        const response = await axios.get('http://localhost:4000/shipment/related/' + companyCode, {headers:{"x-access-token":token}})
+        const response = await axios.get(this.shipmentURL + '/related/' + companyCode, {headers:{"x-access-token":token}})
         .catch((error) => {
             throw error
         })
+        
+        return response
+    }
+
+    async auditTransaction( txnHash, token) {
+        const response = await axios.get(this.shipmentURL + '/audit/' + txnHash, {headers:{"x-access-token":token}})
+        .catch((error) => {
+            throw error
+        })
+        console.log(response)
         
         return response
     }
@@ -119,7 +132,7 @@ class ShipmentService {
     }
 
     async getShipmentById( shipmentId, token ) { 
-        const response = await axios.get("http://localhost:4000/shipment/" + shipmentId , 
+        const response = await axios.get( this.shipmentURL + "/" + shipmentId , 
         {headers:{"x-access-token":token}})
         .catch((error) => {
             return error
@@ -130,7 +143,7 @@ class ShipmentService {
 
 
     async currentStockByNode( nodeCode, token ) {
-        const response = await axios.get("http://localhost:4000/shipment/stock/node/" + nodeCode , 
+        const response = await axios.get(this.shipmentURL + "/stock/node/" + nodeCode , 
         {headers:{"x-access-token":token}})
         .catch((error) => {
             return error
@@ -140,7 +153,7 @@ class ShipmentService {
     }
 
     async scanByNode( nodeCode, token ) {
-        const response = await axios.get("http://localhost:4000/scan/node/" + nodeCode , 
+        const response = await axios.get(this.scanURL + "/node/" + nodeCode , 
         {headers:{"x-access-token":token}})
         .catch((error) => {
             return error
@@ -150,7 +163,7 @@ class ShipmentService {
     }
 
     async currentStockCountByNode( nodeCode, token ) {
-        const response = await axios.get("http://localhost:4000/shipment/stock/node/"+ nodeCode, 
+        const response = await axios.get(this.shipmentURL + "/stock/node/"+ nodeCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -161,17 +174,19 @@ class ShipmentService {
     }
 
     async getScanByShipmentId( shipmentId, token) {
-        const response = await axios.get("http://localhost:4000/scan/shipment/"+ shipmentId, 
+        const response = await axios.get(this.scanURL + "/shipment/"+ shipmentId, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
         }) 
+        console.log(response.data)
         response.data = response.data.sort((a,b) => a.scannedTime - b.scannedTime)
+        console.log('sorted', response.data)
         return response
     }
 
     async getPathByShipmentId( shipmentId, token) {
-        const response = await axios.get("http://localhost:4000/scan/shipment/"+ shipmentId, 
+        const response = await axios.get(this.scanURL + "/shipment/"+ shipmentId, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -195,7 +210,7 @@ class ShipmentService {
     }
 
     async completedCountByCompany( companyCode, token ) {
-        const response = await axios.get("http://localhost:4000/scan/status/completed/"+ companyCode, 
+        const response = await axios.get(this.scanURL + "/status/completed/"+ companyCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -207,7 +222,7 @@ class ShipmentService {
 
 
     async createdCountByCompany( companyCode, token ) {
-        const response = await axios.get("http://localhost:4000/scan/status/created/"+ companyCode, 
+        const response = await axios.get(this.scanURL + "/status/created/"+ companyCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -218,7 +233,7 @@ class ShipmentService {
     }
 
     async currentStockCountByCompany( companyCode, token ) {
-        const response = await axios.get("http://localhost:4000/shipment/stock/"+ companyCode, 
+        const response = await axios.get(this.shipmentURL + "/stock/"+ companyCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -229,7 +244,7 @@ class ShipmentService {
     }
 
     async shippingCountByCompany( companyCode, token ) {
-        const response = await axios.get("http://localhost:4000/shipment/status/shipping/"+ companyCode, 
+        const response = await axios.get(this.shipmentURL + "/status/shipping/"+ companyCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -240,7 +255,7 @@ class ShipmentService {
     }
 
     async incompleteCountByCompany( companyCode, token ) {
-        const response = await axios.get("http://localhost:4000/shipment/incomplete/"+ companyCode, 
+        const response = await axios.get(this.shipmentURL + "/incomplete/"+ companyCode, 
         {headers:{"x-access-token":token}})
         .catch( error => {
             throw error
@@ -255,14 +270,14 @@ class ShipmentService {
     async createShipment( shipmentData , walletPublicKey, token ) {
         var bcData = shipmentData
         bcData["walletPublicKey"] = walletPublicKey
-        axios.post("http://localhost:4000/shipment/", bcData, 
+        axios.post(this.shipmentURL, bcData, 
         {headers:{"x-access-token":token}})
         .then( response => {
             console.log("Create centralize")
             console.log('response', response)
             var centData = shipmentData
             centData["transactionHash"] = response.data.transactionHash
-            axios.post("http://localhost:4000/shipment/centralize/", centData, 
+            axios.post(this.shipmentURL + "/centralize/", centData, 
             {headers:{"x-access-token":token}})
             .then( res_central => {
                 // var createScan = {
@@ -287,14 +302,14 @@ class ShipmentService {
     async updateShipment( shipmentData , walletPublicKey, token ) {
         var bcData = shipmentData
         bcData["walletPublicKey"] = walletPublicKey
-        axios.put("http://localhost:4000/shipment/update/", bcData, 
+        axios.put(this.shipmentURL + "/update/", bcData, 
         {headers:{"x-access-token":token}})
         .then( response => {
             console.log("Update centralize")
             console.log('response', response)
             var centData = shipmentData
             centData["transactionHash"] = response.data.transactionHash
-            axios.put("http://localhost:4000/shipment/centralize/update/", centData, 
+            axios.put(this.shipmentURL + "/centralize/update/", centData, 
             {headers:{"x-access-token":token}})
             .then( res_central => {
                 // var createScan = {

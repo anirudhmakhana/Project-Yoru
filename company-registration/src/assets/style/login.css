@@ -36,6 +36,9 @@ div.logo {
     margin-bottom: 0px;
     flex: 0;
     justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
 }
 
 h3.h3-logo {
@@ -49,3 +52,7 @@ h3.h3-logo {
     display:inline-block;
 }
 
+.login-logo {
+    height: 1.75vw;
+    width: auto;
+}

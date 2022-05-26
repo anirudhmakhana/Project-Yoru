@@ -78,7 +78,16 @@ export const ViewShipmentPage = () => {
         ShipmentService.getScanByShipmentId(shipmentId, userData.token)
         .then( res => {
             console.log(res.data)
-            setAllScans(res.data)
+            var temp = []
+            for ( let i = 0; i < res.data.length; i++ ) {
+                console.log(res.data[i].status )
+
+                if ( (res.data[i].status == "arrived") && res.data[i - 1].nextNode != res.data[i].scannedAt) {
+                    res.data[i].scannedAt = res.data[i].scannedAt + " ##MISMATCHED##"
+                } 
+                temp.push(res.data[i])
+            }
+            setAllScans(temp)
         })
         .catch(err => {
             console.log(err)
@@ -131,7 +140,7 @@ export const ViewShipmentPage = () => {
                 <div className="content-title-container">
                     <h1>Shipment</h1>
                 </div>
-                <div className="detailed-main-container">
+                <div className="detailed-main-container ps-lg-5 ps-md-3 p-md-2">
                     <div className="detailed-title-container">
                         <Button type="button" onClick={() => {
                             navigate(-1)
@@ -145,14 +154,14 @@ export const ViewShipmentPage = () => {
                         
                     </div>
                     <div className="container-row mt-4">
-                        <div className="infoContainer" style={{width: "40%"}}>
+                        <div className="infoContainer" style={{width: "45%"}}>
                             {/* <p>{shipment.description}</p> */}
                             <p><b>Producer:</b> {shipment.companyCode}</p>
                             <p><b>Origin:</b> {shipment.originNode}</p>
                             <p><b>Destination:</b> {shipment.destinationNode}</p>
 
                         </div>
-                        <div className="infoContainer">
+                        <div className="infoContainer" style={{width: "50%"}}>
                             <p><b>Status:</b> {shipment.status.toUpperCase()}</p>
                             <p><b>Current Location:</b> {shipment.currentNode}</p>
                             <div style={{display:'flex', flexDirection:'row'}}>
@@ -165,7 +174,7 @@ export const ViewShipmentPage = () => {
                     </div>
                     
                     <div className="shipment-info">
-                        <div style={{width:'30vw', height:'47vh', textAlign: "left"}}>
+                        <div style={{width:'45%', height:'47vh', textAlign: "left"}}>
                             <div style={{display:'flex', flexDirection:'row', marginBottom: "10px"}}>
                                 <h2 style={{'margin-top':'10px','margin-left':'10px'}}>Map</h2>
                                 <Button type="button" onClick={() => {
@@ -227,10 +236,11 @@ export const ViewShipmentPage = () => {
                             </GoogleMap>
                         </div>
                         
-                        <div className='scan-history-container' style={{overflow: "visible"}}>
+                        <div className='scan-history-container' style={{overflow: "visible", width: "50%", justifyContent: "space-between"}}>
                             <h2 style={{'margin-top':'10px','margin-left':'3%'}}>History</h2>
                             <div style={{height: "85%",overflowY: "auto"}}>
-                                { allScans.reverse().map( scan => {
+                                { allScans.map( (scan) => {
+
                                 return(
                                 <div className="scanContainer">
                                     <br/>

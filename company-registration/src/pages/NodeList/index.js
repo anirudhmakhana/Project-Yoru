@@ -67,11 +67,11 @@ export const NodeListPage = () => {
                 <h1>Node</h1>
                 <Dropdown onSelect={handleCompanyDropdown}>
                     {filterCompany ? (
-                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{background: "black", "border-color": "black"}}>
                             {filterCompany}
                         </Dropdown.Toggle>
                     ) : (
-                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{background: "black", "border-color": "black"}}>
                             Company
                         </Dropdown.Toggle>
                     )}
