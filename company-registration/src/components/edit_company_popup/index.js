@@ -96,7 +96,7 @@ export function EditCompanyPopup({setOpenPopup, companyCode, updateTable}) {
 
     return (
         <div className="popupBackground">
-            <div className="editCompanyContainer">
+            <div className="editCompanyContainer p-lg-3 p-md-1">
             
 
                 <h2>Edit Company</h2>
