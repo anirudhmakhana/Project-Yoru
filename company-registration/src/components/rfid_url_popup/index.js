@@ -46,8 +46,8 @@ export const RfidUrlPopup = ({setOpenPopup,  handleConfirm, handleCancel }) => {
  
     return (
         <div className="popupBackground">
-            <div className="startPageContainer">
-                <div className="logo">
+            <div className="startPageContainer"  style={{display: "flex", "justify-content": "center"}}>
+                <div className="logo mb-lg-5 mb-md-2">
                     <h3 className="h3-logo">Change RFID Scan API URL</h3>
                 </div>
                 
@@ -57,8 +57,7 @@ export const RfidUrlPopup = ({setOpenPopup,  handleConfirm, handleCancel }) => {
                     {warning}
                 </div>}
                 <form onSubmit={handleSubmit}>
-                    
-                    <div className="textInputContainerCol"> 
+                    <div className="textInputContainerCol mb-lg-4 mb-md-2"> 
                         <label className="inputLabel" for="rfidUrl">RFID Scan API URL</label>
                         <input type="text" id="rfidUrl" name="rfidUrl" placeholder="Enter your API URL." value={rfidUrl} onChange={handleChangeUrl}></input>
                     </div>
