@@ -114,7 +114,7 @@ export const LoginPage = (props) => {
                         <img src={applogo} alt="logo" className="login-logo"/>
                     </div>
 
-                    <h2>Log In to Project Yoru</h2>
+                    <h2>Log In</h2>
                     <p>Enter your username and password below</p>
                     { warning &&
                     <div className="alert alert-danger">
