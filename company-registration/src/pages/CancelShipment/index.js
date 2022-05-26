@@ -366,7 +366,7 @@ export const CancelSHP = () => {
 						</div>
 						<div style={{display:"flex", "flex-direction":"column", width:"50%", "text-align":"left"}}>
 							<div className='scan-history-container'>
-								<h3 style={{color: "#252733", marginBottom: "3%", paddingLeft:"3%"}}>Update History</h3>
+								<h3 style={{color: "#252733", marginBottom: "3%"}}>Update History</h3>
 								{ allScans.map( scan => {
 								return(
 									<div>
