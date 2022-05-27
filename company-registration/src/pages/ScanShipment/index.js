@@ -130,7 +130,7 @@ export const ScanSHP = () => {
 	useEffect( () => {
 		if ( nextNodeRef) {
 			if ( nextCompany ) {
-				NodeDataService.getCompanyNearestNode( nextNodeRef, nextCompany.companyCode, userData.token)
+				NodeDataService.getCompanyNearestNodeExcept( nextNodeRef, nextCompany.companyCode, currentNode.nodeCode, userData.token)
 				.then( result => {
 				
 				setNextNode(result.data)
@@ -142,7 +142,7 @@ export const ScanSHP = () => {
 				})
 				.catch(err => console.log(err))
 			} else  {
-				NodeDataService.getNearestNode( nextNodeRef, userData.token)
+				NodeDataService.getNearestNodeExcept(nextNodeRef, currentNode.nodeCode, userData.token)
 				.then( result => {
 				setNextNode(result.data)
 				setShowNextInfo(true)
