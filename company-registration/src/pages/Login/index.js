@@ -123,15 +123,15 @@ export const LoginPage = (props) => {
                     <form onSubmit={handleSubmit}>
                         <div className="textInputContainerCol">
                             <label className="inputLabel" for="username">Username</label>
-                            <input type="text" id="username" name="username" placeholder="Username" onChange={handleChangeUsername} value={username}></input>
+                            <input type="text" id="username" name="username" style={{height: "5vh"}} placeholder="Username" onChange={handleChangeUsername} value={username}></input>
                         </div>
                         <div className="textInputContainerCol"> 
                             <label className="inputLabel" for="password">Password</label>
-                            <input type="password" id="password" name="password" placeholder="Password" onChange={handleChangePassword} value={password}></input>
+                            <input type="password" id="password" name="password" style={{height: "5vh"}} placeholder="Password" onChange={handleChangePassword} value={password}></input>
                         </div>
                         { openPopup ? 
-                        (<input className="signinBtn" type="submit" value="Log In" disabled></input>)
-                    :(<input className="signinBtn" type="submit" value="Log In"></input>)}
+                        (<input className="signinBtn" type="submit" value="Log In"  style={{height: "5vh"}} disabled></input>)
+                    :(<input className="signinBtn" type="submit"  style={{height: "5vh"}} value="Log In"></input>)}
                         {/* <div className="buttonContainerRow">
                             <label>Don't have an account ?</label>
                             <a href="/register" className="signupBtn">Sign Up</a>
