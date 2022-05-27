@@ -103,6 +103,12 @@ export const navbarStaffData = [
         icon: <FontAwesomeIcon icon={faLocationDot}/>,
         cName: 'nav-text'
     },
+    {
+        title: 'Audit Transaction',
+        path: '/main/audit',
+        icon: <FontAwesomeIcon icon={faHistory}/>,
+        cName: 'nav-text'
+    },
 ]
 
 export const navbarAdminData = [
