@@ -259,7 +259,7 @@ div.warning{
     height: 90%;
     padding: 2%;
     text-align: left;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 .content-table-container th{
